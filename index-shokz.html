@@ -316,7 +316,6 @@ section, .s-foot{
 .s-mosaic{ min-height:auto; padding-top:15vh; padding-bottom:11vh; }
 .uc      { min-height:auto;  padding-top:11vh; padding-bottom:11vh; }
 .s-story { min-height:auto;  padding-top:13vh; padding-bottom:13vh; }
-.s-who   { min-height:auto;  padding-top:11vh; padding-bottom:11vh; }
 .s-anatomy{ min-height:auto; padding-top:13vh; padding-bottom:13vh; }
 .s-colors{ min-height:100svh; padding-top:11vh; padding-bottom:9vh;
            align-items:center; text-align:center; justify-content:space-between; }
@@ -511,42 +510,6 @@ section, .s-foot{
 .tag--cold  { --tag:var(--glacier); }
 
 /* ---------------------------------------------------------------
-   WHO IT'S FOR
-   --------------------------------------------------------------- */
-.who-list{ list-style:none; margin:0 auto; padding:0; max-width:900px; }
-.who-list li{
-  position:relative;
-  border-top:1px solid var(--rule);
-  padding:16px 0 16px 38px;
-  font-variation-settings:'opsz' 32,'wdth' 92,'wght' 400;
-  font-size:clamp(1.05rem, 2.1vw, 1.6rem);
-  line-height:1.28; letter-spacing:-.015em;
-  color:var(--ink-soft);
-}
-.who-list li::before{
-  content:""; position:absolute; left:0; top:calc(16px + .48em);
-  width:14px; height:14px; border-radius:50%;
-  background:var(--dot, var(--cw-obsidian));
-  box-shadow:0 0 0 1px rgba(0,0,0,.16);
-}
-.who-list li:nth-child(1){ --dot:var(--cw-obsidian); }
-.who-list li:nth-child(2){ --dot:var(--cw-glacier); }
-.who-list li:nth-child(3){ --dot:var(--cw-ember); }
-.who-list li:nth-child(4){ --dot:var(--cw-chalk); }
-.who-list li:nth-child(5){ --dot:var(--cw-obsidian); }
-.who-list li:nth-child(6){ --dot:var(--cw-glacier); }
-.who-list li:last-child{
-  border-bottom:1px solid var(--rule);
-  color:var(--ink);
-  font-variation-settings:'opsz' 32,'wdth' 92,'wght' 700;
-}
-.who-list li:last-child::before{
-  background:conic-gradient(
-    var(--cw-obsidian) 0deg 90deg, var(--cw-glacier) 90deg 180deg,
-    var(--cw-ember) 180deg 270deg, var(--cw-chalk) 270deg 360deg);
-}
-
-/* ---------------------------------------------------------------
    ANATOMY DIAGRAM
    --------------------------------------------------------------- */
 .anatomy{ position:relative; width:100%; max-width:1180px; margin:44px auto 0; }
@@ -718,8 +681,10 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
     overflow-x:auto; scrollbar-width:none;
     padding-top:2px; margin-top:2px;
     border-top:1px solid var(--rule);
-    /* fades only when the tabs actually overrun the box — below that the
-       masked strip is empty anyway — so a clipped tab reads as swipeable */
+  }
+  /* only once the tabs actually overrun their box, so a clipped tab reads
+     as swipeable rather than disabled (JS sets the class) */
+  .nav-tabs.is-clipped{
     -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);
     mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);
   }
@@ -818,7 +783,6 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
     <ul class="nav-tabs">
       <li><a href="#usage">Usage</a></li>
       <li><a href="#story">Story</a></li>
-      <li><a href="#who">Who</a></li>
       <li><a href="#colors">Colors</a></li>
       <li><a href="#specs">Specs</a></li>
     </ul>
@@ -995,19 +959,6 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
           <p>Magnetic charging, no port to corrode.</p></div>
       </li>
     </ol>
-  </section>
-
-  <!-- WHO IT'S FOR ---------------------------------------------- -->
-  <section class="s-who band--mist centered" id="who" data-reveal aria-labelledby="who-h">
-    <p class="util rv eyebrow acc--glacier" style="margin:0 auto 18px">Who it's for</p>
-    <h2 class="display display--mid rv" id="who-h" style="margin-bottom:40px">Anyone who sits there</h2>
-    <ul class="who-list">
-      <li class="rv">The 6am regular.</li>
-      <li class="rv">The athlete with an actual stopwatch.</li>
-      <li class="rv">The eleven-year-old who treats the plunge like a dare.</li>
-      <li class="rv">The couple with the barrel sauna. Every night.</li>
-      <li class="rv">Everyone, which is the point.</li>
-    </ul>
   </section>
 
   <!-- COLORWAYS -------------------------------------------------- -->
@@ -1611,7 +1562,15 @@ window.addEventListener('resize', resize, { passive:true });
    hero the header is dark-on-light with no ground, everywhere else
    it's light-on-frosted-dark.
    ================================================================= */
-const topbar = document.getElementById('topbar');
+const topbar  = document.getElementById('topbar');
+const tabsEl  = document.querySelector('.nav-tabs');
+
+// the tab row is a scroller on narrow screens; it only earns its edge
+// fade once there is something past the edge to scroll to
+function syncTabClip(){
+  tabsEl.classList.toggle('is-clipped', tabsEl.scrollWidth > tabsEl.clientWidth + 1);
+}
+
 let compact = null;
 function syncHeader(){
   const next = window.scrollY > 64;
@@ -1619,9 +1578,13 @@ function syncHeader(){
   compact = next;
   topbar.classList.toggle('compact', next);
   topbar.classList.toggle('on-dark', next);
+  syncTabClip();                 // the row is re-laid out between states
 }
 syncHeader();
+syncTabClip();
 window.addEventListener('scroll', syncHeader, { passive:true });
+window.addEventListener('resize', syncTabClip, { passive:true });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncTabClip);
 
 /* the tab matching the section you're actually in reads at full strength */
 const tabFor = new Map();
