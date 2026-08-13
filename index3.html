@@ -199,6 +199,27 @@ a{ color:inherit; }
   flex:1 1 auto; width:100%; min-height:280px;
 }
 .s-hero .stage-slot{ min-height:clamp(360px, 48vh, 580px); }
+.hero-media{
+  position:relative;
+  flex:1 1 auto; width:100%;
+  min-height:clamp(360px, 48vh, 580px);
+  display:flex; align-items:center; justify-content:center;
+}
+.hero-media video{
+  width:min(100%, 560px);
+  height:auto;
+  aspect-ratio:1;
+  object-fit:contain;
+  display:block;
+}
+.hero-vid-mark{
+  position:absolute;
+  left:50%; bottom:10%;
+  transform:translateX(-50%);
+  font-size:clamp(22px, 3.2vw, 34px);
+  pointer-events:none;
+  z-index:2;
+}
 .s-colors .stage-slot{ min-height:clamp(300px, 42vh, 520px); }
 .stage-slot::before{
   content:"";
@@ -766,7 +787,13 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
       <p class="mono hero-kicker rv">Bone conduction · 0–110°C</p>
       <h1 class="display display--mid rv" id="hero-h">Stay in<br>longer.</h1>
     </div>
-    <div class="stage-slot" data-slot="hero">
+    <div class="hero-media">
+      <video id="heroVid" autoplay muted loop playsinline preload="auto"
+        poster="images/hero-poster.jpg"
+        data-src="videos/hero-obsidian.mp4"
+        src="videos/hero-obsidian.mp4"
+        aria-label="Dipsana headset turning in place"></video>
+      <p class="mark hero-vid-mark">d<span class="dot-i">ı</span>psana</p>
       <div class="hud" aria-hidden="true">
         <span class="hud-c hud-c--tl"></span>
         <span class="hud-c hud-c--tr"></span>
@@ -1078,10 +1105,10 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 import * as THREE from 'three';
 
 const COLORWAYS = [
-  { name:'Obsidian', hex:'#35383C', note:'Matte charcoal, the hero.' },
-  { name:'Glacier',  hex:'#A8D5E2', note:'Pale ice blue.' },
-  { name:'Ember',    hex:'#E2542C', note:'The loud one.' },
-  { name:'Chalk',    hex:'#EDE8E0', note:'Off-white.' },
+  { name:'Obsidian', hex:'#35383C', note:'Matte charcoal, the hero.', video:'videos/hero-obsidian.mp4' },
+  { name:'Glacier',  hex:'#A8D5E2', note:'Pale ice blue.',            video:'videos/hero-glacier.mp4' },
+  { name:'Ember',    hex:'#E2542C', note:'The loud one.',             video:'videos/hero-ember.mp4' },
+  { name:'Chalk',    hex:'#EDE8E0', note:'Off-white.',                video:'videos/hero-chalk.mp4' },
 ];
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1315,9 +1342,33 @@ function applyBodyColour(c){
 }
 applyBodyColour(colTo);
 
+const heroVid = document.getElementById('heroVid');
+COLORWAYS.forEach(cw => {
+  const pre = document.createElement('video');
+  pre.preload = 'auto';
+  pre.muted = true;
+  pre.src = cw.video;
+});
+function setHeroVideo(i){
+  if (!heroVid) return;
+  const src = COLORWAYS[i].video;
+  if ((heroVid.dataset.src || heroVid.getAttribute('src')) === src) return;
+  const t = heroVid.currentTime || 0;
+  const resume = !heroVid.paused;
+  const onReady = () => {
+    heroVid.removeEventListener('loadeddata', onReady);
+    try { heroVid.currentTime = t; } catch (e) {}
+    if (resume) heroVid.play().catch(() => {});
+  };
+  heroVid.addEventListener('loadeddata', onReady);
+  heroVid.dataset.src = src;
+  heroVid.src = src;
+}
+
 function selectColorway(i, silent){
   activeIndex = i;
   const cw = COLORWAYS[i];
+  setHeroVideo(i);
 
   colFrom.copy(bodyMat.color);
   colTo.set(cw.hex);
