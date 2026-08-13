@@ -237,8 +237,8 @@ a{color:inherit}
    match would be fighting the content every few screens. It stays dark
    throughout instead — one continuous header with the utility strip. */
 .nav{
-  display:flex; align-items:center; justify-content:space-between;
-  gap:16px;
+  display:flex; align-items:center; flex-wrap:wrap; justify-content:space-between;
+  gap:8px 16px;
   padding:14px var(--pad);
   background:rgba(14,17,25,.82);
   backdrop-filter:saturate(180%) blur(20px);
@@ -251,7 +251,7 @@ a{color:inherit}
 }
 .nav-tabs a{
   font-variation-settings:'opsz' 14,'wdth' 90,'wght' 600;
-  font-size:14px; text-decoration:none; color:var(--ink);
+  font-size:14px; text-decoration:none; color:var(--ink); white-space:nowrap;
   opacity:.72; transition:opacity .2s ease;
 }
 .nav-tabs a:hover{ opacity:1; }
@@ -690,7 +690,17 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 }
 @media (max-width:820px){
   .util-bar li:nth-child(n+3){ display:none; }
-  .nav-tabs{ display:none; }
+  /* too narrow for tabs beside the wordmark and CTA — drop to a second,
+     horizontally-scrolling row rather than losing section jumps entirely */
+  .nav-tabs{
+    order:3; width:100%; flex-basis:100%;
+    overflow-x:auto; scrollbar-width:none;
+    padding-top:2px; margin-top:2px;
+    border-top:1px solid var(--rule);
+  }
+  .nav-tabs::-webkit-scrollbar{ display:none; }
+  .nav-tabs li{ flex:0 0 auto; }
+  .nav-tabs a{ display:inline-block; padding:8px 0; }
 }
 @media (max-width:768px){
   .uc-grid{ grid-template-columns:1fr; gap:22px; }
