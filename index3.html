@@ -330,8 +330,15 @@ section, .s-foot{
 .chapter-frame img{
   position:absolute; inset:0;
   width:100%; height:100%;
-  object-fit:cover; object-position:center 22%;
+  object-fit:cover; object-position:center 14%;
+  transform:scale(1.14);
+  transform-origin:center 18%;
   display:block;
+}
+.chapter--ice .chapter-frame img{
+  object-position:center 42%;
+  transform:scale(1.08);
+  transform-origin:center 45%;
 }
 .chapter-frame::after{
   content:"";
@@ -388,7 +395,9 @@ section, .s-foot{
 .contrast-frame img{
   position:absolute; inset:0;
   width:100%; height:100%;
-  object-fit:cover; object-position:center 30%;
+  object-fit:cover; object-position:center 18%;
+  transform:scale(1.12);
+  transform-origin:center 22%;
 }
 .contrast-frame::after{
   content:"";
@@ -714,7 +723,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   <symbol id="i-btn" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="18.5" cy="12" r="2.2"/></symbol>
 </defs></svg>
 
-<canvas id="stage" role="img" aria-label="A slowly rotating three-dimensional view of the Dipsana bone conduction headset: a thin neckband, two wedge-shaped housings, hooks that curve over the ear, and rounded pads that rest on the cheekbone."></canvas>
+<canvas id="stage" role="img" aria-label="A slowly rotating three-dimensional view of the Dipsana bone conduction headset: two wedge-shaped housings, hooks that curve over the ear, and rounded pads that rest on the cheekbone. Head-worn, no neckband."></canvas>
 
 <div class="rail" aria-hidden="true">
   <span class="rail-deg">110°</span>
@@ -792,7 +801,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
         </g>
       </svg>
       <figcaption class="plot-cap mono">
-        <span>sauna</span><span>steam</span><span>plunge</span><span>ice</span>
+        <span>sauna</span><span>steam</span><span>contrast</span><span>ice</span>
       </figcaption>
     </figure>
   </section>
@@ -819,13 +828,13 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
     </div>
   </section>
 
-  <section class="chapter chapter--cold" data-reveal aria-labelledby="u3">
+  <section class="chapter chapter--cold chapter--ice" data-reveal aria-labelledby="u3">
     <div class="chapter-frame">
-      <img src="images/v3-plunge.jpg" alt="Close-up of a young man in an ice bath, wet skin and droplets, wearing Dipsana headphones" width="864" height="1152" loading="lazy" decoding="async">
+      <img src="images/v3-ice.jpg" alt="Close-up of a young man's head in an ice bath, ice cubes at the waterline, wearing Dipsana headphones" width="864" height="1152" loading="lazy" decoding="async">
       <div class="chapter-copy">
-        <p class="mono deg-cold rv">Cold plunge · 3–10°C · 2–3 min</p>
-        <h2 class="display display--mid rv" id="u3">Cold plunge</h2>
-        <p class="lede rv">One song. Get in, finish the song, get out.</p>
+        <p class="mono deg-cold rv">Ice bath · 0–5°C · 3–5 min</p>
+        <h2 class="display display--mid rv" id="u3">Ice bath</h2>
+        <p class="lede rv">Offline mode, because your phone is in a locker and your hands don’t work anyway.</p>
       </div>
     </div>
   </section>
@@ -882,7 +891,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
           <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-temp"/></svg></div>
           <span class="mono swap-deg">0–110°</span>
           <p class="swap-p">Silicone softens, slips and dies in sauna heat.</p>
-          <div class="swap-a"><span class="tag">Nitinol band</span>
+          <div class="swap-a"><span class="tag">Nitinol frame</span>
             <p>Heat-stable pads. The frame remembers its shape.</p></div>
         </li>
         <li class="rv">
@@ -948,7 +957,6 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
           </g>
           <g fill="rgba(240,235,227,.04)" stroke="rgba(240,235,227,.72)"
              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M 620 294 C 672 282, 728 296, 752 332 C 774 364, 772 396, 752 418" fill="none"/>
             <path d="M 378 372 C 350 340, 352 288, 386 258 C 420 228, 470 228, 498 254" fill="none"/>
             <path d="M 486 248 L 596 270 C 616 274, 626 288, 622 306 C 618 326, 602 338, 582 340
                      L 502 348 C 482 350, 470 338, 470 318 L 470 272 C 470 258, 476 246, 486 248 Z"/>
@@ -1008,7 +1016,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
       <div class="spec"><dt>Storage</dt><dd>64GB onboard</dd></div>
       <div class="spec"><dt>Above water</dt><dd>Bluetooth 5.4</dd></div>
       <div class="spec"><dt>Below water</dt><dd>Offline MP3 mode</dd></div>
-      <div class="spec"><dt>Band</dt><dd>Nitinol memory alloy</dd></div>
+      <div class="spec"><dt>Frame</dt><dd>Nitinol, head-worn</dd></div>
       <div class="spec"><dt>Contact pads</dt><dd>Heat-stable, not silicone</dd></div>
       <div class="spec"><dt>Playback</dt><dd>10 hours</dd></div>
       <div class="spec"><dt>Fast charge</dt><dd>10 minutes = 3 hours</dd></div>
@@ -1125,17 +1133,6 @@ const root  = new THREE.Group();
 const inner = new THREE.Group();
 root.add(inner);
 scene.add(root);
-
-const bandCurve = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(-0.615, 0.19, -0.04),
-  new THREE.Vector3(-0.610, 0.21, -0.30),
-  new THREE.Vector3(-0.440, 0.12, -0.62),
-  new THREE.Vector3( 0.000, 0.03, -0.75),
-  new THREE.Vector3( 0.440, 0.12, -0.62),
-  new THREE.Vector3( 0.610, 0.21, -0.30),
-  new THREE.Vector3( 0.615, 0.19, -0.04),
-], false, 'catmullrom', 0.4);
-inner.add(new THREE.Mesh(new THREE.TubeGeometry(bandCurve, 110, 0.035, 12, false), bandMat));
 
 function housingGeometry(){
   const s = new THREE.Shape();
