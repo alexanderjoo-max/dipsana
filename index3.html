@@ -1133,76 +1133,64 @@ const inner = new THREE.Group();
 root.add(inner);
 scene.add(root);
 
-function housingGeometry(){
-  const s = new THREE.Shape();
-  s.moveTo(-0.178, 0.070);
-  s.quadraticCurveTo(-0.180, 0.132, -0.124, 0.130);
-  s.lineTo( 0.072, 0.104);
-  s.quadraticCurveTo( 0.158, 0.096,  0.161, 0.020);
-  s.quadraticCurveTo( 0.164,-0.068,  0.086,-0.116);
-  s.lineTo(-0.070,-0.158);
-  s.quadraticCurveTo(-0.168,-0.182, -0.180,-0.082);
-  s.closePath();
-
-  const g = new THREE.ExtrudeGeometry(s, {
-    depth:0.082, bevelEnabled:true,
-    bevelThickness:0.024, bevelSize:0.024, bevelSegments:5,
-    curveSegments:14, steps:1
-  });
-  g.translate(0, 0, -0.041);
-  g.rotateY(-Math.PI/2);
-  return g;
-}
-const HOUSING_HALF = 0.041 + 0.024;
-const HOUSING_Z    = 0.140;
+const X = 0.62;
+const bandCurve = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(-X, 0.13, 0.00),
+  new THREE.Vector3(-0.60, 0.16, -0.30),
+  new THREE.Vector3(-0.40, 0.07, -0.62),
+  new THREE.Vector3( 0.00, 0.01, -0.74),
+  new THREE.Vector3( 0.40, 0.07, -0.62),
+  new THREE.Vector3( 0.60, 0.16, -0.30),
+  new THREE.Vector3( X, 0.13, 0.00),
+], false, 'catmullrom', 0.42);
+inner.add(new THREE.Mesh(new THREE.TubeGeometry(bandCurve, 120, 0.026, 14, false), bandMat));
 
 for (const side of [-1, 1]) {
-  const h = new THREE.Mesh(housingGeometry(), bodyMat);
-  h.position.set(side * 0.605, 0.045, HOUSING_Z);
-  inner.add(h);
+  const housing = new THREE.Mesh(new THREE.CapsuleGeometry(0.052, 0.20, 8, 18), bodyMat);
+  housing.rotation.x = Math.PI / 2;
+  housing.scale.set(0.82, 1.05, 1.22);
+  housing.position.set(side * X, 0.11, 0.05);
+  inner.add(housing);
 }
 
 function hookGeometry(){
   const c = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0,  0.135, 0.190),
-    new THREE.Vector3(0,  0.290, 0.420),
-    new THREE.Vector3(0,  0.310, 0.600),
-    new THREE.Vector3(0,  0.180, 0.700),
-    new THREE.Vector3(0,  0.000, 0.680),
-    new THREE.Vector3(0, -0.150, 0.560),
-  ], false, 'catmullrom', 0.5);
-  const g = new THREE.TubeGeometry(c, 72, 0.046, 12, false);
-  g.scale(0.66, 1, 1);
+    new THREE.Vector3(0,  0.12, 0.14),
+    new THREE.Vector3(0,  0.24, 0.30),
+    new THREE.Vector3(0,  0.22, 0.46),
+    new THREE.Vector3(0,  0.04, 0.52),
+    new THREE.Vector3(0, -0.10, 0.46),
+  ], false, 'catmullrom', 0.4);
+  const g = new THREE.TubeGeometry(c, 80, 0.028, 12, false);
+  g.scale(0.72, 1, 1);
   return g;
 }
 for (const side of [-1, 1]) {
   const hk = new THREE.Mesh(hookGeometry(), bodyMat);
-  hk.position.x = side * 0.600;
+  hk.position.x = side * X;
   inner.add(hk);
 }
 
 for (const side of [-1, 1]) {
-  const pod = new THREE.Mesh(new THREE.SphereGeometry(1, 26, 18), padMat);
-  pod.scale.set(0.038, 0.072, 0.058);
-  pod.position.set(side * 0.548, 0.055, 0.355);
-  pod.rotation.z = side * 0.08;
-  pod.rotation.x = -0.08;
-  inner.add(pod);
+  const pad = new THREE.Mesh(new THREE.CapsuleGeometry(0.048, 0.036, 6, 16), padMat);
+  pad.scale.set(0.78, 1.18, 0.88);
+  pad.position.set(side * X, -0.155, 0.45);
+  inner.add(pad);
 }
 
 {
-  const plate = new THREE.Mesh(new THREE.CapsuleGeometry(0.030, 0.110, 4, 12), btnMat);
-  plate.rotation.z = Math.PI/2;
-  plate.rotation.y = Math.PI/2;
-  plate.scale.set(1, 1, 0.45);
-  plate.position.set(-0.605 - HOUSING_HALF + 0.010, -0.008, HOUSING_Z - 0.02);
+  const plate = new THREE.Mesh(new THREE.CapsuleGeometry(0.026, 0.10, 4, 12), btnMat);
+  plate.rotation.z = Math.PI / 2;
+  plate.rotation.y = Math.PI / 2;
+  plate.scale.set(1, 1, 0.42);
+  plate.position.set(-X - 0.048, 0.10, 0.04);
   inner.add(plate);
 
-  const bGeo = new THREE.CylinderGeometry(0.013, 0.013, 0.02, 12);
+  const bGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.018, 12);
   for (let i = -1; i <= 1; i++) {
     const b = new THREE.Mesh(bGeo, padMat);
-    b.rotation.z = Math.PI/2;
-    b.position.set(-0.605 - HOUSING_HALF - 0.004, -0.008, HOUSING_Z - 0.02 + i * 0.052);
+    b.rotation.z = Math.PI / 2;
+    b.position.set(-X - 0.056, 0.10, 0.04 + i * 0.046);
     inner.add(b);
   }
 }
@@ -1227,9 +1215,9 @@ const markMat = new THREE.MeshBasicMaterial({
   map:markTex, transparent:true, opacity:0.62, depthWrite:false,
   color:0xC9CCCF
 });
-const markMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.185, 0.046), markMat);
-markMesh.rotation.y = Math.PI/2;
-markMesh.position.set(0.605 + HOUSING_HALF + 0.004, 0.048, HOUSING_Z - 0.025);
+const markMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.04), markMat);
+markMesh.rotation.y = Math.PI / 2;
+markMesh.position.set(X + 0.052, 0.12, 0.04);
 inner.add(markMesh);
 
 if (document.fonts && document.fonts.ready) {
