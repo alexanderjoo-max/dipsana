@@ -677,11 +677,11 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   .btn-short{ display:inline; }
   .topbar.is-scrolled .nav-tabs{
     border-top:0; margin-top:0; padding-top:0;
-    width:auto; flex:1 1 auto; flex-basis:auto; order:0;
-    min-width:0;
+    width:auto; flex:1 1 0; flex-basis:0; order:0;
+    min-width:0; gap:14px;
   }
-  .topbar.is-scrolled .mark{ display:none; }
-  .topbar.is-scrolled{ flex-wrap:nowrap; }
+  .topbar.is-scrolled{ flex-wrap:nowrap; align-items:center; }
+  .topbar.is-scrolled .mark{ flex:0 0 auto; }
   .story-head{ grid-template-columns:1fr; gap:16px; }
   .swap li{ grid-template-columns:28px 1fr; gap:8px 12px; padding:16px 0; }
   .swap-deg{ grid-column:2; }
