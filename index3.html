@@ -140,17 +140,19 @@ a{ color:inherit; }
 
 /* nav */
 .topbar{
-  position:fixed; top:0; left:0; right:0; z-index:30;
+  position:fixed; top:0; left:0; right:0; z-index:50;
   display:flex; align-items:center; justify-content:space-between;
   gap:16px;
   padding:16px var(--pad);
+  padding-top:max(16px, env(safe-area-inset-top));
   background:transparent;
   border-bottom:1px solid transparent;
   transition:background .4s ease, border-color .4s ease, padding .4s var(--ease);
 }
 .topbar.is-scrolled{
-  padding-top:11px; padding-bottom:11px;
-  background:rgba(8,9,12,.72);
+  padding-top:max(11px, env(safe-area-inset-top));
+  padding-bottom:11px;
+  background:rgba(8,9,12,.78);
   backdrop-filter:saturate(160%) blur(18px);
   -webkit-backdrop-filter:saturate(160%) blur(18px);
   border-bottom-color:var(--line);
@@ -170,14 +172,14 @@ a{ color:inherit; }
 
 .btn{
   display:inline-flex; align-items:center; justify-content:center;
-  background:var(--paper); color:var(--void);
+  background:var(--ember); color:#fff;
   font-family:inherit; font-weight:500; font-size:14px; line-height:1;
   padding:12px 20px;
   border:0; border-radius:999px;
   text-decoration:none; cursor:pointer;
   transition:background .25s ease, transform .25s var(--ease), color .25s ease;
 }
-.btn:hover{ background:var(--ice); color:var(--void); }
+.btn:hover{ background:var(--ember-soft); color:#fff; }
 .btn:active{ transform:scale(.98); }
 .btn--sm{ font-size:12.5px; padding:9px 16px; }
 .btn-short{ display:none; }
@@ -660,11 +662,15 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
     flex-wrap:nowrap;
     align-items:center;
     justify-content:space-between;
+    background:rgba(8,9,12,.92);
+    backdrop-filter:saturate(160%) blur(18px);
+    -webkit-backdrop-filter:saturate(160%) blur(18px);
+    border-bottom-color:var(--line);
   }
   .nav-tabs{ display:none; }
   .btn-full{ display:none; }
   .btn-short{ display:inline; }
-  .topbar .mark{ flex:0 0 auto; }
+  .topbar .mark{ flex:0 0 auto; color:#fff; }
   .story-head{ grid-template-columns:1fr; gap:16px; }
   .swap li{ grid-template-columns:28px 1fr; gap:8px 12px; padding:16px 0; }
   .swap-deg{ grid-column:2; }
