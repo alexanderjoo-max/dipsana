@@ -199,17 +199,6 @@ a{ color:inherit; }
   flex:1 1 auto; width:100%; min-height:280px;
 }
 .s-hero .stage-slot{ min-height:clamp(360px, 48vh, 580px); }
-.hero-media{
-  position:relative;
-  flex:1 1 auto; width:100%;
-  min-height:clamp(280px, 42vh, 520px);
-  display:flex; align-items:center; justify-content:center;
-}
-.hero-media img{
-  width:min(100%, 560px);
-  height:auto;
-  display:block;
-}
 .s-colors .stage-slot{ min-height:clamp(300px, 42vh, 520px); }
 .stage-slot::before{
   content:"";
@@ -777,8 +766,13 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
       <p class="mono hero-kicker rv">Bone conduction · 0–110°C</p>
       <h1 class="display display--mid rv" id="hero-h">Stay in<br>longer.</h1>
     </div>
-    <div class="hero-media">
-      <img src="images/hero-product.png" alt="Dipsana bone-conduction headset" width="1200" height="1200">
+    <div class="stage-slot" data-slot="hero">
+      <div class="hud" aria-hidden="true">
+        <span class="hud-c hud-c--tl"></span>
+        <span class="hud-c hud-c--tr"></span>
+        <span class="hud-c hud-c--bl"></span>
+        <span class="hud-c hud-c--br"></span>
+      </div>
     </div>
     <div>
       <p class="hero-sub rv">Audio that does not mind the heat, or the ice.</p>
