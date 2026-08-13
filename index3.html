@@ -273,10 +273,6 @@ section, .s-foot{
   padding-bottom:3.5vh;
   text-align:center;
 }
-.s-hero .display{
-  font-size:clamp(2.6rem, 6.8vw, 5.6rem);
-  line-height:.92;
-}
 .s-hero::before{
   content:"";
   position:absolute; inset:8% 10% auto; height:52%;
@@ -694,8 +690,12 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   form{ flex-direction:column; }
   .s-hero{ padding-top:calc(var(--head, 64px) + 6vh); }
 }
+@media (max-width:768px){
+  .display--mid{ font-size:clamp(2.8rem, 12vw, 4.6rem); }
+}
 @media (max-width:420px){
-  .display{ font-size:clamp(3rem, 16vw, 4.4rem); }
+  .display,
+  .display--mid{ font-size:clamp(3rem, 16vw, 4.4rem); }
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -749,7 +749,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   <section class="s-hero" data-reveal aria-labelledby="hero-h">
     <div>
       <p class="mono hero-kicker rv">Bone conduction · 0–110°C</p>
-      <h1 class="display rv" id="hero-h">Stay in<br>longer.</h1>
+      <h1 class="display display--mid rv" id="hero-h">Stay in<br>longer.</h1>
     </div>
     <div class="stage-slot" data-slot="hero">
       <div class="hud" aria-hidden="true">
