@@ -213,16 +213,39 @@ a{color:inherit}
 .mark--lg{ font-size:clamp(30px,3.8vw,46px); }
 
 /* ---------------------------------------------------------------
-   NAV — a dark utility strip (the specs, always in view) over a
-   tabbed main bar, the way a dive computer keeps its numbers on
-   screen the whole time.
+   NAV
+   Two states. At the top it has no chrome at all: the spec strip and
+   the wordmark sit straight on the pale hero in dark ink, so the
+   header reads as part of the hero rather than a bar over it. Past
+   the fold it sheds the spec strip, picks up a frosted dark ground
+   and flips to light ink — roughly half the height, and translucent
+   enough that the band underneath still shows through.
    --------------------------------------------------------------- */
-.topbar{ position:fixed; top:0; left:0; right:0; z-index:20; }
+.topbar{
+  position:fixed; top:0; left:0; right:0; z-index:20;
+  background:transparent;
+  border-bottom:1px solid transparent;
+  transition:background .4s ease, border-color .4s ease;
+}
+.topbar.compact{
+  background:rgba(14,17,25,.62);
+  backdrop-filter:saturate(180%) blur(22px);
+  -webkit-backdrop-filter:saturate(180%) blur(22px);
+  border-bottom-color:rgba(255,255,255,.11);
+}
+/* used to take a silent measurement of the collapsed height */
+.topbar.no-anim, .topbar.no-anim *{ transition:none !important; }
+
 .util-bar{
   display:flex; justify-content:center; gap:clamp(16px,4vw,40px);
   margin:0; padding:9px var(--pad); list-style:none;
-  background:var(--night);
-  color:var(--paper-soft);
+  color:var(--ink-soft);
+  max-height:56px; overflow:hidden;
+  transition:max-height .45s var(--ease), opacity .3s ease,
+             padding .45s var(--ease), color .35s ease;
+}
+.topbar.compact .util-bar{
+  max-height:0; opacity:0; padding-top:0; padding-bottom:0;
 }
 .util-bar li{
   display:flex; align-items:center; gap:6px;
@@ -230,21 +253,17 @@ a{color:inherit}
   font-size:11px; letter-spacing:.08em; text-transform:uppercase;
   white-space:nowrap;
 }
-.util-bar .ico{ width:14px; height:14px; color:var(--sky); }
-.util-bar b{ color:var(--paper); font-weight:inherit; }
+.util-bar .ico{ width:14px; height:14px; color:var(--glacier); }
+.util-bar b{ color:var(--ink); font-weight:inherit; transition:color .35s ease; }
 
-/* The page alternates mist and night bands, so a chrome that tints to
-   match would be fighting the content every few screens. It stays dark
-   throughout instead — one continuous header with the utility strip. */
 .nav{
   display:flex; align-items:center; flex-wrap:wrap; justify-content:space-between;
   gap:8px 16px;
   padding:14px var(--pad);
-  background:rgba(14,17,25,.82);
-  backdrop-filter:saturate(180%) blur(20px);
-  -webkit-backdrop-filter:saturate(180%) blur(20px);
-  border-bottom:1px solid var(--rule);
+  transition:padding .45s var(--ease);
 }
+.topbar.compact .nav{ padding-top:11px; padding-bottom:11px; }
+.nav > .mark{ transition:color .35s ease, opacity .3s ease; }
 .nav-tabs{
   display:flex; align-items:center; gap:clamp(14px,2.4vw,30px);
   list-style:none; margin:0; padding:0;
@@ -252,9 +271,9 @@ a{color:inherit}
 .nav-tabs a{
   font-variation-settings:'opsz' 14,'wdth' 90,'wght' 600;
   font-size:14px; text-decoration:none; color:var(--ink); white-space:nowrap;
-  opacity:.72; transition:opacity .2s ease;
+  opacity:.6; transition:opacity .25s ease, color .35s ease;
 }
-.nav-tabs a:hover{ opacity:1; }
+.nav-tabs a:hover, .nav-tabs a.is-active{ opacity:1; }
 .nav-right{ display:flex; align-items:center; gap:18px; }
 
 /* pill buttons -------------------------------------------------- */
@@ -281,7 +300,9 @@ section, .s-foot{
   position:relative;
   padding-left:var(--pad); padding-right:var(--pad);
   display:flex; flex-direction:column; justify-content:center;
-  scroll-margin-top:var(--head, 90px);
+  /* an anchor jump always lands in the collapsed state, so that — not the
+     open height — is what the target has to clear */
+  scroll-margin-top:calc(var(--head, 52px) + 10px);
 }
 .wrap{ width:100%; max-width:1120px; margin:0 auto; }
 .centered{ text-align:center; align-items:center; }
@@ -290,7 +311,7 @@ section, .s-foot{
 .band--mist{ background:var(--mist); }
 .band--night{ background:var(--night); }
 
-.s-hero  { min-height:100svh; padding-top:calc(var(--head, 90px) + 5vh); padding-bottom:5vh;
+.s-hero  { min-height:100svh; padding-top:calc(var(--head-full, 96px) + 4vh); padding-bottom:5vh;
            justify-content:space-between; text-align:center; }
 .s-mosaic{ min-height:auto; padding-top:15vh; padding-bottom:11vh; }
 .uc      { min-height:auto;  padding-top:11vh; padding-bottom:11vh; }
@@ -697,10 +718,23 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
     overflow-x:auto; scrollbar-width:none;
     padding-top:2px; margin-top:2px;
     border-top:1px solid var(--rule);
+    /* fades only when the tabs actually overrun the box — below that the
+       masked strip is empty anyway — so a clipped tab reads as swipeable */
+    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);
+    mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);
   }
   .nav-tabs::-webkit-scrollbar{ display:none; }
   .nav-tabs li{ flex:0 0 auto; }
   .nav-tabs a{ display:inline-block; padding:8px 0; }
+
+  /* scrolled: the wordmark goes, which frees the first row for the tabs —
+     two rows become one, and the header is ~a third of its open height */
+  .topbar.compact .nav > .mark{ display:none; }
+  .topbar.compact .nav-tabs{
+    order:0; width:auto; flex:1 1 0; min-width:0;
+    border-top:0; margin-top:0; padding-top:0;
+  }
+  .topbar.compact .nav-tabs a{ padding:0; }
 }
 @media (max-width:768px){
   .uc-grid{ grid-template-columns:1fr; gap:22px; }
@@ -771,7 +805,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 <canvas id="stage" role="img" aria-label="A slowly rotating three-dimensional view of the Dipsana bone conduction headset: a thin neckband, two wedge-shaped housings, hooks that curve over the ear, and rounded pads that rest on the cheekbone."></canvas>
 <div class="hero-wash" id="heroWash" aria-hidden="true"></div>
 
-<div class="topbar on-dark" id="topbar">
+<div class="topbar" id="topbar">
   <ul class="util-bar">
     <li><svg class="ico" aria-hidden="true"><use href="#i-temp"/></svg><b>0&ndash;110&deg;C</b> rated</li>
     <li><svg class="ico" aria-hidden="true"><use href="#i-water"/></svg><b>IP68</b> to 2m</li>
@@ -1374,10 +1408,23 @@ function resize(){
   renderer.setPixelRatio(dpr);
   renderer.setSize(w, h, false);
 
-  // the hero's top padding and every #anchor jump key off the real
-  // header height, which changes with the wrapping of the utility strip
-  const head = document.getElementById('topbar').offsetHeight;
-  document.documentElement.style.setProperty('--head', head + 'px');
+  // The header has two heights and both are laid out, not fixed: the open
+  // one sets the hero's top padding, the collapsed one sets anchor offsets.
+  // Measuring the collapsed height means briefly forcing the class — done
+  // inside one task with transitions off, so no intermediate frame paints.
+  const tb = document.getElementById('topbar');
+  const wasCompact = tb.classList.contains('compact');
+  tb.classList.add('no-anim');
+  tb.classList.remove('compact');
+  const full = tb.offsetHeight;
+  tb.classList.add('compact');
+  const collapsed = tb.offsetHeight;
+  tb.classList.toggle('compact', wasCompact);
+  void tb.offsetHeight;
+  tb.classList.remove('no-anim');
+
+  document.documentElement.style.setProperty('--head', collapsed + 'px');
+  document.documentElement.style.setProperty('--head-full', full + 'px');
 
   const hero = document.querySelector('.s-hero');
   document.getElementById('heroWash').style.height = hero.offsetHeight + 'px';
@@ -1559,7 +1606,42 @@ requestAnimationFrame(frame);
 window.addEventListener('resize', resize, { passive:true });
 
 /* =================================================================
-   6 · REVEALS
+   6 · HEADER STATE
+   Collapsed past the fold, and the ink flips with it: over the pale
+   hero the header is dark-on-light with no ground, everywhere else
+   it's light-on-frosted-dark.
+   ================================================================= */
+const topbar = document.getElementById('topbar');
+let compact = null;
+function syncHeader(){
+  const next = window.scrollY > 64;
+  if (next === compact) return;
+  compact = next;
+  topbar.classList.toggle('compact', next);
+  topbar.classList.toggle('on-dark', next);
+}
+syncHeader();
+window.addEventListener('scroll', syncHeader, { passive:true });
+
+/* the tab matching the section you're actually in reads at full strength */
+const tabFor = new Map();
+document.querySelectorAll('.nav-tabs a').forEach(a => {
+  const sec = document.getElementById(a.getAttribute('href').slice(1));
+  if (sec) tabFor.set(sec, a);
+});
+if (tabFor.size) {
+  const spy = new IntersectionObserver(entries => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      for (const a of tabFor.values()) a.classList.remove('is-active');
+      tabFor.get(e.target).classList.add('is-active');
+    }
+  }, { rootMargin:'-45% 0px -50% 0px' });
+  for (const sec of tabFor.keys()) spy.observe(sec);
+}
+
+/* =================================================================
+   7 · REVEALS
    ================================================================= */
 if (!reduced) {
   document.querySelectorAll('[data-reveal]').forEach(sec => {
@@ -1578,7 +1660,7 @@ if (!reduced) {
 }
 
 /* =================================================================
-   7 · WAITLIST FORM
+   8 · WAITLIST FORM
    ================================================================= */
 async function submitToKit(email){
   await new Promise(r => setTimeout(r, 600));
