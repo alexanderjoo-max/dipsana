@@ -17,7 +17,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -55,12 +55,21 @@ body{
   margin:0;
   background:var(--void);
   color:var(--paper);
-  font-family:"Sora", ui-sans-serif, system-ui, sans-serif;
-  font-weight:400;
+  font-family:"Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  font-variation-settings:'opsz' 14,'wdth' 90,'wght' 400;
   font-size:16px;
   line-height:1.55;
   overflow-x:hidden;
   -webkit-font-smoothing:antialiased;
+}
+body::before{
+  content:"";
+  position:fixed; inset:0; z-index:-1; pointer-events:none;
+  background-image:
+    linear-gradient(rgba(240,235,227,.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240,235,227,.045) 1px, transparent 1px);
+  background-size:56px 56px;
+  mask-image:radial-gradient(ellipse at 50% 18%, #000 10%, transparent 72%);
 }
 
 a{ color:inherit; }
@@ -72,31 +81,22 @@ a{ color:inherit; }
 }
 
 /* type */
-.serif{
-  font-family:"Fraunces", "Times New Roman", serif;
-  font-optical-sizing:auto;
-  font-weight:420;
-  letter-spacing:-.03em;
-  line-height:.92;
-}
 .display{
-  font-family:"Fraunces", "Times New Roman", serif;
-  font-optical-sizing:auto;
-  font-weight:420;
+  font-family:"Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  font-variation-settings:'opsz' 96,'wdth' 100,'wght' 800;
   font-size:clamp(3.2rem, 10.4vw, 7.6rem);
-  line-height:.88;
+  line-height:.92;
   letter-spacing:-.035em;
   margin:0;
 }
 .display--mid{
   font-size:clamp(2.4rem, 6.4vw, 5.2rem);
-  line-height:.92;
+  line-height:.94;
 }
 .lede{
   max-width:38ch;
   color:var(--paper-dim);
   font-size:clamp(16px, 1.5vw, 18px);
-  font-weight:300;
   margin:0;
 }
 .mono{
@@ -116,8 +116,8 @@ a{ color:inherit; }
 
 /* wordmark */
 .mark{
-  font-family:"Sora", sans-serif;
-  font-weight:600;
+  font-family:"Bricolage Grotesque", sans-serif;
+  font-variation-settings:'opsz' 24,'wdth' 100,'wght' 800;
   letter-spacing:-.06em;
   text-transform:lowercase;
   font-size:20px;
@@ -197,15 +197,43 @@ a{ color:inherit; }
   position:relative;
   flex:1 1 auto; width:100%; min-height:280px;
 }
+.s-hero .stage-slot{ min-height:clamp(360px, 48vh, 580px); }
+.s-colors .stage-slot{ min-height:clamp(300px, 42vh, 520px); }
 .stage-slot::before{
   content:"";
-  position:absolute; inset:8% 12% 0;
-  background:radial-gradient(ellipse at 50% 62%,
-    rgba(232,210,180,.16) 0%,
-    rgba(210,90,40,.10) 28%,
-    rgba(142,196,212,.08) 52%,
+  position:absolute; inset:10% 16% 6%;
+  background:radial-gradient(ellipse at 50% 58%,
+    rgba(232,210,180,.14) 0%,
+    rgba(210,90,40,.08) 28%,
+    rgba(142,196,212,.07) 52%,
     transparent 72%);
   pointer-events:none;
+}
+.hud{
+  position:absolute; inset:8px 10%;
+  pointer-events:none;
+  z-index:1;
+}
+.hud-c{
+  position:absolute; width:14px; height:14px;
+  border-color:rgba(142,196,212,.55);
+  border-style:solid;
+}
+.hud-c--tl{ top:0; left:0; border-width:1px 0 0 1px; }
+.hud-c--tr{ top:0; right:0; border-width:1px 1px 0 0; }
+.hud-c--bl{ bottom:0; left:0; border-width:0 0 1px 1px; }
+.hud-c--br{ bottom:0; right:0; border-width:0 1px 1px 0; }
+.hud-read{
+  position:absolute; top:6px; left:22px;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+  color:rgba(142,196,212,.7);
+}
+.hud-axis{
+  position:absolute; right:22px; bottom:6px;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:10px; letter-spacing:.12em;
+  color:rgba(240,235,227,.4);
 }
 
 main{ position:relative; z-index:1; }
@@ -233,7 +261,11 @@ section, .s-foot{
 .rail-track{
   position:relative;
   width:1px; height:min(42vh, 320px);
-  background:var(--line);
+  background:repeating-linear-gradient(
+    180deg,
+    var(--line-strong) 0 1px,
+    transparent 1px 16px
+  );
 }
 .rail-fill{
   position:absolute; left:0; right:0; top:0;
@@ -249,9 +281,13 @@ section, .s-foot{
 .s-hero{
   min-height:100svh;
   display:flex; flex-direction:column; justify-content:space-between;
-  padding-top:calc(var(--head, 72px) + 4vh);
-  padding-bottom:5vh;
+  padding-top:calc(var(--head, 72px) + 2.4vh);
+  padding-bottom:3.5vh;
   text-align:center;
+}
+.s-hero .display{
+  font-size:clamp(2.6rem, 6.8vw, 5.6rem);
+  line-height:.92;
 }
 .s-hero::before{
   content:"";
@@ -266,13 +302,11 @@ section, .s-foot{
   color:var(--ice);
 }
 .hero-sub{
-  font-family:"Fraunces", serif;
-  font-style:italic;
-  font-weight:400;
-  font-size:clamp(1.25rem, 2.6vw, 1.85rem);
+  font-variation-settings:'opsz' 48,'wdth' 96,'wght' 600;
+  font-size:clamp(1.15rem, 2.2vw, 1.55rem);
   letter-spacing:-.02em;
   color:var(--paper-dim);
-  margin:0 0 26px;
+  margin:0 0 18px;
 }
 .facts{
   display:grid; grid-template-columns:repeat(4,1fr);
@@ -337,11 +371,20 @@ section, .s-foot{
 
 /* mosaic intro */
 .s-range{
-  padding-top:18vh; padding-bottom:10vh;
+  padding-top:16vh; padding-bottom:10vh;
   display:flex; flex-direction:column; align-items:center;
   text-align:center;
 }
 .s-range .lede{ margin:22px auto 0; }
+.plot{
+  width:min(720px, 100%);
+  margin:36px auto 0;
+}
+.plot svg{ width:100%; height:auto; display:block; }
+.plot-cap{
+  display:flex; justify-content:space-between;
+  margin-top:8px;
+}
 
 /* contrast split */
 .s-contrast{
@@ -374,52 +417,61 @@ section, .s-foot{
 
 /* story */
 .s-story{
-  padding-top:16vh; padding-bottom:16vh;
+  padding-top:10vh; padding-bottom:10vh;
 }
 .s-story .wrap{ max-width:var(--max); margin:0 auto; }
 .story-head{
-  max-width:22ch;
-  margin-bottom:clamp(40px, 6vw, 72px);
+  display:grid;
+  grid-template-columns:minmax(240px, 1fr) minmax(220px, .9fr);
+  gap:clamp(20px, 4vw, 64px);
+  align-items:end;
+  margin-bottom:28px;
+  padding-bottom:22px;
+  border-bottom:1px dashed var(--line-strong);
 }
-.story-head .lede{ margin-top:22px; }
+.story-head .lede{ margin-top:14px; }
 .turn{
-  font-family:"Fraunces", serif;
-  font-style:italic;
-  font-weight:400;
-  font-size:clamp(1.6rem, 3.6vw, 2.6rem);
-  line-height:1.12;
+  font-variation-settings:'opsz' 48,'wdth' 96,'wght' 700;
+  font-size:clamp(1.35rem, 2.4vw, 1.85rem);
+  line-height:1.16;
   letter-spacing:-.025em;
-  margin:28px 0 0;
-  max-width:18ch;
+  margin:0;
+  max-width:20ch;
 }
 .turn em{
-  font-style:italic;
+  font-style:normal;
   color:var(--void);
   background:var(--ember);
   padding:.02em .18em .04em;
-  border-radius:.08em;
 }
+.ico{
+  width:22px; height:22px; flex:0 0 auto;
+  stroke:currentColor; fill:none;
+  stroke-width:1.6; stroke-linecap:round; stroke-linejoin:round;
+}
+.sprite{ position:absolute; width:0; height:0; overflow:hidden; }
 .swap{
   list-style:none; margin:0; padding:0;
 }
 .swap li{
   display:grid;
-  grid-template-columns:minmax(140px, 22%) 1fr 1fr;
-  gap:clamp(16px, 3vw, 48px);
-  align-items:start;
-  padding:28px 0;
+  grid-template-columns:28px 92px 1fr 1fr;
+  gap:16px 20px;
+  align-items:center;
+  padding:13px 0;
   border-top:1px solid var(--line);
 }
 .swap li:last-child{ border-bottom:1px solid var(--line); }
-.swap-deg{ color:var(--ice); padding-top:4px; }
+.swap-ico{ color:var(--ice); display:flex; align-items:center; }
+.swap-deg{ color:var(--ice); }
 .swap-p, .swap-a p{
   margin:0;
-  font-size:clamp(1rem, 1.5vw, 1.2rem);
-  line-height:1.4;
-  letter-spacing:-.015em;
+  font-size:15px;
+  line-height:1.35;
+  letter-spacing:-.012em;
 }
-.swap-p{ color:var(--mute); font-weight:300; }
-.swap-a p{ color:var(--paper); margin-top:8px; font-weight:400; }
+.swap-p{ color:var(--mute); }
+.swap-a p{ color:var(--paper); margin-top:3px; }
 .tag{
   display:inline-block;
   font-family:"IBM Plex Mono", monospace;
@@ -439,8 +491,7 @@ section, .s-foot{
 }
 .cw-readout{ min-height:108px; }
 .cw-name{
-  font-family:"Fraunces", serif;
-  font-weight:420;
+  font-variation-settings:'opsz' 72,'wdth' 94,'wght' 700;
   font-size:clamp(2rem, 5vw, 3.4rem);
   letter-spacing:-.03em;
   margin:0;
@@ -501,10 +552,14 @@ section, .s-foot{
   display:grid; grid-template-columns:1fr 1fr;
   column-gap:clamp(32px, 6vw, 90px);
   margin:0 auto; width:100%; max-width:1060px;
+  padding:8px 22px 4px;
+  border:1px solid var(--line);
+  background-image:linear-gradient(180deg, rgba(240,235,227,.03), transparent 48px);
 }
 .spec{
   display:flex; justify-content:space-between; align-items:baseline; gap:20px;
-  padding:18px 0; border-top:1px solid var(--line);
+  padding:13px 0;
+  border-top:1px dashed var(--line);
 }
 .spec dt{
   font-family:"IBM Plex Mono", monospace;
@@ -565,8 +620,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 .done{
   margin:0; opacity:0; transform:translateY(14px);
   transition:opacity .5s ease .12s, transform .6s var(--ease) .12s;
-  font-family:"Fraunces", serif;
-  font-style:italic;
+  font-variation-settings:'opsz' 32,'wdth' 90,'wght' 500;
   font-size:clamp(1.15rem, 2.4vw, 1.55rem);
   color:var(--paper);
   height:0; overflow:hidden;
@@ -628,8 +682,11 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   }
   .topbar.is-scrolled .mark{ display:none; }
   .topbar.is-scrolled{ flex-wrap:nowrap; }
-  .swap li{ grid-template-columns:1fr; gap:8px; padding:22px 0; }
-  .swap-deg{ padding-top:0; }
+  .story-head{ grid-template-columns:1fr; gap:16px; }
+  .swap li{ grid-template-columns:28px 1fr; gap:8px 12px; padding:16px 0; }
+  .swap-deg{ grid-column:2; }
+  .swap-p, .swap-a{ grid-column:2; }
+  .swap-ico{ grid-row:1 / span 3; }
 }
 @media (max-width:768px){
   .facts{ grid-template-columns:1fr 1fr; gap:8px 16px; }
@@ -660,6 +717,14 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 
 <body>
 
+<svg class="sprite" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-temp" viewBox="0 0 24 24"><path d="M10 13.8V5a2 2 0 1 1 4 0v8.8a4.2 4.2 0 1 1-4 0z"/><path d="M12 9v5"/></symbol>
+  <symbol id="i-water" viewBox="0 0 24 24"><path d="M12 3.2c3.3 3.9 5.4 6.6 5.4 9.3a5.4 5.4 0 0 1-10.8 0c0-2.7 2.1-5.4 5.4-9.3z"/></symbol>
+  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="2.4"/><path d="M9.5 3.5v3M14.5 3.5v3M9.5 17.5v3M14.5 17.5v3M3.5 9.5h3M3.5 14.5h3M17.5 9.5h3M17.5 14.5h3"/></symbol>
+  <symbol id="i-batt" viewBox="0 0 24 24"><rect x="2.5" y="7.5" width="16" height="9" rx="2.4"/><path d="M21.5 11v2"/><path d="M6 11v2M9.5 11v2M13 11v2"/></symbol>
+  <symbol id="i-btn" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="18.5" cy="12" r="2.2"/></symbol>
+</defs></svg>
+
 <canvas id="stage" role="img" aria-label="A slowly rotating three-dimensional view of the Dipsana bone conduction headset: a thin neckband, two wedge-shaped housings, hooks that curve over the ear, and rounded pads that rest on the cheekbone."></canvas>
 
 <div class="rail" aria-hidden="true">
@@ -672,7 +737,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 <header class="topbar" id="topbar">
   <a class="mark" href="#top" aria-label="Dipsana, home">d<span class="dot-i">ı</span>psana</a>
   <ul class="nav-tabs">
-    <li><a href="#usage">Rooms</a></li>
+    <li><a href="#usage">Uses</a></li>
     <li><a href="#story">Story</a></li>
     <li><a href="#colors">Colors</a></li>
     <li><a href="#specs">Specs</a></li>
@@ -689,7 +754,16 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
       <p class="mono hero-kicker rv">Bone conduction · 0–110°C</p>
       <h1 class="display rv" id="hero-h">Stay in<br>longer.</h1>
     </div>
-    <div class="stage-slot" data-slot="hero"></div>
+    <div class="stage-slot" data-slot="hero">
+      <div class="hud" aria-hidden="true">
+        <span class="hud-c hud-c--tl"></span>
+        <span class="hud-c hud-c--tr"></span>
+        <span class="hud-c hud-c--bl"></span>
+        <span class="hud-c hud-c--br"></span>
+        <span class="hud-read">CAM 01 · LIVE</span>
+        <span class="hud-axis">XZ 1.00 · Y +0.10</span>
+      </div>
+    </div>
     <div>
       <p class="hero-sub rv">Audio that does not mind the heat, or the ice.</p>
       <p class="rv" style="margin:0"><a class="btn" href="#waitlist">Join the waitlist</a></p>
@@ -706,6 +780,34 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
     <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Where it goes</p>
     <h2 class="display display--mid rv" id="range-h">Rated for the<br>whole range.</h2>
     <p class="lede rv">Four rooms. One device. Nothing left on the bench between them.</p>
+    <figure class="plot rv" aria-hidden="true">
+      <svg viewBox="0 0 720 120" role="presentation">
+        <g fill="none" stroke="rgba(240,235,227,.14)" stroke-width="1">
+          <line x1="0" y1="20" x2="720" y2="20"/>
+          <line x1="0" y1="50" x2="720" y2="50"/>
+          <line x1="0" y1="80" x2="720" y2="80"/>
+          <line x1="0" y1="110" x2="720" y2="110"/>
+        </g>
+        <polyline fill="none" stroke="#d25a28" stroke-width="1.6"
+          points="20,18 150,28 300,62 420,70 560,96 700,108"/>
+        <polyline fill="none" stroke="#8ec4d4" stroke-width="1.2" stroke-dasharray="3 4"
+          points="20,36 180,40 340,68 500,88 700,104"/>
+        <g fill="#8ec4d4">
+          <circle cx="20" cy="18" r="3"/>
+          <circle cx="300" cy="62" r="3"/>
+          <circle cx="420" cy="70" r="3"/>
+          <circle cx="700" cy="108" r="3"/>
+        </g>
+        <g fill="rgba(240,235,227,.45)" font-family="IBM Plex Mono, monospace" font-size="10">
+          <text x="20" y="14">110°</text>
+          <text x="300" y="58">45°</text>
+          <text x="668" y="104">0°</text>
+        </g>
+      </svg>
+      <figcaption class="plot-cap mono">
+        <span>sauna</span><span>steam</span><span>plunge</span><span>ice</span>
+      </figcaption>
+    </figure>
   </section>
 
   <section class="chapter chapter--heat" data-reveal aria-labelledby="u1">
@@ -757,38 +859,47 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   <section class="s-story" id="story" data-reveal aria-labelledby="story-h">
     <div class="wrap">
       <div class="story-head">
-        <p class="mono rv" style="color:var(--ember-soft); margin:0 0 18px">Why it exists</p>
-        <h2 class="display display--mid rv" id="story-h">The last four minutes</h2>
-        <p class="lede rv">The hardest part of every sauna and every plunge. Not the heat. Not the cold. The counting.</p>
-        <p class="turn rv">So we built something that <em>doesn’t mind</em></p>
+        <div>
+          <p class="mono rv" style="color:var(--ember-soft); margin:0 0 12px">Why it exists</p>
+          <h2 class="display display--mid rv" id="story-h">The last four minutes</h2>
+        </div>
+        <div>
+          <p class="lede rv">The hardest part of every sauna and every plunge. Not the heat. Not the cold. The counting.</p>
+          <p class="turn rv" style="margin-top:12px">So we built something that <em>doesn’t mind</em></p>
+        </div>
       </div>
 
       <ol class="swap">
         <li class="rv">
+          <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-batt"/></svg></div>
           <span class="mono swap-deg">10 hrs</span>
           <p class="swap-p">You get out early. Not because it is too hot — because it is too boring.</p>
           <div class="swap-a"><span class="tag">Playback</span>
             <p>Long enough that you stop counting.</p></div>
         </li>
         <li class="rv">
+          <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-chip"/></svg></div>
           <span class="mono swap-deg">64 GB</span>
           <p class="swap-p">A 90°C room is no place for a phone, and you bring it anyway.</p>
           <div class="swap-a"><span class="tag tag--ice">Onboard</span>
             <p>Load it at home. Walk in empty-handed.</p></div>
         </li>
         <li class="rv">
+          <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-water"/></svg></div>
           <span class="mono swap-deg">IP68</span>
           <p class="swap-p">Bluetooth does not travel through water.</p>
           <div class="swap-a"><span class="tag tag--ice">2 metres</span>
             <p>Offline MP3 below the surface.</p></div>
         </li>
         <li class="rv">
+          <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-temp"/></svg></div>
           <span class="mono swap-deg">0–110°</span>
           <p class="swap-p">Silicone softens, slips and dies in sauna heat.</p>
           <div class="swap-a"><span class="tag">Nitinol band</span>
             <p>Heat-stable pads. The frame remembers its shape.</p></div>
         </li>
         <li class="rv">
+          <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-btn"/></svg></div>
           <span class="mono swap-deg">Buttons</span>
           <p class="swap-p">Numb fingers and touch controls do not get along.</p>
           <div class="swap-a"><span class="tag tag--ice">Magnetic charge</span>
@@ -805,7 +916,16 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
       <p class="lede rv" style="margin:18px auto 0; text-align:center">Not for the pigment. Pick one and watch it change.</p>
     </div>
 
-    <div class="stage-slot" data-slot="colors"></div>
+    <div class="stage-slot" data-slot="colors">
+      <div class="hud" aria-hidden="true">
+        <span class="hud-c hud-c--tl"></span>
+        <span class="hud-c hud-c--tr"></span>
+        <span class="hud-c hud-c--bl"></span>
+        <span class="hud-c hud-c--br"></span>
+        <span class="hud-read">CAM 02 · COLOR</span>
+        <span class="hud-axis">SWATCH · LIVE</span>
+      </div>
+    </div>
 
     <div>
       <div class="cw-readout rv">
@@ -1115,7 +1235,7 @@ function paintWordmark(){
   x.textAlign = 'center';
   x.textBaseline = 'middle';
   if ('letterSpacing' in x) x.letterSpacing = '10px';
-  x.font = '600 58px "Sora", system-ui, sans-serif';
+  x.font = '700 58px "Bricolage Grotesque", system-ui, sans-serif';
   x.fillText('DIPSANA', 256, 66);
 }
 paintWordmark();
@@ -1153,12 +1273,12 @@ const MODEL_H = _dy;
 const SLOTS = [...document.querySelectorAll('.stage-slot')].map(el => ({
   el,
   look: el.dataset.slot === 'colors'
-    ? { key:1.55, em:1.20, gl:1.20, rx:0.08, fill:0.98 }
-    : { key:1.25, em:0.85, gl:0.80, rx:0.10, fill:0.96 },
+    ? { key:1.45, em:1.05, gl:1.05, rx:0.06, fill:0.74 }
+    : { key:1.20, em:0.80, gl:0.75, rx:0.06, fill:0.70 },
 }));
 
 const SPAN_XZ = Math.sqrt(_dx*_dx + _dz*_dz);
-const SPAN_Y  = MODEL_H * 1.3;
+const SPAN_Y  = MODEL_H * 1.65;
 let idleSpin = 0;
 
 function resize(){
