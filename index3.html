@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dipsana — Stay in longer</title>
+<meta name="description" content="Bone conduction audio built for heat and ice. Rated 0–110°C, IP68 to 2m, 64GB onboard. Sauna, steam room, cold plunge, ice bath.">
+<meta name="theme-color" content="#08090c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2308090c'/%3E%3Ccircle cx='16' cy='12' r='4' fill='%23d25a28'/%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Dipsana — Stay in longer">
+<meta property="og:description" content="Bone conduction audio built for heat and ice. Sauna, steam room, cold plunge, ice bath.">
+<meta property="og:site_name" content="Dipsana">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Dipsana — Stay in longer">
+<meta name="twitter:description" content="Bone conduction audio built for heat and ice. Sauna, steam room, cold plunge, ice bath.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --void:      #08090c;
+  --ash:       #11141b;
+  --ash-2:     #181c26;
+  --paper:     #f0ebe3;
+  --paper-dim: #b7b2a8;
+  --mute:      #7d7972;
+  --line:      rgba(240,235,227,.12);
+  --line-strong: rgba(240,235,227,.22);
+
+  --ember:     #d25a28;
+  --ember-soft:#e08a5c;
+  --ice:       #8ec4d4;
+  --ice-deep:  #4a8fa3;
+
+  --cw-obsidian:#35383C;
+  --cw-glacier: #A8D5E2;
+  --cw-ember:   #E2542C;
+  --cw-chalk:   #EDE8E0;
+
+  --active:        #35383C;
+  --active-ink:    #c9cccf;
+
+  --pad:     clamp(20px, 4.6vw, 80px);
+  --max:     1180px;
+  --ease:    cubic-bezier(.16,1,.3,1);
+  --head:    64px;
+}
+
+*{ box-sizing:border-box }
+html{ -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
+body{
+  margin:0;
+  background:var(--void);
+  color:var(--paper);
+  font-family:"Sora", ui-sans-serif, system-ui, sans-serif;
+  font-weight:400;
+  font-size:16px;
+  line-height:1.55;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+a{ color:inherit; }
+:focus-visible{ outline:2px solid var(--ice); outline-offset:3px; border-radius:4px; }
+
+.sr{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+
+/* type */
+.serif{
+  font-family:"Fraunces", "Times New Roman", serif;
+  font-optical-sizing:auto;
+  font-weight:420;
+  letter-spacing:-.03em;
+  line-height:.92;
+}
+.display{
+  font-family:"Fraunces", "Times New Roman", serif;
+  font-optical-sizing:auto;
+  font-weight:420;
+  font-size:clamp(3.2rem, 10.4vw, 7.6rem);
+  line-height:.88;
+  letter-spacing:-.035em;
+  margin:0;
+}
+.display--mid{
+  font-size:clamp(2.4rem, 6.4vw, 5.2rem);
+  line-height:.92;
+}
+.lede{
+  max-width:38ch;
+  color:var(--paper-dim);
+  font-size:clamp(16px, 1.5vw, 18px);
+  font-weight:300;
+  margin:0;
+}
+.mono{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-weight:500;
+  color:var(--mute);
+}
+.fine{
+  font-size:13px;
+  line-height:1.55;
+  color:var(--mute);
+  margin:0;
+}
+
+/* wordmark */
+.mark{
+  font-family:"Sora", sans-serif;
+  font-weight:600;
+  letter-spacing:-.06em;
+  text-transform:lowercase;
+  font-size:20px;
+  line-height:1;
+  display:inline-block;
+  text-decoration:none;
+  color:var(--paper);
+}
+.mark .dot-i{ position:relative; display:inline-block; }
+.mark .dot-i::after{
+  content:"";
+  position:absolute;
+  left:50%; top:.04em;
+  width:.22em; height:.22em;
+  transform:translateX(-50%);
+  border-radius:50%;
+  background:var(--active-ink);
+  transition:background .4s linear;
+}
+.mark--lg{ font-size:clamp(28px, 3.4vw, 42px); }
+
+/* nav */
+.topbar{
+  position:fixed; top:0; left:0; right:0; z-index:30;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:16px;
+  padding:16px var(--pad);
+  background:transparent;
+  border-bottom:1px solid transparent;
+  transition:background .4s ease, border-color .4s ease, padding .4s var(--ease);
+}
+.topbar.is-scrolled{
+  padding-top:11px; padding-bottom:11px;
+  background:rgba(8,9,12,.72);
+  backdrop-filter:saturate(160%) blur(18px);
+  -webkit-backdrop-filter:saturate(160%) blur(18px);
+  border-bottom-color:var(--line);
+}
+.nav-tabs{
+  display:flex; align-items:center; gap:clamp(16px, 2.4vw, 32px);
+  list-style:none; margin:0; padding:0;
+}
+.nav-tabs a{
+  font-size:13px; font-weight:400;
+  text-decoration:none; color:var(--paper);
+  opacity:.55; transition:opacity .25s ease;
+  white-space:nowrap;
+}
+.nav-tabs a:hover, .nav-tabs a.is-active{ opacity:1; }
+.nav-right{ display:flex; align-items:center; gap:14px; }
+
+.btn{
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--paper); color:var(--void);
+  font-family:inherit; font-weight:500; font-size:14px; line-height:1;
+  padding:12px 20px;
+  border:0; border-radius:999px;
+  text-decoration:none; cursor:pointer;
+  transition:background .25s ease, transform .25s var(--ease), color .25s ease;
+}
+.btn:hover{ background:var(--ice); color:var(--void); }
+.btn:active{ transform:scale(.98); }
+.btn--sm{ font-size:12.5px; padding:9px 16px; }
+.btn-short{ display:none; }
+.btn--ghost{
+  background:transparent; color:var(--paper);
+  border:1px solid var(--line-strong);
+}
+.btn--ghost:hover{ background:rgba(240,235,227,.06); color:var(--paper); }
+
+/* 3D stage */
+#stage{
+  position:fixed; inset:0; width:100%; height:100%;
+  z-index:0; pointer-events:none; display:block;
+}
+.stage-slot{
+  position:relative;
+  flex:1 1 auto; width:100%; min-height:280px;
+}
+.stage-slot::before{
+  content:"";
+  position:absolute; inset:8% 12% 0;
+  background:radial-gradient(ellipse at 50% 62%,
+    rgba(232,210,180,.16) 0%,
+    rgba(210,90,40,.10) 28%,
+    rgba(142,196,212,.08) 52%,
+    transparent 72%);
+  pointer-events:none;
+}
+
+main{ position:relative; z-index:1; }
+
+section, .s-foot{
+  position:relative;
+  padding-left:var(--pad); padding-right:var(--pad);
+  scroll-margin-top:calc(var(--head, 64px) + 12px);
+}
+
+/* temperature rail */
+.rail{
+  position:fixed; right:18px; top:50%;
+  transform:translateY(-50%);
+  z-index:25;
+  display:flex; flex-direction:column; align-items:center;
+  gap:10px;
+  pointer-events:none;
+}
+.rail-deg{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:10px; letter-spacing:.08em;
+  color:var(--mute);
+}
+.rail-track{
+  position:relative;
+  width:1px; height:min(42vh, 320px);
+  background:var(--line);
+}
+.rail-fill{
+  position:absolute; left:0; right:0; top:0;
+  height:0%;
+  background:linear-gradient(180deg, var(--ember), var(--ice));
+}
+.rail-live{
+  min-width:3.4em; text-align:center;
+  color:var(--paper);
+}
+
+/* hero */
+.s-hero{
+  min-height:100svh;
+  display:flex; flex-direction:column; justify-content:space-between;
+  padding-top:calc(var(--head, 72px) + 4vh);
+  padding-bottom:5vh;
+  text-align:center;
+}
+.s-hero::before{
+  content:"";
+  position:absolute; inset:8% 10% auto; height:52%;
+  background:
+    radial-gradient(50% 70% at 28% 50%, rgba(210,90,40,.16), transparent 70%),
+    radial-gradient(50% 70% at 74% 48%, rgba(142,196,212,.12), transparent 72%);
+  pointer-events:none; z-index:-1;
+}
+.hero-kicker{
+  margin:0 0 18px;
+  color:var(--ice);
+}
+.hero-sub{
+  font-family:"Fraunces", serif;
+  font-style:italic;
+  font-weight:400;
+  font-size:clamp(1.25rem, 2.6vw, 1.85rem);
+  letter-spacing:-.02em;
+  color:var(--paper-dim);
+  margin:0 0 26px;
+}
+.facts{
+  display:grid; grid-template-columns:repeat(4,1fr);
+  gap:clamp(12px, 2vw, 28px);
+  width:100%; max-width:720px;
+  margin:18px auto 0;
+  list-style:none; padding:0;
+}
+.facts li{
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  padding-top:16px;
+  border-top:1px solid var(--line);
+}
+.facts b{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:13px; letter-spacing:.04em;
+  font-weight:500; color:var(--paper);
+}
+.facts span{ font-size:12px; color:var(--mute); }
+
+/* photo chapters */
+.chapter{
+  min-height:auto;
+  padding:0;
+}
+.chapter-frame{
+  position:relative;
+  min-height:92svh;
+  display:flex; align-items:flex-end;
+  overflow:hidden;
+}
+.chapter-frame img{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover; display:block;
+}
+.chapter-frame::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(8,9,12,.12) 0%, rgba(8,9,12,.18) 40%, rgba(8,9,12,.78) 100%);
+  pointer-events:none;
+}
+.chapter--heat .chapter-frame::after{
+  background:linear-gradient(180deg, rgba(40,16,8,.08) 0%, rgba(8,9,12,.2) 45%, rgba(8,9,12,.82) 100%);
+}
+.chapter--cold .chapter-frame::after{
+  background:linear-gradient(180deg, rgba(8,16,24,.1) 0%, rgba(8,9,12,.22) 45%, rgba(8,9,12,.84) 100%);
+}
+.chapter-copy{
+  position:relative; z-index:1;
+  padding:clamp(28px, 6vw, 72px) var(--pad);
+  max-width:34rem;
+}
+.chapter-copy h2{
+  margin:10px 0 14px;
+  color:var(--paper);
+}
+.chapter-copy p{ color:var(--paper-dim); }
+.deg-hot{ color:var(--ember-soft); }
+.deg-cold{ color:var(--ice); }
+
+/* mosaic intro */
+.s-range{
+  padding-top:18vh; padding-bottom:10vh;
+  display:flex; flex-direction:column; align-items:center;
+  text-align:center;
+}
+.s-range .lede{ margin:22px auto 0; }
+
+/* contrast split */
+.s-contrast{
+  padding:0;
+}
+.contrast-frame{
+  position:relative;
+  min-height:78svh;
+  overflow:hidden;
+  display:flex; align-items:flex-end;
+}
+.contrast-frame img{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:cover;
+}
+.contrast-frame::after{
+  content:"";
+  position:absolute; inset:0;
+  background:linear-gradient(180deg, rgba(8,9,12,.05), rgba(8,9,12,.72));
+}
+.contrast-copy{
+  position:relative; z-index:1;
+  width:100%;
+  padding:clamp(28px, 6vw, 72px) var(--pad);
+  display:flex; justify-content:space-between; align-items:flex-end; gap:24px;
+}
+.hot-word{ color:var(--ember-soft); }
+.cold-word{ color:var(--ice); }
+
+/* story */
+.s-story{
+  padding-top:16vh; padding-bottom:16vh;
+}
+.s-story .wrap{ max-width:var(--max); margin:0 auto; }
+.story-head{
+  max-width:22ch;
+  margin-bottom:clamp(40px, 6vw, 72px);
+}
+.story-head .lede{ margin-top:22px; }
+.turn{
+  font-family:"Fraunces", serif;
+  font-style:italic;
+  font-weight:400;
+  font-size:clamp(1.6rem, 3.6vw, 2.6rem);
+  line-height:1.12;
+  letter-spacing:-.025em;
+  margin:28px 0 0;
+  max-width:18ch;
+}
+.turn em{
+  font-style:italic;
+  color:var(--void);
+  background:var(--ember);
+  padding:.02em .18em .04em;
+  border-radius:.08em;
+}
+.swap{
+  list-style:none; margin:0; padding:0;
+}
+.swap li{
+  display:grid;
+  grid-template-columns:minmax(140px, 22%) 1fr 1fr;
+  gap:clamp(16px, 3vw, 48px);
+  align-items:start;
+  padding:28px 0;
+  border-top:1px solid var(--line);
+}
+.swap li:last-child{ border-bottom:1px solid var(--line); }
+.swap-deg{ color:var(--ice); padding-top:4px; }
+.swap-p, .swap-a p{
+  margin:0;
+  font-size:clamp(1rem, 1.5vw, 1.2rem);
+  line-height:1.4;
+  letter-spacing:-.015em;
+}
+.swap-p{ color:var(--mute); font-weight:300; }
+.swap-a p{ color:var(--paper); margin-top:8px; font-weight:400; }
+.tag{
+  display:inline-block;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--ember-soft);
+  padding-bottom:4px;
+  border-bottom:1px solid rgba(210,90,40,.4);
+}
+.tag--ice{ color:var(--ice); border-bottom-color:rgba(142,196,212,.35); }
+
+/* colorways */
+.s-colors{
+  min-height:100svh;
+  padding-top:12vh; padding-bottom:9vh;
+  display:flex; flex-direction:column; justify-content:space-between;
+  align-items:center; text-align:center;
+}
+.cw-readout{ min-height:108px; }
+.cw-name{
+  font-family:"Fraunces", serif;
+  font-weight:420;
+  font-size:clamp(2rem, 5vw, 3.4rem);
+  letter-spacing:-.03em;
+  margin:0;
+  color:var(--active-ink);
+  transition:color .4s linear;
+}
+.cw-hex{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--mute); margin:10px 0 0;
+}
+.cw-note{ color:var(--paper-dim); margin:8px 0 0; font-weight:300; }
+.cw-fade{ transition:opacity .18s ease; }
+.cw-fade.out{ opacity:0; }
+.swatches{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:16px;
+  margin:0; padding:0; list-style:none;
+}
+.swatch{
+  width:38px; height:38px; padding:0;
+  border-radius:50%; border:0; cursor:pointer;
+  background:var(--sw);
+  box-shadow:0 0 0 1px rgba(255,255,255,.18);
+  transition:transform .3s var(--ease), box-shadow .3s ease;
+}
+.swatch:hover{ transform:translateY(-3px) scale(1.06); }
+.swatch[aria-checked="true"]{
+  box-shadow:0 0 0 1px rgba(255,255,255,.3), 0 0 0 5px rgba(142,196,212,.32);
+  transform:translateY(-3px) scale(1.08);
+}
+
+/* anatomy + specs */
+.s-build{
+  padding-top:16vh; padding-bottom:8vh;
+}
+.s-build .wrap{ max-width:var(--max); margin:0 auto; }
+.build-head{ max-width:28ch; margin-bottom:56px; }
+.build-head .lede{ margin-top:18px; }
+
+.anatomy{ position:relative; width:100%; max-width:1180px; margin:0 auto 72px; }
+.anatomy svg{ width:100%; height:auto; display:block; }
+.a-call{ position:absolute; width:19.5%; transform:translateY(-50%); }
+.a-call--l{ left:0; text-align:right; }
+.a-call--r{ left:80.5%; text-align:left; }
+.a-title{
+  margin:0 0 5px;
+  font-size:14px; font-weight:500; letter-spacing:-.01em;
+}
+.a-num{
+  display:inline-block; min-width:1.2em;
+  font-family:"IBM Plex Mono", monospace;
+  font-size:12px; color:var(--ice);
+}
+.a-desc{ margin:0; font-size:12.5px; line-height:1.45; color:var(--mute); }
+
+.s-specs{ padding-top:4vh; padding-bottom:16vh; }
+.specs{
+  display:grid; grid-template-columns:1fr 1fr;
+  column-gap:clamp(32px, 6vw, 90px);
+  margin:0 auto; width:100%; max-width:1060px;
+}
+.spec{
+  display:flex; justify-content:space-between; align-items:baseline; gap:20px;
+  padding:18px 0; border-top:1px solid var(--line);
+}
+.spec dt{
+  font-family:"IBM Plex Mono", monospace;
+  font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--mute); flex:0 0 auto;
+}
+.spec dd{
+  margin:0; text-align:right;
+  font-size:15px; font-weight:400; color:var(--paper);
+}
+
+/* waitlist */
+.s-list{
+  min-height:88svh;
+  display:flex; flex-direction:column; justify-content:center; align-items:center;
+  text-align:center;
+  padding-top:14vh; padding-bottom:14vh;
+}
+.s-list::before{
+  content:"";
+  position:absolute; inset:0; z-index:-1;
+  background:
+    linear-gradient(180deg, rgba(8,9,12,.55), rgba(8,9,12,.78)),
+    url("images/product-obsidian.jpg") center 40% / cover no-repeat;
+  filter:saturate(.7) brightness(.55);
+}
+.form-wrap{ width:100%; max-width:540px; margin:36px auto 0; }
+form{
+  display:flex; gap:10px; align-items:stretch;
+  transition:opacity .35s ease, transform .45s var(--ease);
+}
+form.gone{ opacity:0; transform:translateY(-10px); pointer-events:none; height:0; overflow:hidden; margin:0; }
+input[type=email]{
+  flex:1; min-width:0;
+  background:rgba(8,9,12,.55);
+  border:1px solid var(--line-strong);
+  border-radius:999px;
+  color:var(--paper);
+  font-family:inherit; font-size:16px; font-weight:300;
+  padding:16px 22px;
+  transition:border-color .25s ease, box-shadow .25s ease;
+}
+input[type=email]::placeholder{ color:var(--mute); }
+input[type=email]:hover{ border-color:rgba(240,235,227,.4); }
+input[type=email]:focus{
+  border-color:var(--ice);
+  box-shadow:0 0 0 4px rgba(142,196,212,.16);
+  outline:none;
+}
+form.invalid input[type=email]{ border-color:#e06a5c; background:rgba(60,16,14,.5); }
+button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
+.err{
+  margin:14px 2px 0; min-height:20px;
+  font-size:13.5px; color:#e06a5c; opacity:0;
+  transition:opacity .25s ease;
+}
+.err.show{ opacity:1; }
+.done{
+  margin:0; opacity:0; transform:translateY(14px);
+  transition:opacity .5s ease .12s, transform .6s var(--ease) .12s;
+  font-family:"Fraunces", serif;
+  font-style:italic;
+  font-size:clamp(1.15rem, 2.4vw, 1.55rem);
+  color:var(--paper);
+  height:0; overflow:hidden;
+}
+.done.show{ opacity:1; transform:none; height:auto; overflow:visible; }
+.done .glc{ color:var(--ice); }
+
+/* footer */
+.s-foot{
+  padding-top:8vh; padding-bottom:40px;
+  background:var(--void);
+}
+.foot-row{
+  display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between;
+  gap:20px; padding-top:24px; border-top:1px solid var(--line);
+  width:100%; max-width:var(--max); margin:0 auto;
+}
+.safety{
+  margin:18px auto 0; max-width:var(--max); width:100%;
+}
+
+/* reveal */
+.rv{
+  opacity:0; transform:translateY(24px);
+  transition:opacity .75s var(--ease), transform .75s var(--ease);
+}
+.in .rv{ opacity:1; transform:none; }
+
+/* mobile */
+@media (max-width:900px){
+  .rail{ display:none; }
+  .anatomy .leaders{ display:none; }
+  .anatomy{ margin-bottom:36px; }
+  .a-call{
+    position:static; width:auto; transform:none;
+    text-align:left !important; padding:16px 0;
+    border-top:1px solid var(--line);
+  }
+  .a-call--l, .a-call--r{ left:auto; }
+  .a-desc{ font-size:14px; }
+}
+@media (max-width:820px){
+  .topbar{ flex-wrap:wrap; }
+  .nav-tabs{
+    order:3; width:100%; flex-basis:100%;
+    overflow-x:auto; scrollbar-width:none;
+    padding-top:6px; margin-top:2px;
+    border-top:1px solid var(--line);
+    gap:20px;
+  }
+  .nav-tabs::-webkit-scrollbar{ display:none; }
+  .nav-tabs a{ display:inline-block; padding:6px 0; }
+  .btn-full{ display:none; }
+  .btn-short{ display:inline; }
+  .topbar.is-scrolled .nav-tabs{
+    border-top:0; margin-top:0; padding-top:0;
+    width:auto; flex:1 1 auto; flex-basis:auto; order:0;
+    min-width:0;
+  }
+  .topbar.is-scrolled .mark{ display:none; }
+  .topbar.is-scrolled{ flex-wrap:nowrap; }
+  .swap li{ grid-template-columns:1fr; gap:8px; padding:22px 0; }
+  .swap-deg{ padding-top:0; }
+}
+@media (max-width:768px){
+  .facts{ grid-template-columns:1fr 1fr; gap:8px 16px; }
+  .specs{ grid-template-columns:1fr; }
+  .chapter-frame{ min-height:78svh; }
+  .contrast-frame{ min-height:64svh; }
+  .contrast-copy{ flex-direction:column; align-items:flex-start; }
+  form{ flex-direction:column; }
+  .s-hero{ padding-top:calc(var(--head, 64px) + 6vh); }
+}
+@media (max-width:420px){
+  .display{ font-size:clamp(3rem, 16vw, 4.4rem); }
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto; }
+  .rv{ opacity:1 !important; transform:none !important; transition:none !important; }
+  .swatch, .swatch:hover, .swatch[aria-checked="true"]{ transition:box-shadow .2s linear; transform:none; }
+  form, .done, .err, .cw-fade, .btn{ transition:none; }
+  *{ scroll-behavior:auto !important; }
+}
+</style>
+
+<script type="importmap">
+{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+</script>
+</head>
+
+<body>
+
+<canvas id="stage" role="img" aria-label="A slowly rotating three-dimensional view of the Dipsana bone conduction headset: a thin neckband, two wedge-shaped housings, hooks that curve over the ear, and rounded pads that rest on the cheekbone."></canvas>
+
+<div class="rail" aria-hidden="true">
+  <span class="rail-deg">110°</span>
+  <div class="rail-track"><div class="rail-fill" id="railFill"></div></div>
+  <span class="rail-deg rail-live" id="railLive">110°</span>
+  <span class="rail-deg">0°</span>
+</div>
+
+<header class="topbar" id="topbar">
+  <a class="mark" href="#top" aria-label="Dipsana, home">d<span class="dot-i">ı</span>psana</a>
+  <ul class="nav-tabs">
+    <li><a href="#usage">Rooms</a></li>
+    <li><a href="#story">Story</a></li>
+    <li><a href="#colors">Colors</a></li>
+    <li><a href="#specs">Specs</a></li>
+  </ul>
+  <div class="nav-right">
+    <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Join the waitlist</span><span class="btn-short">Join</span></a>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="s-hero" data-reveal aria-labelledby="hero-h">
+    <div>
+      <p class="mono hero-kicker rv">Bone conduction · 0–110°C</p>
+      <h1 class="display rv" id="hero-h">Stay in<br>longer.</h1>
+    </div>
+    <div class="stage-slot" data-slot="hero"></div>
+    <div>
+      <p class="hero-sub rv">Audio that does not mind the heat, or the ice.</p>
+      <p class="rv" style="margin:0"><a class="btn" href="#waitlist">Join the waitlist</a></p>
+      <ul class="facts rv">
+        <li><b>0–110°C</b><span>Sauna to ice</span></li>
+        <li><b>IP68</b><span>2 m under</span></li>
+        <li><b>64 GB</b><span>No phone</span></li>
+        <li><b>10 hrs</b><span>Per charge</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="s-range" id="usage" data-reveal aria-labelledby="range-h">
+    <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Where it goes</p>
+    <h2 class="display display--mid rv" id="range-h">Rated for the<br>whole range.</h2>
+    <p class="lede rv">Four rooms. One device. Nothing left on the bench between them.</p>
+  </section>
+
+  <section class="chapter chapter--heat" data-reveal aria-labelledby="u1">
+    <div class="chapter-frame">
+      <img src="images/v3-sauna.jpg" alt="A woman sitting in a modern cedar sauna wearing Dipsana bone-conduction headphones" width="864" height="1152" loading="lazy" decoding="async">
+      <div class="chapter-copy">
+        <p class="mono deg-hot rv">Sauna · 80–100°C · 15–20 min</p>
+        <h2 class="display display--mid rv" id="u1">Sauna</h2>
+        <p class="lede rv">The podcast that makes twenty minutes feel like eight.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter chapter--heat" data-reveal aria-labelledby="u2">
+    <div class="chapter-frame">
+      <img src="images/v3-steam.jpg" alt="A steam room in a contemporary spa, a person in a robe wearing Dipsana headphones" width="1152" height="864" loading="lazy" decoding="async">
+      <div class="chapter-copy">
+        <p class="mono deg-hot rv">Steam room · 40–45°C · 100% humidity</p>
+        <h2 class="display display--mid rv" id="u2">Steam room</h2>
+        <p class="lede rv">Where every other pair of headphones has already quit.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="chapter chapter--cold" data-reveal aria-labelledby="u3">
+    <div class="chapter-frame">
+      <img src="images/v3-plunge.jpg" alt="A man chest-deep in an outdoor cold plunge at dusk, wearing Dipsana headphones" width="864" height="1152" loading="lazy" decoding="async">
+      <div class="chapter-copy">
+        <p class="mono deg-cold rv">Cold plunge · 3–10°C · 2–3 min</p>
+        <h2 class="display display--mid rv" id="u3">Cold plunge</h2>
+        <p class="lede rv">One song. Get in, finish the song, get out.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-contrast" data-reveal aria-labelledby="u5">
+    <div class="contrast-frame">
+      <img src="images/v3-contrast.jpg" alt="A person walking from a glowing sauna toward an outdoor ice bath at night, wearing Dipsana headphones" width="1280" height="720" loading="lazy" decoding="async">
+      <div class="contrast-copy">
+        <div>
+          <p class="mono rv" style="margin:0 0 12px"><span class="hot-word">Hot</span> · <span class="cold-word">cold</span> · repeat</p>
+          <h2 class="display display--mid rv" id="u5">Contrast</h2>
+        </div>
+        <p class="lede rv">A playlist that runs the whole cycle, so you are not resetting a timer with wet hands.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-story" id="story" data-reveal aria-labelledby="story-h">
+    <div class="wrap">
+      <div class="story-head">
+        <p class="mono rv" style="color:var(--ember-soft); margin:0 0 18px">Why it exists</p>
+        <h2 class="display display--mid rv" id="story-h">The last four minutes</h2>
+        <p class="lede rv">The hardest part of every sauna and every plunge. Not the heat. Not the cold. The counting.</p>
+        <p class="turn rv">So we built something that <em>doesn’t mind</em></p>
+      </div>
+
+      <ol class="swap">
+        <li class="rv">
+          <span class="mono swap-deg">10 hrs</span>
+          <p class="swap-p">You get out early. Not because it is too hot — because it is too boring.</p>
+          <div class="swap-a"><span class="tag">Playback</span>
+            <p>Long enough that you stop counting.</p></div>
+        </li>
+        <li class="rv">
+          <span class="mono swap-deg">64 GB</span>
+          <p class="swap-p">A 90°C room is no place for a phone, and you bring it anyway.</p>
+          <div class="swap-a"><span class="tag tag--ice">Onboard</span>
+            <p>Load it at home. Walk in empty-handed.</p></div>
+        </li>
+        <li class="rv">
+          <span class="mono swap-deg">IP68</span>
+          <p class="swap-p">Bluetooth does not travel through water.</p>
+          <div class="swap-a"><span class="tag tag--ice">2 metres</span>
+            <p>Offline MP3 below the surface.</p></div>
+        </li>
+        <li class="rv">
+          <span class="mono swap-deg">0–110°</span>
+          <p class="swap-p">Silicone softens, slips and dies in sauna heat.</p>
+          <div class="swap-a"><span class="tag">Nitinol band</span>
+            <p>Heat-stable pads. The frame remembers its shape.</p></div>
+        </li>
+        <li class="rv">
+          <span class="mono swap-deg">Buttons</span>
+          <p class="swap-p">Numb fingers and touch controls do not get along.</p>
+          <div class="swap-a"><span class="tag tag--ice">Magnetic charge</span>
+            <p>Physical clicks. No port to corrode.</p></div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="s-colors" id="colors" data-reveal aria-labelledby="cw-h">
+    <div>
+      <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Four colorways</p>
+      <h2 class="display display--mid rv" id="cw-h">Named for the ritual</h2>
+      <p class="lede rv" style="margin:18px auto 0; text-align:center">Not for the pigment. Pick one and watch it change.</p>
+    </div>
+
+    <div class="stage-slot" data-slot="colors"></div>
+
+    <div>
+      <div class="cw-readout rv">
+        <p class="cw-name cw-fade" id="cwName">Obsidian</p>
+        <p class="cw-hex cw-fade" id="cwHex">#35383C</p>
+        <p class="cw-note cw-fade" id="cwNote">Matte charcoal, the hero.</p>
+      </div>
+      <ul class="swatches rv" id="swatches" role="radiogroup" aria-label="Choose a colorway"></ul>
+    </div>
+  </section>
+
+  <section class="s-build" data-reveal aria-labelledby="an-h">
+    <div class="wrap">
+      <div class="build-head">
+        <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Anatomy</p>
+        <h2 class="display display--mid rv" id="an-h">What’s in it</h2>
+        <p class="lede rv">Open-ear bone conduction, sealed for the two worst rooms in the building.</p>
+      </div>
+
+      <div class="anatomy rv">
+        <svg viewBox="0 0 1200 620" role="img"
+             aria-label="Labelled side view of the Dipsana headset. One, nitinol memory-alloy frame. Two, heat-stable transducer pads. Three, bone conduction through the cheekbone. Four, three physical buttons. Five, sealed IP68 housing with 64GB storage. Six, magnetic charging contacts.">
+          <g class="leaders" fill="none" stroke="rgba(240,235,227,.2)" stroke-width="1.25">
+            <polyline points="452,240 340,168 262,168"/>
+            <polyline points="342,364 300,332 262,332"/>
+            <polyline points="380,428 314,494 262,494"/>
+            <polyline points="548,286 700,180 938,180"/>
+            <polyline points="612,314 762,332 938,332"/>
+            <polyline points="566,348 700,488 938,488"/>
+          </g>
+          <g fill="none" stroke="var(--ice)" stroke-linecap="round">
+            <path d="M 366 376 A 30 30 0 0 0 366 420" stroke-opacity=".85"/>
+            <path d="M 352 366 A 42 42 0 0 0 352 430" stroke-opacity=".55"/>
+            <path d="M 338 356 A 54 54 0 0 0 338 440" stroke-opacity=".3"/>
+          </g>
+          <g fill="rgba(240,235,227,.04)" stroke="rgba(240,235,227,.72)"
+             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M 620 294 C 672 282, 728 296, 752 332 C 774 364, 772 396, 752 418" fill="none"/>
+            <path d="M 378 372 C 350 340, 352 288, 386 258 C 420 228, 470 228, 498 254" fill="none"/>
+            <path d="M 486 248 L 596 270 C 616 274, 626 288, 622 306 C 618 326, 602 338, 582 340
+                     L 502 348 C 482 350, 470 338, 470 318 L 470 272 C 470 258, 476 246, 486 248 Z"/>
+            <ellipse cx="392" cy="398" rx="34" ry="28" transform="rotate(-18 392 398)"/>
+          </g>
+          <g stroke="rgba(240,235,227,.72)" stroke-width="1.8" fill="rgba(240,235,227,.08)">
+            <circle cx="516" cy="280" r="6.5"/>
+            <circle cx="540" cy="285" r="6.5"/>
+            <circle cx="564" cy="290" r="6.5"/>
+            <rect x="548" y="330" width="18" height="9" rx="4.5"/>
+            <rect x="574" y="326" width="18" height="9" rx="4.5"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle" font-family="IBM Plex Mono, monospace">
+            <g><circle cx="452" cy="240" r="13" fill="var(--ice)"/><text x="452" y="245" fill="#08090c">1</text></g>
+            <g><circle cx="380" cy="428" r="13" fill="var(--ember)"/><text x="380" y="433" fill="#08090c">2</text></g>
+            <g><circle cx="342" cy="364" r="13" fill="var(--ice)"/><text x="342" y="369" fill="#08090c">3</text></g>
+            <g><circle cx="548" cy="286" r="13" fill="var(--ice)"/><text x="548" y="291" fill="#08090c">4</text></g>
+            <g><circle cx="612" cy="314" r="13" fill="var(--ember)"/><text x="612" y="319" fill="#08090c">5</text></g>
+            <g><circle cx="566" cy="348" r="13" fill="var(--ice)"/><text x="566" y="353" fill="#08090c">6</text></g>
+          </g>
+        </svg>
+
+        <div class="a-call a-call--l" style="top:27.1%">
+          <p class="a-title"><span class="a-num">1</span> Nitinol frame</p>
+          <p class="a-desc">Memory alloy. Won’t warp, soften or go tacky in heat.</p>
+        </div>
+        <div class="a-call a-call--l" style="top:79.7%">
+          <p class="a-title"><span class="a-num">2</span> Heat-stable pads</p>
+          <p class="a-desc">A heat-stable compound, not standard silicone.</p>
+        </div>
+        <div class="a-call a-call--l" style="top:53.5%">
+          <p class="a-title"><span class="a-num">3</span> Bone conduction</p>
+          <p class="a-desc">Through the cheekbone. Nothing goes in your ear.</p>
+        </div>
+        <div class="a-call a-call--r" style="top:29.0%">
+          <p class="a-title"><span class="a-num">4</span> Physical buttons</p>
+          <p class="a-desc">Sized for numb fingers and wet hands. No touch surfaces.</p>
+        </div>
+        <div class="a-call a-call--r" style="top:53.5%">
+          <p class="a-title"><span class="a-num">5</span> Sealed housing</p>
+          <p class="a-desc">IP68 to 2m. 64GB onboard, Bluetooth 5.4.</p>
+        </div>
+        <div class="a-call a-call--r" style="top:78.7%">
+          <p class="a-title"><span class="a-num">6</span> Magnetic charging</p>
+          <p class="a-desc">No port to corrode. Ten minutes gives three hours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-specs" id="specs" data-reveal aria-labelledby="spec-h">
+    <p class="mono" style="text-align:center; color:var(--ice); margin:0 0 18px">Specification</p>
+    <h2 class="display display--mid" id="spec-h" style="text-align:center; margin:0 0 48px">The list</h2>
+    <dl class="specs">
+      <div class="spec"><dt>Temperature</dt><dd>Rated 0°C to 110°C</dd></div>
+      <div class="spec"><dt>Water</dt><dd>IP68, submersible to 2m</dd></div>
+      <div class="spec"><dt>Storage</dt><dd>64GB onboard</dd></div>
+      <div class="spec"><dt>Above water</dt><dd>Bluetooth 5.4</dd></div>
+      <div class="spec"><dt>Below water</dt><dd>Offline MP3 mode</dd></div>
+      <div class="spec"><dt>Band</dt><dd>Nitinol memory alloy</dd></div>
+      <div class="spec"><dt>Contact pads</dt><dd>Heat-stable, not silicone</dd></div>
+      <div class="spec"><dt>Playback</dt><dd>10 hours</dd></div>
+      <div class="spec"><dt>Fast charge</dt><dd>10 minutes = 3 hours</dd></div>
+      <div class="spec"><dt>Controls</dt><dd>Physical buttons</dd></div>
+      <div class="spec"><dt>Charging</dt><dd>Magnetic, no ports</dd></div>
+      <div class="spec"><dt>Colorways</dt><dd>Four</dd></div>
+    </dl>
+  </section>
+
+  <section class="s-list" id="waitlist" data-reveal aria-labelledby="wl-h">
+    <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Founding list</p>
+    <h2 class="display rv" id="wl-h">First in.</h2>
+    <p class="lede rv" style="margin:24px auto 0; text-align:center">We’ll email you once, when it’s ready, and not before.</p>
+
+    <div class="form-wrap rv">
+      <!-- KIT: replace action with https://app.kit.com/forms/XXXXXX/subscriptions, method="post" -->
+      <form id="waitlist-form" action="" novalidate>
+        <label class="sr" for="email">Email address</label>
+        <input type="email" id="email" name="email_address" placeholder="you@example.com" required autocomplete="email" inputmode="email">
+
+        <div class="sr" aria-hidden="true">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+        </div>
+
+        <button class="btn" type="submit">Join the waitlist</button>
+      </form>
+      <p class="err" id="formErr" role="alert"></p>
+      <p class="done" id="formDone">You’re on the list. <span class="glc">Go and sit down somewhere hot.</span></p>
+      <p class="fine" style="margin-top:22px">No drip sequence. No launch spam. One note, when it ships.</p>
+    </div>
+  </section>
+
+  <footer class="s-foot" data-reveal>
+    <div class="foot-row">
+      <a class="mark mark--lg rv" href="#top" aria-label="Dipsana, back to top">d<span class="dot-i">ı</span>psana</a>
+      <p class="mono rv" style="margin:0">© 2026 Dipsana</p>
+    </div>
+    <p class="fine safety rv">Listen to your body, not just your playlist — follow the sauna and cold exposure guidance that applies to you.</p>
+  </footer>
+
+</main>
+
+<script type="module">
+import * as THREE from 'three';
+
+const COLORWAYS = [
+  { name:'Obsidian', hex:'#35383C', note:'Matte charcoal, the hero.' },
+  { name:'Glacier',  hex:'#A8D5E2', note:'Pale ice blue.' },
+  { name:'Ember',    hex:'#E2542C', note:'The loud one.' },
+  { name:'Chalk',    hex:'#EDE8E0', note:'Off-white.' },
+];
+
+const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const isMobile = () => window.innerWidth < 768;
+const lerp = (a,b,t) => a + (b-a)*t;
+
+const canvas   = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true, powerPreference:'high-performance' });
+renderer.outputColorSpace  = THREE.SRGBColorSpace;
+renderer.toneMapping       = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.28;
+
+const scene  = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 50);
+camera.position.set(0, 0.22, 5.2);
+camera.lookAt(0, 0, 0);
+
+const ambient = new THREE.AmbientLight(0xF0E8DC, 0.42);
+const studio = new THREE.HemisphereLight(0xffffff, 0x1a1e26, 0.38);
+
+const keyLight = new THREE.DirectionalLight(0xFFF4E6, 2.8);
+keyLight.position.set(3.2, 4.0, 3.4);
+
+const emberRim = new THREE.DirectionalLight(0xE2542C, 0.0);
+emberRim.position.set(-4.2, 0.6, -1.6);
+
+const glacierRim = new THREE.DirectionalLight(0xA8D5E2, 0.0);
+glacierRim.position.set(3.6, 0.5, -2.6);
+
+const KEY_WARM = new THREE.Color(0xFFEBD2), KEY_COOL = new THREE.Color(0xC9DEEC);
+const AMB_WARM = new THREE.Color(0xF0E8DC), AMB_COOL = new THREE.Color(0xD6E3EA);
+
+const fill = new THREE.DirectionalLight(0xBFC9D0, 0.70);
+fill.position.set(-1.6, -2.4, 2.2);
+
+const kicker = new THREE.DirectionalLight(0xffffff, 1.1);
+kicker.position.set(-2.4, 3.2, -3.0);
+
+const TWO_LIGHT = isMobile();
+scene.add(ambient, studio, keyLight, emberRim, kicker);
+if (!TWO_LIGHT) scene.add(glacierRim, fill);
+
+const RIM_EMBER = new THREE.Color(0xE2542C), RIM_GLACIER = new THREE.Color(0xA8D5E2);
+const KEY_BASE = 3.6, RIM_BASE = 2.6, AMB_BASE = 0.28, FILL_BASE = 0.45;
+
+const bodyMat = new THREE.MeshPhysicalMaterial({
+  color:0x35383C, roughness:0.55, metalness:0.05,
+  clearcoat:0.30, clearcoatRoughness:0.40
+});
+const bandMat = new THREE.MeshPhysicalMaterial({
+  color:0x101112, roughness:0.62, metalness:0.06,
+  clearcoat:0.28, clearcoatRoughness:0.45
+});
+const padMat = new THREE.MeshPhysicalMaterial({
+  color:0x0D0E0F, roughness:0.72, metalness:0.02,
+  clearcoat:0.15, clearcoatRoughness:0.6
+});
+const btnMat = new THREE.MeshPhysicalMaterial({
+  color:0x2A2C2E, roughness:0.6, metalness:0.08, clearcoat:0.25
+});
+
+const root  = new THREE.Group();
+const inner = new THREE.Group();
+root.add(inner);
+scene.add(root);
+
+const bandCurve = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(-0.615, 0.19, -0.04),
+  new THREE.Vector3(-0.610, 0.21, -0.30),
+  new THREE.Vector3(-0.440, 0.12, -0.62),
+  new THREE.Vector3( 0.000, 0.03, -0.75),
+  new THREE.Vector3( 0.440, 0.12, -0.62),
+  new THREE.Vector3( 0.610, 0.21, -0.30),
+  new THREE.Vector3( 0.615, 0.19, -0.04),
+], false, 'catmullrom', 0.4);
+inner.add(new THREE.Mesh(new THREE.TubeGeometry(bandCurve, 110, 0.035, 12, false), bandMat));
+
+function housingGeometry(){
+  const s = new THREE.Shape();
+  s.moveTo(-0.178, 0.070);
+  s.quadraticCurveTo(-0.180, 0.132, -0.124, 0.130);
+  s.lineTo( 0.072, 0.104);
+  s.quadraticCurveTo( 0.158, 0.096,  0.161, 0.020);
+  s.quadraticCurveTo( 0.164,-0.068,  0.086,-0.116);
+  s.lineTo(-0.070,-0.158);
+  s.quadraticCurveTo(-0.168,-0.182, -0.180,-0.082);
+  s.closePath();
+
+  const g = new THREE.ExtrudeGeometry(s, {
+    depth:0.082, bevelEnabled:true,
+    bevelThickness:0.024, bevelSize:0.024, bevelSegments:5,
+    curveSegments:14, steps:1
+  });
+  g.translate(0, 0, -0.041);
+  g.rotateY(-Math.PI/2);
+  return g;
+}
+const HOUSING_HALF = 0.041 + 0.024;
+const HOUSING_Z    = 0.140;
+
+for (const side of [-1, 1]) {
+  const h = new THREE.Mesh(housingGeometry(), bodyMat);
+  h.position.set(side * 0.605, 0.045, HOUSING_Z);
+  inner.add(h);
+}
+
+function hookGeometry(){
+  const c = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0,  0.135, 0.190),
+    new THREE.Vector3(0,  0.290, 0.420),
+    new THREE.Vector3(0,  0.310, 0.600),
+    new THREE.Vector3(0,  0.180, 0.700),
+    new THREE.Vector3(0,  0.000, 0.680),
+    new THREE.Vector3(0, -0.150, 0.560),
+  ], false, 'catmullrom', 0.5);
+  const g = new THREE.TubeGeometry(c, 72, 0.046, 12, false);
+  g.scale(0.66, 1, 1);
+  return g;
+}
+for (const side of [-1, 1]) {
+  const hk = new THREE.Mesh(hookGeometry(), bodyMat);
+  hk.position.x = side * 0.600;
+  inner.add(hk);
+}
+
+for (const side of [-1, 1]) {
+  const pod = new THREE.Mesh(new THREE.SphereGeometry(1, 26, 18), padMat);
+  pod.scale.set(0.052, 0.104, 0.088);
+  pod.position.set(side * 0.578, -0.175, 0.520);
+  pod.rotation.z = side * 0.16;
+  pod.rotation.x = -0.22;
+  inner.add(pod);
+}
+
+{
+  const plate = new THREE.Mesh(new THREE.CapsuleGeometry(0.030, 0.110, 4, 12), btnMat);
+  plate.rotation.z = Math.PI/2;
+  plate.rotation.y = Math.PI/2;
+  plate.scale.set(1, 1, 0.45);
+  plate.position.set(-0.605 - HOUSING_HALF + 0.010, -0.008, HOUSING_Z - 0.02);
+  inner.add(plate);
+
+  const bGeo = new THREE.CylinderGeometry(0.013, 0.013, 0.02, 12);
+  for (let i = -1; i <= 1; i++) {
+    const b = new THREE.Mesh(bGeo, padMat);
+    b.rotation.z = Math.PI/2;
+    b.position.set(-0.605 - HOUSING_HALF - 0.004, -0.008, HOUSING_Z - 0.02 + i * 0.052);
+    inner.add(b);
+  }
+}
+
+const markCanvas = document.createElement('canvas');
+markCanvas.width = 512; markCanvas.height = 128;
+function paintWordmark(){
+  const x = markCanvas.getContext('2d');
+  x.clearRect(0, 0, 512, 128);
+  x.fillStyle = '#ffffff';
+  x.textAlign = 'center';
+  x.textBaseline = 'middle';
+  if ('letterSpacing' in x) x.letterSpacing = '10px';
+  x.font = '600 58px "Sora", system-ui, sans-serif';
+  x.fillText('DIPSANA', 256, 66);
+}
+paintWordmark();
+const markTex = new THREE.CanvasTexture(markCanvas);
+markTex.colorSpace = THREE.SRGBColorSpace;
+markTex.anisotropy = 4;
+const markMat = new THREE.MeshBasicMaterial({
+  map:markTex, transparent:true, opacity:0.62, depthWrite:false,
+  color:0xC9CCCF
+});
+const markMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.185, 0.046), markMat);
+markMesh.rotation.y = Math.PI/2;
+markMesh.position.set(0.605 + HOUSING_HALF + 0.004, 0.048, HOUSING_Z - 0.025);
+inner.add(markMesh);
+
+if (document.fonts && document.fonts.ready) {
+  document.fonts.ready.then(() => { paintWordmark(); markTex.needsUpdate = true; });
+}
+
+const anatomySvg = document.querySelector('.anatomy svg');
+function fitAnatomy(){
+  if (!anatomySvg) return;
+  anatomySvg.setAttribute('viewBox',
+    window.innerWidth <= 900 ? '285 175 630 320' : '0 0 1200 620');
+}
+fitAnatomy();
+window.addEventListener('resize', fitAnatomy, { passive:true });
+
+const bbox = new THREE.Box3().setFromObject(inner);
+const centre = bbox.getCenter(new THREE.Vector3());
+inner.children.forEach(c => c.position.sub(centre));
+const _dx = bbox.max.x - bbox.min.x, _dy = bbox.max.y - bbox.min.y, _dz = bbox.max.z - bbox.min.z;
+const MODEL_H = _dy;
+
+const SLOTS = [...document.querySelectorAll('.stage-slot')].map(el => ({
+  el,
+  look: el.dataset.slot === 'colors'
+    ? { key:1.55, em:1.20, gl:1.20, rx:0.08, fill:0.98 }
+    : { key:1.25, em:0.85, gl:0.80, rx:0.10, fill:0.96 },
+}));
+
+const SPAN_XZ = Math.sqrt(_dx*_dx + _dz*_dz);
+const SPAN_Y  = MODEL_H * 1.3;
+let idleSpin = 0;
+
+function resize(){
+  const w = window.innerWidth, h = window.innerHeight;
+  const dpr = Math.min(window.devicePixelRatio || 1, isMobile() ? 1.5 : 2);
+  renderer.setPixelRatio(dpr);
+  renderer.setSize(w, h, false);
+  const tb = document.getElementById('topbar');
+  document.documentElement.style.setProperty('--head', tb.offsetHeight + 'px');
+}
+
+const swatchList = document.getElementById('swatches');
+const cwName = document.getElementById('cwName');
+const cwHex  = document.getElementById('cwHex');
+const cwNote = document.getElementById('cwNote');
+const fades  = [cwName, cwHex, cwNote];
+
+const colFrom = new THREE.Color(COLORWAYS[0].hex);
+const colTo   = new THREE.Color(COLORWAYS[0].hex);
+let colT = 1, activeIndex = 0;
+const COLOR_MS = 400;
+
+const lumOf = rgb => (0.2126*rgb[0] + 0.7152*rgb[1] + 0.0722*rgb[2]) / 255;
+function inkFor(hex){
+  const n = parseInt(hex.slice(1), 16);
+  let rgb = [n >> 16 & 255, n >> 8 & 255, n & 255];
+  while (lumOf(rgb) < 0.55) rgb = rgb.map(v => v + (255 - v) * 0.22);
+  return rgb;
+}
+function setInk(rgb){
+  document.documentElement.style.setProperty(
+    '--active-ink',
+    `rgb(${Math.round(rgb[0])} ${Math.round(rgb[1])} ${Math.round(rgb[2])})`
+  );
+}
+
+let inkFrom = inkFor(COLORWAYS[0].hex);
+let inkTo   = inkFor(COLORWAYS[0].hex);
+setInk(inkTo);
+
+const tmp = new THREE.Color(), tmp2 = new THREE.Color();
+function applyBodyColour(c){
+  bodyMat.color.copy(c);
+  bandMat.color.copy(c).multiplyScalar(0.58);
+  padMat .color.copy(c).multiplyScalar(0.44);
+  const lum = 0.2126*c.r + 0.7152*c.g + 0.0722*c.b;
+  btnMat .color.copy(c).lerp(tmp2.set(0x9AA0A6), 0.30);
+  markMat.color.set(lum > 0.45 ? 0x2A2C2E : 0xC9CCCF);
+  markMat.opacity = lum > 0.45 ? 0.55 : 0.62;
+}
+applyBodyColour(colTo);
+
+function selectColorway(i, silent){
+  activeIndex = i;
+  const cw = COLORWAYS[i];
+
+  colFrom.copy(bodyMat.color);
+  colTo.set(cw.hex);
+  colT = silent ? 1 : 0;
+  if (silent) applyBodyColour(colTo);
+
+  document.documentElement.style.setProperty('--active', cw.hex);
+  inkFrom = inkTo;
+  inkTo   = inkFor(cw.hex);
+  if (silent) setInk(inkTo);
+
+  [...swatchList.children].forEach((li, n) => {
+    li.firstElementChild.setAttribute('aria-checked', String(n === i));
+    li.firstElementChild.tabIndex = n === i ? 0 : -1;
+  });
+
+  if (silent) {
+    cwName.textContent = cw.name; cwHex.textContent = cw.hex; cwNote.textContent = cw.note;
+    return;
+  }
+  fades.forEach(el => el.classList.add('out'));
+  setTimeout(() => {
+    cwName.textContent = cw.name;
+    cwHex.textContent  = cw.hex;
+    cwNote.textContent = cw.note;
+    fades.forEach(el => el.classList.remove('out'));
+  }, reduced ? 0 : 180);
+}
+
+COLORWAYS.forEach((cw, i) => {
+  const li = document.createElement('li');
+  const b  = document.createElement('button');
+  b.className = 'swatch';
+  b.type = 'button';
+  b.style.setProperty('--sw', cw.hex);
+  b.setAttribute('role', 'radio');
+  b.setAttribute('aria-checked', String(i === 0));
+  b.setAttribute('aria-label', `${cw.name}, ${cw.hex}`);
+  b.tabIndex = i === 0 ? 0 : -1;
+  b.addEventListener('click', () => selectColorway(i));
+  b.addEventListener('keydown', ev => {
+    const d = ev.key === 'ArrowRight' || ev.key === 'ArrowDown' ?  1
+            : ev.key === 'ArrowLeft'  || ev.key === 'ArrowUp'   ? -1 : 0;
+    if (!d) return;
+    ev.preventDefault();
+    const n = (activeIndex + d + COLORWAYS.length) % COLORWAYS.length;
+    selectColorway(n);
+    swatchList.children[n].firstElementChild.focus();
+  });
+  li.appendChild(b);
+  swatchList.appendChild(li);
+});
+selectColorway(0, true);
+
+let last = performance.now();
+
+function drawSlot(slot){
+  const r = slot.el.getBoundingClientRect();
+  const h = window.innerHeight;
+  if (r.bottom <= 0 || r.top >= h || r.width < 1 || r.height < 1) return;
+
+  const { look } = slot;
+  renderer.setViewport(r.left, h - r.bottom, r.width, r.height);
+  renderer.setScissor(r.left, h - r.bottom, r.width, r.height);
+
+  camera.aspect = r.width / r.height;
+  camera.updateProjectionMatrix();
+  const frustumH = 2 * Math.tan((camera.fov * Math.PI/180) / 2) * camera.position.z;
+  const frustumW = frustumH * camera.aspect;
+  root.scale.setScalar(look.fill * Math.min(frustumW / SPAN_XZ, frustumH / SPAN_Y));
+  inner.rotation.set(look.rx, 0.55 + idleSpin, 0);
+
+  const cold = look.gl / (look.gl + look.em);
+  keyLight.color.copy(KEY_WARM).lerp(KEY_COOL, cold);
+  ambient.color.copy(AMB_WARM).lerp(AMB_COOL, cold);
+  keyLight.intensity = KEY_BASE * look.key;
+  ambient.intensity  = AMB_BASE;
+
+  if (TWO_LIGHT) {
+    emberRim.color.copy(RIM_EMBER).lerp(RIM_GLACIER, cold);
+    emberRim.intensity = RIM_BASE * Math.max(look.em, look.gl);
+  } else {
+    emberRim.intensity   = RIM_BASE * look.em;
+    glacierRim.intensity = RIM_BASE * look.gl;
+    fill.intensity       = FILL_BASE;
+  }
+
+  renderer.render(scene, camera);
+}
+
+function frame(now){
+  const dt = Math.min(now - last, 60);
+  last = now;
+  if (!reduced) idleSpin += dt * 0.00013;
+
+  if (colT < 1) {
+    colT = Math.min(1, colT + dt / COLOR_MS);
+    const e = colT * colT * (3 - 2 * colT);
+    applyBodyColour(tmp.copy(colFrom).lerp(colTo, e));
+    const ink = inkFrom.map((v, i) => lerp(v, inkTo[i], e));
+    setInk(ink);
+  }
+
+  renderer.setScissorTest(false);
+  renderer.clear();
+  renderer.setScissorTest(true);
+  for (const slot of SLOTS) drawSlot(slot);
+
+  requestAnimationFrame(frame);
+}
+
+resize();
+requestAnimationFrame(frame);
+window.addEventListener('resize', resize, { passive:true });
+
+const topbar = document.getElementById('topbar');
+let scrolled = null;
+function syncHeader(){
+  const next = window.scrollY > 48;
+  if (next === scrolled) return;
+  scrolled = next;
+  topbar.classList.toggle('is-scrolled', next);
+}
+syncHeader();
+window.addEventListener('scroll', syncHeader, { passive:true });
+
+const railFill = document.getElementById('railFill');
+const railLive = document.getElementById('railLive');
+function syncRail(){
+  const max = document.documentElement.scrollHeight - window.innerHeight;
+  const t = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+  railFill.style.height = (t * 100) + '%';
+  railLive.textContent = Math.round(110 - t * 110) + '°';
+}
+syncRail();
+window.addEventListener('scroll', syncRail, { passive:true });
+window.addEventListener('resize', syncRail, { passive:true });
+
+const tabFor = new Map();
+document.querySelectorAll('.nav-tabs a').forEach(a => {
+  const sec = document.getElementById(a.getAttribute('href').slice(1));
+  if (sec) tabFor.set(sec, a);
+});
+if (tabFor.size) {
+  const spy = new IntersectionObserver(entries => {
+    for (const e of entries) {
+      if (!e.isIntersecting) continue;
+      for (const a of tabFor.values()) a.classList.remove('is-active');
+      tabFor.get(e.target).classList.add('is-active');
+    }
+  }, { rootMargin:'-45% 0px -50% 0px' });
+  for (const sec of tabFor.keys()) spy.observe(sec);
+}
+
+if (!reduced) {
+  document.querySelectorAll('[data-reveal]').forEach(sec => {
+    sec.querySelectorAll('.rv').forEach((el, i) => {
+      el.style.transitionDelay = `${Math.min(i * 80, 480)}ms`;
+    });
+  });
+  const io = new IntersectionObserver(entries => {
+    for (const e of entries) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }
+  }, { rootMargin:'0px 0px -10% 0px', threshold:0.05 });
+  document.querySelectorAll('[data-reveal]').forEach(s => io.observe(s));
+} else {
+  document.querySelectorAll('[data-reveal]').forEach(s => s.classList.add('in'));
+}
+
+async function submitToKit(){
+  await new Promise(r => setTimeout(r, 600));
+  return { ok:true };
+}
+
+const form   = document.getElementById('waitlist-form');
+const emailIn= document.getElementById('email');
+const errEl  = document.getElementById('formErr');
+const doneEl = document.getElementById('formDone');
+const submit = form.querySelector('button[type=submit]');
+const honey  = document.getElementById('company');
+const looksLikeEmail = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+
+function showError(msg){
+  errEl.textContent = msg;
+  errEl.classList.add('show');
+  form.classList.add('invalid');
+  emailIn.setAttribute('aria-invalid', 'true');
+}
+function clearError(){
+  errEl.classList.remove('show');
+  form.classList.remove('invalid');
+  emailIn.removeAttribute('aria-invalid');
+}
+emailIn.addEventListener('input', clearError);
+
+form.addEventListener('submit', async ev => {
+  ev.preventDefault();
+  if (honey.value) return;
+
+  const email = emailIn.value.trim();
+  if (!email)                 return showError('Add an email address and we’ll take it from there.');
+  if (!looksLikeEmail(email)) return showError('That address is missing something. Check it and try again.');
+
+  clearError();
+  submit.disabled = true;
+  submit.textContent = 'Sending…';
+
+  try {
+    const res = await submitToKit(email);
+    if (!res.ok) throw new Error('rejected');
+    form.classList.add('gone');
+    setTimeout(() => doneEl.classList.add('show'), reduced ? 0 : 220);
+  } catch {
+    submit.disabled = false;
+    submit.textContent = 'Join the waitlist';
+    showError('That didn’t go through. Try again in a moment.');
+  }
+});
+</script>
+</body>
+</html>
