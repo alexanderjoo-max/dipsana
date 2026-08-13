@@ -134,8 +134,7 @@ a{ color:inherit; }
   width:.22em; height:.22em;
   transform:translateX(-50%);
   border-radius:50%;
-  background:var(--active-ink);
-  transition:background .4s linear;
+  background:var(--ember);
 }
 .mark--lg{ font-size:clamp(28px, 3.4vw, 42px); }
 
@@ -723,7 +722,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   <symbol id="i-btn" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="18.5" cy="12" r="2.2"/></symbol>
 </defs></svg>
 
-<canvas id="stage" role="img" aria-label="A slowly rotating three-dimensional view of the Dipsana bone conduction headset: two wedge-shaped housings, hooks that curve over the ear, and rounded pads that rest on the cheekbone. Head-worn, no neckband."></canvas>
+<canvas id="stage" role="img" aria-label="A slowly rotating three-dimensional view of the Dipsana bone conduction headset: two housings behind the ears, hooks over the ears, and transducers sitting immediately in front of the ears. Head-worn, no neckband."></canvas>
 
 <div class="rail" aria-hidden="true">
   <span class="rail-deg">110°</span>
@@ -989,7 +988,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
         </div>
         <div class="a-call a-call--l" style="top:53.5%">
           <p class="a-title"><span class="a-num">3</span> Bone conduction</p>
-          <p class="a-desc">Through the cheekbone. Nothing goes in your ear.</p>
+          <p class="a-desc">Sits just in front of the ear. Nothing goes in the canal.</p>
         </div>
         <div class="a-call a-call--r" style="top:29.0%">
           <p class="a-title"><span class="a-num">4</span> Physical buttons</p>
@@ -1184,10 +1183,10 @@ for (const side of [-1, 1]) {
 
 for (const side of [-1, 1]) {
   const pod = new THREE.Mesh(new THREE.SphereGeometry(1, 26, 18), padMat);
-  pod.scale.set(0.052, 0.104, 0.088);
-  pod.position.set(side * 0.578, -0.175, 0.520);
-  pod.rotation.z = side * 0.16;
-  pod.rotation.x = -0.22;
+  pod.scale.set(0.038, 0.072, 0.058);
+  pod.position.set(side * 0.548, 0.055, 0.355);
+  pod.rotation.z = side * 0.08;
+  pod.rotation.x = -0.08;
   inner.add(pod);
 }
 
