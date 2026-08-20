@@ -93,6 +93,9 @@ a{ color:inherit; }
   font-size:100px;
   line-height:.92;
 }
+/* a line break that only lands on phones */
+.br-m{ display:none; }
+
 .display--hero{
   font-size:100px;
   line-height:.94;
@@ -435,7 +438,6 @@ section, .s-foot{
   text-align:center;
 }
 .s-story .wrap{ max-width:var(--max); margin:0 auto; }
-.s-story .lede, .turn{ margin-left:auto; margin-right:auto; }
 .story-head{
   display:flex;
   flex-direction:column;
@@ -451,7 +453,7 @@ section, .s-foot{
   font-size:clamp(1.35rem, 2.4vw, 1.85rem);
   line-height:1.16;
   letter-spacing:-.025em;
-  margin:0;
+  margin:0 auto;
   max-width:20ch;
 }
 .turn em{
@@ -720,19 +722,19 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   .nav-right{ flex:0 0 auto; margin-left:0; }
   .btn--sm{ font-size:12px; padding:8px 12px; }
   .story-head{ grid-template-columns:1fr; gap:16px; }
-  .swap{ grid-template-columns:1fr; }
-  .swap li{
-    display:grid;
-    grid-template-columns:28px auto;
-    justify-content:center;
-    gap:7px 12px;
-    align-items:center;
-    padding:18px 0 20px;
+  .swap{
+    grid-template-columns:1fr;
+    gap:14px;
+    border-bottom:0;
   }
-  .swap-ico{ grid-row:1; grid-column:1; }
-  .swap-deg{ grid-row:1; grid-column:2; }
-  .swap-p{ grid-column:1 / -1; }
-  .swap-a{ grid-column:1 / -1; margin-top:0; padding-top:2px; }
+  .swap li{
+    gap:9px;
+    padding:22px 18px 24px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    background:rgba(240,235,227,.02);
+  }
+  .swap-a{ padding-top:10px; }
 }
 @media (max-width:768px){
   .facts{ grid-template-columns:1fr 1fr; gap:8px 16px; }
@@ -749,13 +751,14 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   .s-colors .stage-slot{ width:min(720px, 92%, 52vh); }
 }
 @media (max-width:768px){
+  /* every display heading shares the hero's scale down here */
   .display,
-  .display--mid{
-    font-size:90px;
-    line-height:.92;
+  .display--mid,
+  .display--hero{
+    font-size:clamp(2.5rem, 12.5vw, 3.6rem);
+    line-height:.96;
   }
-  /* keep its own scale: this headline is a sentence, not two words */
-  .display--hero{ font-size:clamp(2.5rem, 12.5vw, 3.6rem); line-height:.96; }
+  .br-m{ display:inline; }
   /* 37 characters of mono is a lot for 375px: ease the tracking */
   .hero-kicker{ letter-spacing:.1em; line-height:1.5; }
 }
@@ -871,7 +874,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 
   <section class="s-range" id="usage" data-reveal aria-labelledby="range-h">
     <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Where it goes</p>
-    <h2 class="display display--mid rv" id="range-h">Rated for the whole range.</h2>
+    <h2 class="display display--mid rv" id="range-h">Rated<br class="br-m"> for the<br class="br-m"> whole<br class="br-m"> range.</h2>
     <p class="lede rv">Five rooms. One device. Nothing left on the bench between them.</p>
     <figure class="plot rv" aria-hidden="true">
       <svg viewBox="0 0 720 120" role="presentation">
@@ -1050,7 +1053,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
     <div class="wrap">
       <div class="build-head">
         <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Anatomy</p>
-        <h2 class="display display--mid rv" id="an-h">What’s in it</h2>
+        <h2 class="display display--mid rv" id="an-h">What’s<br class="br-m"> in it</h2>
         <p class="lede rv">Open-ear bone conduction, sealed for the two worst rooms in the building.</p>
       </div>
 
@@ -1092,9 +1095,9 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
           </g>
         </svg>
 
-        <div class="a-call a-call--l" style="top:27.1%">
-          <p class="a-title"><span class="a-num">5</span> Sealed housing</p>
-          <p class="a-desc">IP68 to 2m. 32GB onboard, Bluetooth 5.4.</p>
+        <div class="a-call a-call--r" style="top:53.5%">
+          <p class="a-title"><span class="a-num">1</span> Nitinol frame</p>
+          <p class="a-desc">Memory alloy. Won’t warp, soften or go tacky in heat.</p>
         </div>
         <div class="a-call a-call--l" style="top:79.7%">
           <p class="a-title"><span class="a-num">2</span> Heat-stable pads</p>
@@ -1108,9 +1111,9 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
           <p class="a-title"><span class="a-num">4</span> Physical buttons</p>
           <p class="a-desc">Sized for numb fingers and wet hands. No touch surfaces.</p>
         </div>
-        <div class="a-call a-call--r" style="top:53.5%">
-          <p class="a-title"><span class="a-num">1</span> Nitinol frame</p>
-          <p class="a-desc">Memory alloy. Won’t warp, soften or go tacky in heat.</p>
+        <div class="a-call a-call--l" style="top:27.1%">
+          <p class="a-title"><span class="a-num">5</span> Sealed housing</p>
+          <p class="a-desc">IP68 to 2m. 32GB onboard, Bluetooth 5.4.</p>
         </div>
         <div class="a-call a-call--r" style="top:78.7%">
           <p class="a-title"><span class="a-num">6</span> Magnetic charging</p>
