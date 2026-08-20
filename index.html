@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dipsana — Stay in longer</title>
-<meta name="description" content="Bone conduction audio built for heat and ice. Rated 0–110°C, IP68 to 2m, 64GB onboard. Sauna, steam room, cold plunge, ice bath.">
+<meta name="description" content="Bone conduction audio built for heat and ice. Rated 0–110°C, IP68 to 2m, 32GB onboard. Sauna, steam room, cold plunge, ice bath.">
 <meta name="theme-color" content="#08090c">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%2308090c'/%3E%3Ccircle cx='16' cy='12' r='4' fill='%23d25a28'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='164%20-3%2092%2096'%3E%3Crect%20x='164'%20y='-3'%20width='92'%20height='96'%20rx='20'%20fill='%2308090c'/%3E%3Cpath%20d='M189.43%2C39l26.59-26.59-.71-.71-1.97-1.97-9.73-9.73-30.08%2C30.08c-8.37%2C8.37-8.37%2C21.95%2C0%2C30.32l8.09%2C8.09%2C5.25%2C5.25%2C30.93-30.93c2.39%2C2.39%2C2.39%2C6.27%2C0%2C8.66l-26.59%2C26.59.71.71%2C1.97%2C1.97%2C9.73%2C9.73%2C30.08-30.08c8.37-8.37%2C8.37-21.95%2C0-30.32l-8.09-8.09-5.25-5.25-30.93%2C30.93c-2.39-2.39-2.39-6.27%2C0-8.66Z'%20fill='%23f0a24a'/%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Dipsana — Stay in longer">
 <meta property="og:description" content="Bone conduction audio built for heat and ice. Sauna, steam room, cold plunge, ice bath.">
@@ -84,14 +84,19 @@ a{ color:inherit; }
 .display{
   font-family:"Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
   font-variation-settings:'opsz' 96,'wdth' 100,'wght' 800;
-  font-size:130px;
+  font-size:100px;
   line-height:.92;
   letter-spacing:-.035em;
   margin:0;
 }
 .display--mid{
-  font-size:130px;
+  font-size:100px;
   line-height:.92;
+}
+.display--hero{
+  font-size:100px;
+  line-height:.94;
+  letter-spacing:-.032em;
 }
 .lede{
   max-width:38ch;
@@ -116,27 +121,12 @@ a{ color:inherit; }
 
 /* wordmark */
 .mark{
-  font-family:"Bricolage Grotesque", sans-serif;
-  font-variation-settings:'opsz' 24,'wdth' 100,'wght' 800;
-  letter-spacing:-.06em;
-  text-transform:lowercase;
-  font-size:20px;
-  line-height:1;
-  display:inline-block;
+  display:inline-flex; align-items:center;
   text-decoration:none;
-  color:var(--paper);
+  color:var(--paper);            /* the letterforms ride on currentColor */
 }
-.mark .dot-i{ position:relative; display:inline-block; }
-.mark .dot-i::after{
-  content:"";
-  position:absolute;
-  left:50%; top:.04em;
-  width:.22em; height:.22em;
-  transform:translateX(-50%);
-  border-radius:50%;
-  background:var(--ember);
-}
-.mark--lg{ font-size:clamp(28px, 3.4vw, 42px); }
+.mark svg{ display:block; height:22px; width:auto; }
+.mark--lg svg{ height:clamp(30px, 3.4vw, 46px); }
 
 /* nav */
 .topbar{
@@ -189,27 +179,55 @@ a{ color:inherit; }
 }
 .btn--ghost:hover{ background:rgba(240,235,227,.06); color:var(--paper); }
 
-/* 3D stage */
+/* stage + product shot */
 #stage{
   position:fixed; inset:0; width:100%; height:100%;
   z-index:0; pointer-events:none; display:block;
 }
+.pshot{
+  position:relative;
+  flex:1 1 auto;
+  width:100%;
+  display:flex; align-items:center; justify-content:center;
+}
+.s-hero   .pshot{ min-height:clamp(320px, 46vh, 560px); }
+.s-colors .pshot{ min-height:clamp(280px, 40vh, 480px); }
+
+.pshot-glow{
+  position:absolute; inset:12% 15% 8%;
+  z-index:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse 44% 38% at 50% 56%, var(--active-glow, rgba(232,210,180,.08)) 0%, transparent 72%),
+    radial-gradient(ellipse 54% 46% at 50% 58%,
+      rgba(232,210,180,.10)  0%,
+      rgba(210,90,40,.055)  32%,
+      rgba(142,196,212,.045) 58%,
+      transparent 78%);
+  transition:background .45s linear;
+}
+
+/* the box the renderer scissors into, and the frame the poster holds */
 .stage-slot{
   position:relative;
-  flex:1 1 auto; width:100%; min-height:280px;
+  z-index:1;
+  width:min(880px, 94%, 86vh);
+  aspect-ratio:1200 / 760;
+  cursor:grab;
+  touch-action:pan-y;
 }
-.s-hero .stage-slot{ min-height:clamp(360px, 48vh, 580px); }
-.s-colors .stage-slot{ min-height:clamp(300px, 42vh, 520px); }
-.stage-slot::before{
-  content:"";
-  position:absolute; inset:10% 16% 6%;
-  background:radial-gradient(ellipse at 50% 58%,
-    rgba(232,210,180,.14) 0%,
-    rgba(210,90,40,.08) 28%,
-    rgba(142,196,212,.07) 52%,
-    transparent 72%);
-  pointer-events:none;
+.stage-slot:active{ cursor:grabbing; }
+.s-colors .stage-slot{ width:min(720px, 86%, 70vh); }
+
+/* the photograph keeps the frame until the mesh has downloaded */
+.pshot-poster{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  object-fit:contain;
+  transition:opacity .6s ease;
 }
+.pshot.is-live .pshot-poster{ opacity:0; }
+
 .hud{
   position:absolute; inset:8px 10%;
   pointer-events:none;
@@ -284,7 +302,8 @@ section, .s-foot{
   pointer-events:none; z-index:-1;
 }
 .hero-kicker{
-  margin:0 0 18px;
+  margin:0 0 20px;
+  font-size:clamp(12.5px, 1.25vw, 17px);
   color:var(--ice);
 }
 .hero-sub{
@@ -292,7 +311,7 @@ section, .s-foot{
   font-size:clamp(1.15rem, 2.2vw, 1.55rem);
   letter-spacing:-.02em;
   color:var(--paper-dim);
-  margin:0 0 18px;
+  margin:20px 0 0;
 }
 .facts{
   display:grid; grid-template-columns:repeat(4,1fr);
@@ -413,13 +432,15 @@ section, .s-foot{
 /* story */
 .s-story{
   padding-top:10vh; padding-bottom:10vh;
+  text-align:center;
 }
 .s-story .wrap{ max-width:var(--max); margin:0 auto; }
+.s-story .lede, .turn{ margin-left:auto; margin-right:auto; }
 .story-head{
-  display:grid;
-  grid-template-columns:minmax(240px, 1fr) minmax(220px, .9fr);
-  gap:clamp(20px, 4vw, 64px);
-  align-items:end;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:clamp(14px, 2vw, 22px);
   margin-bottom:28px;
   padding-bottom:22px;
   border-bottom:1px dashed var(--line-strong);
@@ -447,16 +468,20 @@ section, .s-foot{
 .sprite{ position:absolute; width:0; height:0; overflow:hidden; }
 .swap{
   list-style:none; margin:0; padding:0;
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+  gap:0 clamp(20px, 2.4vw, 34px);
+  border-bottom:1px solid var(--line);
 }
 .swap li{
-  display:grid;
-  grid-template-columns:28px 92px 1fr 1fr;
-  gap:16px 20px;
+  display:flex;
+  flex-direction:column;
   align-items:center;
-  padding:13px 0;
+  text-align:center;
+  gap:11px;
+  padding:22px 0 26px;
   border-top:1px solid var(--line);
 }
-.swap li:last-child{ border-bottom:1px solid var(--line); }
 .swap-ico{ color:var(--ice); display:flex; align-items:center; }
 .swap-deg{ color:var(--ice); }
 .swap-p, .swap-a p{
@@ -466,6 +491,7 @@ section, .s-foot{
   letter-spacing:-.012em;
 }
 .swap-p{ color:var(--mute); }
+.swap-a{ margin-top:auto; padding-top:14px; }
 .swap-a p{ color:var(--paper); margin-top:3px; }
 .tag{
   display:inline-block;
@@ -521,15 +547,16 @@ section, .s-foot{
 /* anatomy + specs */
 .s-build{
   padding-top:16vh; padding-bottom:8vh;
+  text-align:center;
 }
 .s-build .wrap{ max-width:var(--max); margin:0 auto; }
-.build-head{ max-width:28ch; margin-bottom:56px; }
-.build-head .lede{ margin-top:18px; }
+.build-head{ margin:0 auto 56px; }
+.build-head .lede{ max-width:38ch; margin:18px auto 0; }
 
 .anatomy{ position:relative; width:100%; max-width:1180px; margin:0 auto 72px; }
 .anatomy svg{ width:100%; height:auto; display:block; }
 .a-call{ position:absolute; width:19.5%; transform:translateY(-50%); }
-.a-call--l{ left:0; text-align:right; }
+.a-call--l{ left:0; text-align:right; }   /* aimed inward at the leader lines */
 .a-call--r{ left:80.5%; text-align:left; }
 .a-title{
   margin:0 0 5px;
@@ -542,7 +569,7 @@ section, .s-foot{
 }
 .a-desc{ margin:0; font-size:12.5px; line-height:1.45; color:var(--mute); }
 
-.s-specs{ padding-top:4vh; padding-bottom:16vh; }
+.s-specs{ padding-top:4vh; padding-bottom:16vh; text-align:center; }
 .specs{
   display:grid; grid-template-columns:1fr 1fr;
   column-gap:clamp(32px, 6vw, 90px);
@@ -553,6 +580,7 @@ section, .s-foot{
 }
 .spec{
   display:flex; justify-content:space-between; align-items:baseline; gap:20px;
+  text-align:left;
   padding:13px 0;
   border-top:1px dashed var(--line);
 }
@@ -651,7 +679,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   .anatomy{ margin-bottom:36px; }
   .a-call{
     position:static; width:auto; transform:none;
-    text-align:left !important; padding:16px 0;
+    text-align:center !important; padding:16px 0;
     border-top:1px solid var(--line);
   }
   .a-call--l, .a-call--r{ left:auto; }
@@ -687,14 +715,24 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   }
   .btn-full{ display:none; }
   .btn-short{ display:inline; }
-  .topbar .mark{ flex:0 0 auto; color:#fff; font-size:18px; }
+  .topbar .mark{ flex:0 0 auto; color:#fff; }
+  .topbar .mark svg{ height:19px; }
   .nav-right{ flex:0 0 auto; margin-left:0; }
   .btn--sm{ font-size:12px; padding:8px 12px; }
   .story-head{ grid-template-columns:1fr; gap:16px; }
-  .swap li{ grid-template-columns:28px 1fr; gap:8px 12px; padding:16px 0; }
-  .swap-deg{ grid-column:2; }
-  .swap-p, .swap-a{ grid-column:2; }
-  .swap-ico{ grid-row:1 / span 3; }
+  .swap{ grid-template-columns:1fr; }
+  .swap li{
+    display:grid;
+    grid-template-columns:28px auto;
+    justify-content:center;
+    gap:7px 12px;
+    align-items:center;
+    padding:18px 0 20px;
+  }
+  .swap-ico{ grid-row:1; grid-column:1; }
+  .swap-deg{ grid-row:1; grid-column:2; }
+  .swap-p{ grid-column:1 / -1; }
+  .swap-a{ grid-column:1 / -1; margin-top:0; padding-top:2px; }
 }
 @media (max-width:768px){
   .facts{ grid-template-columns:1fr 1fr; gap:8px 16px; }
@@ -704,6 +742,11 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   .contrast-copy{ flex-direction:column; align-items:flex-start; }
   form{ flex-direction:column; }
   .s-hero{ padding-top:calc(var(--head, 64px) + 6vh); }
+  .s-hero .pshot{ min-height:240px; }
+  .stage-slot{ width:min(880px, 96%, 58vh); }
+  /* let the section space the blocks out, so the brackets hug the product */
+  .s-colors .pshot{ flex:0 1 auto; min-height:0; }
+  .s-colors .stage-slot{ width:min(720px, 92%, 52vh); }
 }
 @media (max-width:768px){
   .display,
@@ -711,6 +754,10 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
     font-size:90px;
     line-height:.92;
   }
+  /* keep its own scale: this headline is a sentence, not two words */
+  .display--hero{ font-size:clamp(2.5rem, 12.5vw, 3.6rem); line-height:.96; }
+  /* 37 characters of mono is a lot for 375px: ease the tracking */
+  .hero-kicker{ letter-spacing:.1em; line-height:1.5; }
 }
 
 @media (prefers-reduced-motion:reduce){
@@ -723,13 +770,40 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 </style>
 
 <script type="importmap">
-{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
 </script>
+
 </head>
 
 <body>
 
 <svg class="sprite" aria-hidden="true" focusable="false"><defs>
+  <linearGradient id="dipsana-warm" x1="208.21" y1="-51.28" x2="202.8" y2="62.33" gradientUnits="userSpaceOnUse">
+    <stop offset="0" stop-color="#fff462"/>
+    <stop offset=".03" stop-color="#fcea5c"/>
+    <stop offset=".11" stop-color="#f8d84f"/>
+    <stop offset=".19" stop-color="#f5cc48"/>
+    <stop offset=".28" stop-color="#f5c946"/>
+    <stop offset=".67" stop-color="#e59550"/>
+    <stop offset=".89" stop-color="#dd7049"/>
+    <stop offset="1" stop-color="#d74d43"/>
+    </linearGradient>
+  <symbol id="i-logo" viewBox="0 0 431.37 90.49">
+    <path fill="currentColor" d="M64.53,13.23h14.68c11.25,0,20.38,9.13,20.38,20.38v40.48h-14.68c-11.25,0-20.38-9.13-20.38-20.38V13.23h0Z"/>
+    <path fill="currentColor" d="M305.85,43.66c0-16.81-13.62-30.43-30.43-30.43s-30.43,13.62-30.43,30.43c0,15.47,11.55,28.23,26.49,30.17h0s.05,0,.05,0c1.28.16,2.57.26,3.89.26s2.62-.09,3.89-.26h26.54v-30.05h0s0-.08,0-.12ZM275.42,50.1c-3.55,0-6.44-2.88-6.44-6.44s2.88-6.44,6.44-6.44,6.44,2.88,6.44,6.44-2.88,6.44-6.44,6.44Z"/>
+    <path fill="currentColor" d="M431.37,43.66c0-16.81-13.62-30.43-30.43-30.43s-30.43,13.62-30.43,30.43c0,15.47,11.55,28.23,26.49,30.17h0s.05,0,.05,0c1.28.16,2.57.26,3.89.26s2.62-.09,3.89-.26h26.54v-30.05h0s0-.08,0-.12ZM400.94,50.1c-3.55,0-6.44-2.88-6.44-6.44s2.88-6.44,6.44-6.44,6.44,2.88,6.44,6.44-2.88,6.44-6.44,6.44Z"/>
+    <path fill="currentColor" d="M30.43,13.17H0v60.86h30.43c16.81,0,30.43-13.62,30.43-30.43h0c0-16.81-13.62-30.43-30.43-30.43ZM30.43,50.04c-3.55,0-6.44-2.88-6.44-6.44s2.88-6.44,6.44-6.44,6.44,2.88,6.44,6.44-2.88,6.44-6.44,6.44Z"/>
+    <path fill="currentColor" d="M140.73,13.22v-.11h-35.06v39.78c0,11.64,9.44,21.09,21.09,21.09h13.98v-11.7c12.52-1.17,22.32-11.7,22.32-24.53s-9.8-23.36-22.32-24.53ZM132.14,43.54c-3.55,0-6.44-2.88-6.44-6.44s2.88-6.44,6.44-6.44,6.44,2.88,6.44,6.44-2.88,6.44-6.44,6.44Z"/>
+    <path fill="currentColor" d="M345.87,74.09c0,.53-.02,1.06-.03,1.58l1.58-1.58h-1.55Z"/>
+    <path fill="currentColor" d="M328.69,73.84h0c0-.3,0-.6,0-.9,0-15.32,3.85-27.75,8.59-27.75s8.44,11.94,8.59,26.84l1.8,1.8-.26.26h21.2v-30.43c0-16.81-13.62-30.43-30.43-30.43-1.02,0-2.02.05-3.01.15h0s-27.27,0-27.27,0v27.27c-.1.99-.15,1.99-.15,3.01v30.43h20.95c0-.08,0-.17,0-.25h0Z"/>
+    <path fill="currentColor" d="M345.87,72.04c0,.3,0,.6,0,.9,0,.39,0,.77,0,1.15h1.55l.26-.26-1.8-1.8Z"/>
+    <path fill="currentColor" d="M328.69,73.84h0s0,0,0,0h0Z"/>
+    <path fill="currentColor" d="M328.7,73.84c0,.08,0,.17,0,.25h.25l-.25-.25Z"/>
+    <path fill="url(#dipsana-warm)" d="M189.43,39l26.59-26.59-.71-.71-1.97-1.97-9.73-9.73-30.08,30.08c-8.37,8.37-8.37,21.95,0,30.32l8.09,8.09,5.25,5.25,30.93-30.93c2.39,2.39,2.39,6.27,0,8.66l-26.59,26.59.71.71,1.97,1.97,9.73,9.73,30.08-30.08c8.37-8.37,8.37-21.95,0-30.32l-8.09-8.09-5.25-5.25-30.93,30.93c-2.39-2.39-2.39-6.27,0-8.66Z"/>
+  </symbol>
   <symbol id="i-temp" viewBox="0 0 24 24"><path d="M10 13.8V5a2 2 0 1 1 4 0v8.8a4.2 4.2 0 1 1-4 0z"/><path d="M12 9v5"/></symbol>
   <symbol id="i-water" viewBox="0 0 24 24"><path d="M12 3.2c3.3 3.9 5.4 6.6 5.4 9.3a5.4 5.4 0 0 1-10.8 0c0-2.7 2.1-5.4 5.4-9.3z"/></symbol>
   <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="2.4"/><path d="M9.5 3.5v3M14.5 3.5v3M9.5 17.5v3M14.5 17.5v3M3.5 9.5h3M3.5 14.5h3M17.5 9.5h3M17.5 14.5h3"/></symbol>
@@ -737,7 +811,6 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   <symbol id="i-btn" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="18.5" cy="12" r="2.2"/></symbol>
 </defs></svg>
 
-<canvas id="stage" role="img" aria-label="A slowly rotating three-dimensional view of the Dipsana bone conduction headset: two housings behind the ears, hooks over the ears, and transducers sitting immediately in front of the ears. Head-worn, no neckband."></canvas>
 
 <div class="rail" aria-hidden="true">
   <span class="rail-deg">110°</span>
@@ -746,8 +819,10 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
   <span class="rail-deg">0°</span>
 </div>
 
+<canvas id="stage" aria-hidden="true"></canvas>
+
 <header class="topbar" id="topbar">
-  <a class="mark" href="#top" aria-label="Dipsana, home">d<span class="dot-i">ı</span>psana</a>
+  <a class="mark" href="#top" aria-label="Dipsana, home"><svg viewBox="0 0 431.37 90.49" role="img" aria-hidden="true"><use href="#i-logo"/></svg></a>
   <ul class="nav-tabs">
     <li><a href="#usage">Uses</a></li>
     <li><a href="#story">Story</a></li>
@@ -763,24 +838,32 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 
   <section class="s-hero" data-reveal aria-labelledby="hero-h">
     <div>
-      <p class="mono hero-kicker rv">Bone conduction · 0–110°C</p>
-      <h1 class="display display--mid rv" id="hero-h">Stay in<br>longer.</h1>
+      <p class="mono hero-kicker rv">100% waterproof bone conduction audio</p>
+      <h1 class="display display--hero rv" id="hero-h">Built for recovery.</h1>
+      <p class="hero-sub rv">Sauna. Steam. Ice bath. Swim.</p>
     </div>
-    <div class="stage-slot" data-slot="hero">
+    <div class="pshot pshot--hero">
       <div class="hud" aria-hidden="true">
         <span class="hud-c hud-c--tl"></span>
         <span class="hud-c hud-c--tr"></span>
         <span class="hud-c hud-c--bl"></span>
         <span class="hud-c hud-c--br"></span>
       </div>
+      <div class="pshot-glow" aria-hidden="true"></div>
+      <div class="stage-slot" data-slot="hero" role="img"
+           aria-label="The Dipsana headset in Obsidian, slowly rotating: a matte charcoal bone-conduction band that hooks over both ears, with the transducers sitting just in front of them.">
+        <picture>
+          <source srcset="images/product.webp" type="image/webp">
+          <img class="pshot-poster" src="images/product.png" alt="" width="1200" height="760" fetchpriority="high" decoding="async">
+        </picture>
+      </div>
     </div>
     <div>
-      <p class="hero-sub rv">Audio that does not mind the heat, or the ice.</p>
       <p class="rv" style="margin:0"><a class="btn" href="#waitlist">Join the waitlist</a></p>
       <ul class="facts rv">
         <li><b>0–110°C</b><span>Sauna to ice</span></li>
         <li><b>IP68</b><span>2 m under</span></li>
-        <li><b>64 GB</b><span>No phone</span></li>
+        <li><b>32 GB</b><span>No phone</span></li>
         <li><b>10 hrs</b><span>Per charge</span></li>
       </ul>
     </div>
@@ -788,7 +871,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 
   <section class="s-range" id="usage" data-reveal aria-labelledby="range-h">
     <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Where it goes</p>
-    <h2 class="display display--mid rv" id="range-h">Rated for the<br>whole range.</h2>
+    <h2 class="display display--mid rv" id="range-h">Rated for the whole range.</h2>
     <p class="lede rv">Five rooms. One device. Nothing left on the bench between them.</p>
     <figure class="plot rv" aria-hidden="true">
       <svg viewBox="0 0 720 120" role="presentation">
@@ -900,7 +983,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
         </li>
         <li class="rv">
           <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-chip"/></svg></div>
-          <span class="mono swap-deg">64 GB</span>
+          <span class="mono swap-deg">32 GB</span>
           <p class="swap-p">A 90°C room is no place for a phone, and you bring it anyway.</p>
           <div class="swap-a"><span class="tag tag--ice">Onboard</span>
             <p>Load it at home. Walk in empty-handed.</p></div>
@@ -937,15 +1020,22 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
       <p class="lede rv" style="margin:18px auto 0; text-align:center">Not for the pigment. Pick one and watch it change.</p>
     </div>
 
-    <div class="stage-slot" data-slot="colors">
+    <div class="pshot pshot--cw">
       <div class="hud" aria-hidden="true">
         <span class="hud-c hud-c--tl"></span>
         <span class="hud-c hud-c--tr"></span>
         <span class="hud-c hud-c--bl"></span>
         <span class="hud-c hud-c--br"></span>
       </div>
+      <div class="pshot-glow" aria-hidden="true"></div>
+      <div class="stage-slot" data-slot="colors" role="img"
+           aria-label="The Dipsana headset in Obsidian: matte charcoal, the hero. Slowly rotating.">
+        <picture>
+          <source srcset="images/product.webp" type="image/webp">
+          <img class="pshot-poster" src="images/product.png" alt="" width="1200" height="760" decoding="async">
+        </picture>
+      </div>
     </div>
-
     <div>
       <div class="cw-readout rv">
         <p class="cw-name cw-fade" id="cwName">Obsidian</p>
@@ -966,47 +1056,45 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 
       <div class="anatomy rv">
         <svg viewBox="0 0 1200 620" role="img"
-             aria-label="Labelled side view of the Dipsana headset. One, nitinol memory-alloy frame. Two, heat-stable transducer pads. Three, bone conduction through the cheekbone. Four, three physical buttons. Five, sealed IP68 housing with 64GB storage. Six, magnetic charging contacts.">
+             aria-label="Labelled side view of the Dipsana headset. One, nitinol memory-alloy frame. Two, heat-stable transducer pads. Three, bone conduction just in front of the ear. Four, three physical buttons. Five, sealed IP68 housing with 32GB storage. Six, magnetic charging contacts.">
           <g class="leaders" fill="none" stroke="rgba(240,235,227,.2)" stroke-width="1.25">
-            <polyline points="452,240 340,168 262,168"/>
-            <polyline points="342,364 300,332 262,332"/>
-            <polyline points="380,428 314,494 262,494"/>
-            <polyline points="548,286 700,180 938,180"/>
-            <polyline points="612,314 762,332 938,332"/>
-            <polyline points="566,348 700,488 938,488"/>
+            <polyline points="470,264.2 338,168 262,168"/>
+            <polyline points="370.2,322 318,332 262,332"/>
+            <polyline points="402,364.2 330,494 262,494"/>
+            <polyline points="582,282.6 712,180 938,180"/>
+            <polyline points="818,310.2 886,332 938,332"/>
+            <polyline points="520,376 700,488 938,488"/>
           </g>
           <g fill="none" stroke="var(--ice)" stroke-linecap="round">
-            <path d="M 366 376 A 30 30 0 0 0 366 420" stroke-opacity=".85"/>
-            <path d="M 352 366 A 42 42 0 0 0 352 430" stroke-opacity=".55"/>
-            <path d="M 338 356 A 54 54 0 0 0 338 440" stroke-opacity=".3"/>
+            <path d="M 356.2 304.7 A 24 24 0 0 0 356.2 339.3" stroke-opacity=".85"/>
+            <path d="M 344.2 297.5 A 34 34 0 0 0 344.2 346.5" stroke-opacity=".55"/>
+            <path d="M 332.2 290.3 A 44 44 0 0 0 332.2 353.7" stroke-opacity=".3"/>
           </g>
-          <g fill="rgba(240,235,227,.04)" stroke="rgba(240,235,227,.72)"
-             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M 378 372 C 350 340, 352 288, 386 258 C 420 228, 470 228, 498 254" fill="none"/>
-            <path d="M 486 248 L 596 270 C 616 274, 626 288, 622 306 C 618 326, 602 338, 582 340
-                     L 502 348 C 482 350, 470 338, 470 318 L 470 272 C 470 258, 476 246, 486 248 Z"/>
-            <ellipse cx="392" cy="398" rx="34" ry="28" transform="rotate(-18 392 398)"/>
+          <g fill="rgba(240,235,227,.05)" stroke="rgba(240,235,227,.72)"
+             stroke-width="2.2" stroke-linejoin="round" fill-rule="evenodd">
+            <path d="M 403.3 222.7 L 418.6 223 L 435.8 230.2 L 453.8 246.6 L 478.5 273.5 L 488.5 279.6 L 496.8 282.4 L 517.3 282.4 L 574.5 277.4 L 579.5 279.1 L 582.2 282.9 L 632.7 280.7 L 684.9 280.7 L 763.1 285.2 L 797 290.2 L 821.4 296.8 L 829.4 302.6 L 830 316 L 824.7 322.3 L 804.8 329 L 750.4 336.8 L 683.8 340.1 L 583.9 338.4 L 583.1 342.6 L 577.5 350.9 L 576.4 368.1 L 572.3 375.6 L 565 377.3 L 542.8 377.3 L 493.5 374.5 L 486.2 372.8 L 480.4 368.1 L 471.5 342.6 L 461 320.4 L 436 283.8 L 418.6 267.4 L 408.6 263.5 L 401.9 263.5 L 396.9 265.2 L 391.1 270.5 L 386.1 284.3 L 389.1 289 L 401.9 289.6 L 414.9 299.3 L 420.5 320.9 L 421 347.6 L 417.7 356.5 L 409.1 362.8 L 391.4 366.2 L 381.4 366.2 L 373.9 359.8 L 370 348.7 L 370.6 261 L 375.5 243.8 L 382.8 232.7 L 394.7 224.7 L 403.3 222.7 Z"/>
+            <path d="M 639.7 295.4 L 702.7 295.7 L 750.4 298.5 L 795.3 304.6 L 815.6 310.4 L 786.4 317.9 L 727.6 324 L 640 325.7 L 583.9 323.4 L 577.5 316 L 577.5 313.7 L 583.1 304.9 L 583.1 299.9 L 585 297.9 L 639.7 295.4 Z"/>
           </g>
-          <g stroke="rgba(240,235,227,.72)" stroke-width="1.8" fill="rgba(240,235,227,.08)">
-            <circle cx="516" cy="280" r="6.5"/>
-            <circle cx="540" cy="285" r="6.5"/>
-            <circle cx="564" cy="290" r="6.5"/>
-            <rect x="548" y="330" width="18" height="9" rx="4.5"/>
-            <rect x="574" y="326" width="18" height="9" rx="4.5"/>
+          <g stroke="rgba(240,235,227,.72)" stroke-width="1.7" fill="rgba(240,235,227,.08)">
+            <circle cx="494" cy="288.5" r="5.5"/>
+            <circle cx="516" cy="289.4" r="5.5"/>
+            <circle cx="538" cy="287.6" r="5.5"/>
+            <rect x="463.5" y="331" width="17" height="8" rx="4"/>
+            <rect x="487.5" y="361.6" width="17" height="8" rx="4"/>
           </g>
           <g font-size="15" font-weight="700" text-anchor="middle" font-family="IBM Plex Mono, monospace">
-            <g><circle cx="452" cy="240" r="13" fill="var(--ice)"/><text x="452" y="245" fill="#08090c">1</text></g>
-            <g><circle cx="380" cy="428" r="13" fill="var(--ember)"/><text x="380" y="433" fill="#08090c">2</text></g>
-            <g><circle cx="342" cy="364" r="13" fill="var(--ice)"/><text x="342" y="369" fill="#08090c">3</text></g>
-            <g><circle cx="548" cy="286" r="13" fill="var(--ice)"/><text x="548" y="291" fill="#08090c">4</text></g>
-            <g><circle cx="612" cy="314" r="13" fill="var(--ember)"/><text x="612" y="319" fill="#08090c">5</text></g>
-            <g><circle cx="566" cy="348" r="13" fill="var(--ice)"/><text x="566" y="353" fill="#08090c">6</text></g>
+            <g><circle cx="818" cy="310.2" r="13" fill="var(--ember)"/><text x="818" y="315.2" fill="#08090c">1</text></g>
+            <g><circle cx="402" cy="364.2" r="13" fill="var(--ember)"/><text x="402" y="369.2" fill="#08090c">2</text></g>
+            <g><circle cx="370.2" cy="322" r="13" fill="var(--ice)"/><text x="370.2" y="327" fill="#08090c">3</text></g>
+            <g><circle cx="582" cy="282.6" r="13" fill="var(--ice)"/><text x="582" y="287.6" fill="#08090c">4</text></g>
+            <g><circle cx="470" cy="264.2" r="13" fill="var(--ice)"/><text x="470" y="269.2" fill="#08090c">5</text></g>
+            <g><circle cx="520" cy="376" r="13" fill="var(--ice)"/><text x="520" y="381" fill="#08090c">6</text></g>
           </g>
         </svg>
 
         <div class="a-call a-call--l" style="top:27.1%">
-          <p class="a-title"><span class="a-num">1</span> Nitinol frame</p>
-          <p class="a-desc">Memory alloy. Won’t warp, soften or go tacky in heat.</p>
+          <p class="a-title"><span class="a-num">5</span> Sealed housing</p>
+          <p class="a-desc">IP68 to 2m. 32GB onboard, Bluetooth 5.4.</p>
         </div>
         <div class="a-call a-call--l" style="top:79.7%">
           <p class="a-title"><span class="a-num">2</span> Heat-stable pads</p>
@@ -1021,8 +1109,8 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
           <p class="a-desc">Sized for numb fingers and wet hands. No touch surfaces.</p>
         </div>
         <div class="a-call a-call--r" style="top:53.5%">
-          <p class="a-title"><span class="a-num">5</span> Sealed housing</p>
-          <p class="a-desc">IP68 to 2m. 64GB onboard, Bluetooth 5.4.</p>
+          <p class="a-title"><span class="a-num">1</span> Nitinol frame</p>
+          <p class="a-desc">Memory alloy. Won’t warp, soften or go tacky in heat.</p>
         </div>
         <div class="a-call a-call--r" style="top:78.7%">
           <p class="a-title"><span class="a-num">6</span> Magnetic charging</p>
@@ -1038,7 +1126,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
     <dl class="specs">
       <div class="spec"><dt>Temperature</dt><dd>Rated 0°C to 110°C</dd></div>
       <div class="spec"><dt>Water</dt><dd>IP68, submersible to 2m</dd></div>
-      <div class="spec"><dt>Storage</dt><dd>64GB onboard</dd></div>
+      <div class="spec"><dt>Storage</dt><dd>32GB onboard</dd></div>
       <div class="spec"><dt>Above water</dt><dd>Bluetooth 5.4</dd></div>
       <div class="spec"><dt>Below water</dt><dd>Offline MP3 mode</dd></div>
       <div class="spec"><dt>Frame</dt><dd>Nitinol, head-worn</dd></div>
@@ -1076,7 +1164,7 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 
   <footer class="s-foot" data-reveal>
     <div class="foot-row">
-      <a class="mark mark--lg rv" href="#top" aria-label="Dipsana, back to top">d<span class="dot-i">ı</span>psana</a>
+      <a class="mark mark--lg rv" href="#top" aria-label="Dipsana, back to top"><svg viewBox="0 0 431.37 90.49" role="img" aria-hidden="true"><use href="#i-logo"/></svg></a>
       <p class="mono rv" style="margin:0">© 2026 Dipsana</p>
     </div>
     <p class="fine safety rv">Listen to your body, not just your playlist — follow the sauna and cold exposure guidance that applies to you.</p>
@@ -1086,214 +1174,235 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 
 <script type="module">
 import * as THREE from 'three';
+import { GLTFLoader }     from 'three/addons/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const COLORWAYS = [
-  { name:'Obsidian', hex:'#35383C', note:'Matte charcoal, the hero.' },
-  { name:'Glacier',  hex:'#A8D5E2', note:'Pale ice blue.' },
-  { name:'Ember',    hex:'#E2542C', note:'The loud one.' },
-  { name:'Chalk',    hex:'#EDE8E0', note:'Off-white.' },
+  { name:'Obsidian', hex:'#35383C', note:'Matte charcoal, the hero.', rough:.58, cc:.34 },
+  { name:'Glacier',  hex:'#A8D5E2', note:'Pale ice blue.',            rough:.50, cc:.42 },
+  { name:'Ember',    hex:'#E2542C', note:'The loud one.',             rough:.42, cc:.55 },
+  { name:'Chalk',    hex:'#EDE8E0', note:'Off-white.',                rough:.62, cc:.28 },
 ];
 
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isMobile = () => window.innerWidth < 768;
-const lerp = (a,b,t) => a + (b-a)*t;
+const coarse  = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+const lerp  = (a,b,t) => a + (b-a)*t;
+const clamp = (v,lo,hi) => v < lo ? lo : v > hi ? hi : v;
 
-const canvas   = document.getElementById('stage');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true, powerPreference:'high-performance' });
-renderer.outputColorSpace  = THREE.SRGBColorSpace;
-renderer.toneMapping       = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.28;
+/* ── stage ────────────────────────────────────────────────────────────────
+   One WebGL context for the whole page. Each .stage-slot marks out a box in
+   the document; the renderer scissors to that box and draws the headset into
+   it, so both sections share a single context and a single copy of the mesh. */
+
+const canvas = document.getElementById('stage');
+const renderer = new THREE.WebGLRenderer({
+  canvas, antialias:true, alpha:true, powerPreference:'high-performance'
+});
+renderer.setClearAlpha(0);                       // the page shows through
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.12;
+renderer.setScissorTest(true);
 
 const scene  = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 50);
-camera.position.set(0, 0.22, 5.2);
-camera.lookAt(0, 0, 0);
+const camera = new THREE.PerspectiveCamera(26, 1, 0.01, 100);
 
-const ambient = new THREE.AmbientLight(0xF0E8DC, 0.42);
-const studio = new THREE.HemisphereLight(0xffffff, 0x1a1e26, 0.38);
+const envRT = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04);
+scene.environment = envRT.texture;   /* Scene.environmentIntensity only lands in r163,
+                                        so the dial is envMapIntensity on the material */
 
-const keyLight = new THREE.DirectionalLight(0xFFF4E6, 2.8);
-keyLight.position.set(3.2, 4.0, 3.4);
-
-const emberRim = new THREE.DirectionalLight(0xE2542C, 0.0);
-emberRim.position.set(-4.2, 0.6, -1.6);
-
-const glacierRim = new THREE.DirectionalLight(0xA8D5E2, 0.0);
-glacierRim.position.set(3.6, 0.5, -2.6);
-
-const KEY_WARM = new THREE.Color(0xFFEBD2), KEY_COOL = new THREE.Color(0xC9DEEC);
-const AMB_WARM = new THREE.Color(0xF0E8DC), AMB_COOL = new THREE.Color(0xD6E3EA);
-
-const fill = new THREE.DirectionalLight(0xBFC9D0, 0.70);
-fill.position.set(-1.6, -2.4, 2.2);
-
-const kicker = new THREE.DirectionalLight(0xffffff, 1.1);
-kicker.position.set(-2.4, 3.2, -3.0);
-
-const TWO_LIGHT = isMobile();
-scene.add(ambient, studio, keyLight, emberRim, kicker);
-if (!TWO_LIGHT) scene.add(glacierRim, fill);
-
-const RIM_EMBER = new THREE.Color(0xE2542C), RIM_GLACIER = new THREE.Color(0xA8D5E2);
-const KEY_BASE = 3.6, RIM_BASE = 2.6, AMB_BASE = 0.28, FILL_BASE = 0.45;
+const key  = new THREE.DirectionalLight(0xFFF2E4, 2.4); key.position.set(3, 4, 3);
+const rim  = new THREE.DirectionalLight(0x8EC4D4, 1.5); rim.position.set(-3, 1.5, -3);
+const fill = new THREE.DirectionalLight(0xBFC9D0, 0.55); fill.position.set(-2, -1.5, 2);
+scene.add(key, rim, fill, new THREE.AmbientLight(0xF0E8DC, 0.3));
 
 const bodyMat = new THREE.MeshPhysicalMaterial({
-  color:0x35383C, roughness:0.55, metalness:0.05,
-  clearcoat:0.30, clearcoatRoughness:0.40
-});
-const bandMat = new THREE.MeshPhysicalMaterial({
-  color:0x101112, roughness:0.62, metalness:0.06,
-  clearcoat:0.28, clearcoatRoughness:0.45
-});
-const padMat = new THREE.MeshPhysicalMaterial({
-  color:0x0D0E0F, roughness:0.72, metalness:0.02,
-  clearcoat:0.15, clearcoatRoughness:0.6
-});
-const btnMat = new THREE.MeshPhysicalMaterial({
-  color:0x2A2C2E, roughness:0.6, metalness:0.08, clearcoat:0.25
+  color:new THREE.Color(COLORWAYS[0].hex),
+  roughness:COLORWAYS[0].rough, metalness:0.04,
+  clearcoat:COLORWAYS[0].cc, clearcoatRoughness:0.35,
+  envMapIntensity:0.42,
 });
 
-const root  = new THREE.Group();
-const inner = new THREE.Group();
-root.add(inner);
-scene.add(root);
+const rig = new THREE.Group();
+scene.add(rig);
+let modelRadius = 0.5, ready = false, handedOver = false;
 
-const X = 0.62;
-const bandCurve = new THREE.CatmullRomCurve3([
-  new THREE.Vector3(-X, 0.13, 0.00),
-  new THREE.Vector3(-0.60, 0.16, -0.30),
-  new THREE.Vector3(-0.40, 0.07, -0.62),
-  new THREE.Vector3( 0.00, 0.01, -0.74),
-  new THREE.Vector3( 0.40, 0.07, -0.62),
-  new THREE.Vector3( 0.60, 0.16, -0.30),
-  new THREE.Vector3( X, 0.13, 0.00),
-], false, 'catmullrom', 0.42);
-inner.add(new THREE.Mesh(new THREE.TubeGeometry(bandCurve, 120, 0.026, 14, false), bandMat));
+/* the three-quarter view the product is normally shot from */
+const BASE_AZ = -75 * Math.PI/180;
+const CAM_EL  =  14 * Math.PI/180;
 
-for (const side of [-1, 1]) {
-  const housing = new THREE.Mesh(new THREE.CapsuleGeometry(0.052, 0.20, 8, 18), bodyMat);
-  housing.rotation.x = Math.PI / 2;
-  housing.scale.set(0.82, 1.05, 1.22);
-  housing.position.set(side * X, 0.11, 0.05);
-  inner.add(housing);
+new GLTFLoader().load('models/headset.glb', gltf => {
+  let geo = null;
+  gltf.scene.traverse(o => { if (o.isMesh && !geo) geo = o.geometry; });
+  if (!geo) return;
+
+  geo.computeVertexNormals();                    // the file ships positions only
+  geo.computeBoundingBox();
+  const size = geo.boundingBox.getSize(new THREE.Vector3());
+  const mid  = geo.boundingBox.getCenter(new THREE.Vector3());
+  geo.translate(-mid.x, -mid.y, -mid.z);
+  const k = 1 / Math.max(size.x, size.y, size.z);
+  geo.scale(k, k, k);
+  geo.computeBoundingSphere();
+  modelRadius = geo.boundingSphere.radius;
+
+  rig.add(new THREE.Mesh(geo, bodyMat));
+  ready = true;
+}, undefined, () => {
+  /* mesh unavailable — the poster photograph simply stays put */
+});
+
+/* distance that fits the model inside the slot on both axes */
+function fitDistance(aspect, fill){
+  const vFov = camera.fov * Math.PI/180;
+  const hFov = 2 * Math.atan(Math.tan(vFov/2) * aspect);
+  return Math.max(modelRadius / Math.sin(vFov/2), modelRadius / Math.sin(hFov/2)) / fill;
 }
 
-function hookGeometry(){
-  const c = new THREE.CatmullRomCurve3([
-    new THREE.Vector3(0,  0.12, 0.14),
-    new THREE.Vector3(0,  0.24, 0.30),
-    new THREE.Vector3(0,  0.22, 0.46),
-    new THREE.Vector3(0,  0.04, 0.52),
-    new THREE.Vector3(0, -0.10, 0.46),
-  ], false, 'catmullrom', 0.4);
-  const g = new THREE.TubeGeometry(c, 80, 0.028, 12, false);
-  g.scale(0.72, 1, 1);
-  return g;
+const SLOTS = [...document.querySelectorAll('.stage-slot')].map(el => ({
+  el,
+  rect: null,
+  fill: el.dataset.slot === 'colors' ? 1.26 : 1.20,
+}));
+
+let needMeasure = true;
+const remeasure = () => { needMeasure = true; };
+window.addEventListener('scroll', remeasure, { passive:true });
+window.addEventListener('resize', remeasure, { passive:true });
+
+function resize(){
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, coarse ? 1.6 : 2));
+  renderer.setSize(window.innerWidth, window.innerHeight, false);
+  const tb = document.getElementById('topbar');
+  if (tb) document.documentElement.style.setProperty('--head', tb.offsetHeight + 'px');
+  needMeasure = true;
 }
-for (const side of [-1, 1]) {
-  const hk = new THREE.Mesh(hookGeometry(), bodyMat);
-  hk.position.x = side * X;
-  inner.add(hk);
+resize();
+window.addEventListener('resize', resize, { passive:true });
+
+/* ── motion ───────────────────────────────────────────────────────────────
+   A slow idle turn, plus a little push from the pointer so it feels held
+   rather than played back. Drag to spin it yourself. */
+
+let spin = 0, spinVel = 0;
+let ptrLive = false, ptrX = 0, ptrY = 0;
+let dragging = false, dragLast = 0, tiltX = 0, tiltXTarget = 0;
+
+if (!coarse){
+  window.addEventListener('pointermove', ev => {
+    ptrLive = true; ptrX = ev.clientX; ptrY = ev.clientY;
+    if (dragging){
+      spinVel += (ev.clientX - dragLast) * 0.00042;
+      dragLast = ev.clientX;
+    }
+  }, { passive:true });
+  document.addEventListener('pointerleave', () => { ptrLive = false; }, { passive:true });
 }
 
-for (const side of [-1, 1]) {
-  const pad = new THREE.Mesh(new THREE.CapsuleGeometry(0.048, 0.036, 6, 16), padMat);
-  pad.scale.set(0.78, 1.18, 0.88);
-  pad.position.set(side * X, -0.155, 0.45);
-  inner.add(pad);
+for (const slot of SLOTS){
+  slot.el.addEventListener('pointerdown', ev => {
+    dragging = true; dragLast = ev.clientX;
+    slot.el.setPointerCapture?.(ev.pointerId);
+  });
+  slot.el.addEventListener('pointerup',     () => { dragging = false; });
+  slot.el.addEventListener('pointercancel', () => { dragging = false; });
 }
 
-{
-  const plate = new THREE.Mesh(new THREE.CapsuleGeometry(0.026, 0.10, 4, 12), btnMat);
-  plate.rotation.z = Math.PI / 2;
-  plate.rotation.y = Math.PI / 2;
-  plate.scale.set(1, 1, 0.42);
-  plate.position.set(-X - 0.048, 0.10, 0.04);
-  inner.add(plate);
+let last = performance.now();
 
-  const bGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.018, 12);
-  for (let i = -1; i <= 1; i++) {
-    const b = new THREE.Mesh(bGeo, padMat);
-    b.rotation.z = Math.PI / 2;
-    b.position.set(-X - 0.056, 0.10, 0.04 + i * 0.046);
-    inner.add(b);
+function drawSlot(slot){
+  const r = slot.rect;
+  if (!r || r.width < 1 || r.height < 1) return;
+  const h = window.innerHeight;
+  if (r.bottom <= 0 || r.top >= h) return;
+
+  const y = h - r.bottom;
+  renderer.setViewport(r.left, y, r.width, r.height);
+  renderer.setScissor(r.left, y, r.width, r.height);
+
+  const aspect = r.width / r.height;
+  camera.aspect = aspect;
+  camera.updateProjectionMatrix();
+
+  const d  = fitDistance(aspect, slot.fill);
+  const el = CAM_EL + tiltX;
+  camera.position.set(0, d * Math.sin(el), d * Math.cos(el));
+  camera.lookAt(0, 0, 0);
+
+  renderer.render(scene, camera);
+}
+
+function frame(now){
+  const dt = Math.min(now - last, 64);
+  last = now;
+
+  if (needMeasure){
+    for (const s of SLOTS) s.rect = s.el.getBoundingClientRect();
+    needMeasure = false;
   }
-}
 
-const markCanvas = document.createElement('canvas');
-markCanvas.width = 512; markCanvas.height = 128;
-function paintWordmark(){
-  const x = markCanvas.getContext('2d');
-  x.clearRect(0, 0, 512, 128);
-  x.fillStyle = '#ffffff';
-  x.textAlign = 'center';
-  x.textBaseline = 'middle';
-  if ('letterSpacing' in x) x.letterSpacing = '10px';
-  x.font = '700 58px "Bricolage Grotesque", system-ui, sans-serif';
-  x.fillText('DIPSANA', 256, 66);
-}
-paintWordmark();
-const markTex = new THREE.CanvasTexture(markCanvas);
-markTex.colorSpace = THREE.SRGBColorSpace;
-markTex.anisotropy = 4;
-const markMat = new THREE.MeshBasicMaterial({
-  map:markTex, transparent:true, opacity:0.62, depthWrite:false,
-  color:0xC9CCCF
-});
-const markMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.04), markMat);
-markMesh.rotation.y = Math.PI / 2;
-markMesh.position.set(X + 0.052, 0.12, 0.04);
-inner.add(markMesh);
+  if (!reduced){
+    spin += (dt * 0.00016 + spinVel);
+    spinVel *= Math.pow(0.0025, dt/1000);        // drag momentum bleeds off
 
-if (document.fonts && document.fonts.ready) {
-  document.fonts.ready.then(() => { paintWordmark(); markTex.needsUpdate = true; });
+    if (ptrLive && !coarse && SLOTS.length){
+      const r = SLOTS[0].rect;
+      if (r && r.height) tiltXTarget = clamp((ptrY - (r.top + r.height/2)) / (r.height/2), -1, 1) * 0.16;
+    } else {
+      tiltXTarget = 0;
+    }
+    tiltX = lerp(tiltX, tiltXTarget, 1 - Math.pow(0.004, dt/1000));
+  }
+
+  rig.rotation.y = BASE_AZ + spin;
+
+  if (colT < 1){
+    colT = Math.min(1, colT + dt / COLOR_MS);
+    const e = colT * colT * (3 - 2*colT);
+    bodyMat.color.copy(colFrom).lerp(colTo, e);
+    bodyMat.roughness = lerp(roughFrom, roughTo, e);
+    bodyMat.clearcoat = lerp(ccFrom, ccTo, e);
+  }
+
+  if (ready){
+    renderer.setScissorTest(false);
+    renderer.clear();
+    renderer.setScissorTest(true);
+    for (const slot of SLOTS) drawSlot(slot);
+
+    if (!handedOver){          // only drop the poster once there is a frame behind it
+      handedOver = true;
+      document.querySelectorAll('.pshot').forEach(el => el.classList.add('is-live'));
+    }
+  }
+  requestAnimationFrame(frame);
 }
+requestAnimationFrame(frame);
 
 const anatomySvg = document.querySelector('.anatomy svg');
 function fitAnatomy(){
   if (!anatomySvg) return;
   anatomySvg.setAttribute('viewBox',
-    window.innerWidth <= 900 ? '285 175 630 320' : '0 0 1200 620');
+    window.innerWidth <= 900 ? '270 200 580 210' : '0 0 1200 620');
 }
 fitAnatomy();
 window.addEventListener('resize', fitAnatomy, { passive:true });
 
-const bbox = new THREE.Box3().setFromObject(inner);
-const centre = bbox.getCenter(new THREE.Vector3());
-inner.children.forEach(c => c.position.sub(centre));
-const _dx = bbox.max.x - bbox.min.x, _dy = bbox.max.y - bbox.min.y, _dz = bbox.max.z - bbox.min.z;
-const MODEL_H = _dy;
-
-const SLOTS = [...document.querySelectorAll('.stage-slot')].map(el => ({
-  el,
-  look: el.dataset.slot === 'colors'
-    ? { key:1.45, em:1.05, gl:1.05, rx:0.06, fill:0.74 }
-    : { key:1.20, em:0.80, gl:0.75, rx:0.06, fill:0.70 },
-}));
-
-const SPAN_XZ = Math.sqrt(_dx*_dx + _dz*_dz);
-const SPAN_Y  = MODEL_H * 1.65;
-let idleSpin = 0;
-
-function resize(){
-  const w = window.innerWidth, h = window.innerHeight;
-  const dpr = Math.min(window.devicePixelRatio || 1, isMobile() ? 1.5 : 2);
-  renderer.setPixelRatio(dpr);
-  renderer.setSize(w, h, false);
-  const tb = document.getElementById('topbar');
-  document.documentElement.style.setProperty('--head', tb.offsetHeight + 'px');
-}
+/* ── colourways ───────────────────────────────────────────────────────── */
 
 const swatchList = document.getElementById('swatches');
 const cwName = document.getElementById('cwName');
 const cwHex  = document.getElementById('cwHex');
 const cwNote = document.getElementById('cwNote');
 const fades  = [cwName, cwHex, cwNote];
+const cwShot = document.querySelector('.pshot--cw');
 
 const colFrom = new THREE.Color(COLORWAYS[0].hex);
 const colTo   = new THREE.Color(COLORWAYS[0].hex);
 let colT = 1, activeIndex = 0;
-const COLOR_MS = 400;
+let roughFrom = COLORWAYS[0].rough, roughTo = COLORWAYS[0].rough;
+let ccFrom = COLORWAYS[0].cc, ccTo = COLORWAYS[0].cc;
+const COLOR_MS = 460;
 
 const lumOf = rgb => (0.2126*rgb[0] + 0.7152*rgb[1] + 0.0722*rgb[2]) / 255;
 function inkFor(hex){
@@ -1309,42 +1418,38 @@ function setInk(rgb){
   );
 }
 
-let inkFrom = inkFor(COLORWAYS[0].hex);
-let inkTo   = inkFor(COLORWAYS[0].hex);
-setInk(inkTo);
-
-const tmp = new THREE.Color(), tmp2 = new THREE.Color();
-function applyBodyColour(c){
-  bodyMat.color.copy(c);
-  bandMat.color.copy(c).multiplyScalar(0.58);
-  padMat .color.copy(c).multiplyScalar(0.44);
-  const lum = 0.2126*c.r + 0.7152*c.g + 0.0722*c.b;
-  btnMat .color.copy(c).lerp(tmp2.set(0x9AA0A6), 0.30);
-  markMat.color.set(lum > 0.45 ? 0x2A2C2E : 0xC9CCCF);
-  markMat.opacity = lum > 0.45 ? 0.55 : 0.62;
-}
-applyBodyColour(colTo);
-
 function selectColorway(i, silent){
   activeIndex = i;
   const cw = COLORWAYS[i];
+  const n = parseInt(cw.hex.slice(1), 16);
 
   colFrom.copy(bodyMat.color);
   colTo.set(cw.hex);
+  roughFrom = bodyMat.roughness; roughTo = cw.rough;
+  ccFrom    = bodyMat.clearcoat; ccTo    = cw.cc;
   colT = silent ? 1 : 0;
-  if (silent) applyBodyColour(colTo);
+  if (silent){
+    bodyMat.color.copy(colTo);
+    bodyMat.roughness = roughTo;
+    bodyMat.clearcoat = ccTo;
+  }
 
   document.documentElement.style.setProperty('--active', cw.hex);
-  inkFrom = inkTo;
-  inkTo   = inkFor(cw.hex);
-  if (silent) setInk(inkTo);
+  if (cwShot) cwShot.style.setProperty(
+    '--active-glow', `rgba(${n>>16&255},${n>>8&255},${n&255},.20)`
+  );
+  setInk(inkFor(cw.hex));
 
-  [...swatchList.children].forEach((li, n) => {
-    li.firstElementChild.setAttribute('aria-checked', String(n === i));
-    li.firstElementChild.tabIndex = n === i ? 0 : -1;
+  [...swatchList.children].forEach((li, k) => {
+    li.firstElementChild.setAttribute('aria-checked', String(k === i));
+    li.firstElementChild.tabIndex = k === i ? 0 : -1;
   });
 
-  if (silent) {
+  const slot = SLOTS.find(s => s.el.dataset.slot === 'colors');
+  if (slot) slot.el.setAttribute('aria-label',
+    `The Dipsana headset in ${cw.name}: ${cw.note.toLowerCase()} Slowly rotating.`);
+
+  if (silent){
     cwName.textContent = cw.name; cwHex.textContent = cw.hex; cwNote.textContent = cw.note;
     return;
   }
@@ -1373,76 +1478,14 @@ COLORWAYS.forEach((cw, i) => {
             : ev.key === 'ArrowLeft'  || ev.key === 'ArrowUp'   ? -1 : 0;
     if (!d) return;
     ev.preventDefault();
-    const n = (activeIndex + d + COLORWAYS.length) % COLORWAYS.length;
-    selectColorway(n);
-    swatchList.children[n].firstElementChild.focus();
+    const k = (activeIndex + d + COLORWAYS.length) % COLORWAYS.length;
+    selectColorway(k);
+    swatchList.children[k].firstElementChild.focus();
   });
   li.appendChild(b);
   swatchList.appendChild(li);
 });
 selectColorway(0, true);
-
-let last = performance.now();
-
-function drawSlot(slot){
-  const r = slot.el.getBoundingClientRect();
-  const h = window.innerHeight;
-  if (r.bottom <= 0 || r.top >= h || r.width < 1 || r.height < 1) return;
-
-  const { look } = slot;
-  renderer.setViewport(r.left, h - r.bottom, r.width, r.height);
-  renderer.setScissor(r.left, h - r.bottom, r.width, r.height);
-
-  camera.aspect = r.width / r.height;
-  camera.updateProjectionMatrix();
-  const frustumH = 2 * Math.tan((camera.fov * Math.PI/180) / 2) * camera.position.z;
-  const frustumW = frustumH * camera.aspect;
-  root.scale.setScalar(look.fill * Math.min(frustumW / SPAN_XZ, frustumH / SPAN_Y));
-  inner.rotation.set(look.rx, 0.55 + idleSpin, 0);
-
-  const cold = look.gl / (look.gl + look.em);
-  keyLight.color.copy(KEY_WARM).lerp(KEY_COOL, cold);
-  ambient.color.copy(AMB_WARM).lerp(AMB_COOL, cold);
-  keyLight.intensity = KEY_BASE * look.key;
-  ambient.intensity  = AMB_BASE;
-
-  if (TWO_LIGHT) {
-    emberRim.color.copy(RIM_EMBER).lerp(RIM_GLACIER, cold);
-    emberRim.intensity = RIM_BASE * Math.max(look.em, look.gl);
-  } else {
-    emberRim.intensity   = RIM_BASE * look.em;
-    glacierRim.intensity = RIM_BASE * look.gl;
-    fill.intensity       = FILL_BASE;
-  }
-
-  renderer.render(scene, camera);
-}
-
-function frame(now){
-  const dt = Math.min(now - last, 60);
-  last = now;
-  if (!reduced) idleSpin += dt * 0.00013;
-
-  if (colT < 1) {
-    colT = Math.min(1, colT + dt / COLOR_MS);
-    const e = colT * colT * (3 - 2 * colT);
-    applyBodyColour(tmp.copy(colFrom).lerp(colTo, e));
-    const ink = inkFrom.map((v, i) => lerp(v, inkTo[i], e));
-    setInk(ink);
-  }
-
-  renderer.setScissorTest(false);
-  renderer.clear();
-  renderer.setScissorTest(true);
-  for (const slot of SLOTS) drawSlot(slot);
-
-  requestAnimationFrame(frame);
-}
-
-resize();
-requestAnimationFrame(frame);
-window.addEventListener('resize', resize, { passive:true });
-
 const topbar = document.getElementById('topbar');
 let scrolled = null;
 function syncHeader(){
