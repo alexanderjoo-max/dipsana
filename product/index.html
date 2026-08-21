@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dipsana — Built for recovery</title>
-<meta name="description" content="Bone conduction audio built for heat and ice. Rated 0–110°C, IP68 to 2m, 32GB onboard. Sauna, steam room, cold plunge, ice bath.">
+<title>The product — Dipsana</title>
+<meta name="description" content="Open-ear bone conduction rated 0–110°C, IP68 to 2 metres, 32GB onboard. Heat-stable frame and pads, physical buttons, magnetic charge. Pre-launch.">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F26GGJJMGX"></script>
@@ -17,14 +17,14 @@
 <meta name="theme-color" content="#08090c">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='164%20-3%2092%2096'%3E%3Crect%20x='164'%20y='-3'%20width='92'%20height='96'%20rx='20'%20fill='%2308090c'/%3E%3Cpath%20d='M189.43%2C39l26.59-26.59-.71-.71-1.97-1.97-9.73-9.73-30.08%2C30.08c-8.37%2C8.37-8.37%2C21.95%2C0%2C30.32l8.09%2C8.09%2C5.25%2C5.25%2C30.93-30.93c2.39%2C2.39%2C2.39%2C6.27%2C0%2C8.66l-26.59%2C26.59.71.71%2C1.97%2C1.97%2C9.73%2C9.73%2C30.08-30.08c8.37-8.37%2C8.37-21.95%2C0-30.32l-8.09-8.09-5.25-5.25-30.93%2C30.93c-2.39-2.39-2.39-6.27%2C0-8.66Z'%20fill='%23f0a24a'/%3E%3C/svg%3E">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Dipsana — Built for recovery">
-<meta property="og:description" content="Bone conduction audio built for heat and ice. Sauna, steam room, cold plunge, ice bath.">
+<meta property="og:title" content="The product — Dipsana">
+<meta property="og:description" content="Open-ear bone conduction rated 0–110°C, IP68 to 2 metres, 32GB onboard. Heat-stable frame and pads, physical buttons, magnetic charge. Pre-launch.">
 <meta property="og:site_name" content="Dipsana">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Dipsana — Built for recovery">
-<meta name="twitter:description" content="Bone conduction audio built for heat and ice. Sauna, steam room, cold plunge, ice bath.">
-<link rel="canonical" href="https://dipsana.com/">
-<meta property="og:url" content="https://dipsana.com/">
+<meta name="twitter:title" content="The product — Dipsana">
+<meta name="twitter:description" content="Open-ear bone conduction rated 0–110°C, IP68 to 2 metres, 32GB onboard. Heat-stable frame and pads, physical buttons, magnetic charge. Pre-launch.">
+<link rel="canonical" href="https://dipsana.com/product/">
+<meta property="og:url" content="https://dipsana.com/product/">
 <meta property="og:image" content="https://dipsana.com/images/product.png">
 <meta name="twitter:image" content="https://dipsana.com/images/product.png">
 
@@ -90,7 +90,7 @@
 <header class="topbar" id="topbar">
   <a class="mark" href="/" aria-label="Dipsana, home"><svg viewBox="0 0 431.37 90.49" role="img" aria-hidden="true"><use href="#i-logo"/></svg></a>
   <ul class="nav-tabs">
-    <li><a href="/product/">Product</a></li>
+    <li><a href="/product/" aria-current="page" class="is-active">Product</a></li>
     <li><a href="/how-it-works/">How it works</a></li>
     <li><a href="/learn/">Learn</a></li>
   </ul>
@@ -100,13 +100,16 @@
 </header>
 
 <main id="top">
-  <section class="s-hero" data-reveal aria-labelledby="hero-h">
-    <div>
-      <p class="mono hero-kicker rv">100% waterproof bone conduction audio</p>
-      <h1 class="display display--hero rv" id="hero-h">Built for recovery.</h1>
-      <p class="hero-sub rv">Sauna. Steam. Ice bath. Swim.</p>
-    </div>
-    <div class="pshot pshot--hero">
+
+  <section class="s-list s-list--intro" data-reveal aria-labelledby="prod-h">
+    <p class="mono rv" style="color:var(--ice); margin:0 0 18px">The headset</p>
+    <h1 class="display rv" id="prod-h">The product</h1>
+    <p class="lede rv" style="margin:24px auto 0; text-align:center">Open-ear bone conduction rated 0&#8211;110&#176;C, IP68 to 2 metres, 32GB onboard. The canal stays empty. The phone stays in the locker.</p>
+  </section>
+
+  <section class="s-colors s-colors--hero" id="colors" data-reveal aria-label="Choose a colorway">
+
+    <div class="pshot pshot--cw">
       <div class="hud" aria-hidden="true">
         <span class="hud-c hud-c--tl"></span>
         <span class="hud-c hud-c--tr"></span>
@@ -114,167 +117,172 @@
         <span class="hud-c hud-c--br"></span>
       </div>
       <div class="pshot-glow" aria-hidden="true"></div>
-      <div class="stage-slot" data-slot="hero" role="img"
-           aria-label="The Dipsana headset in Obsidian, slowly rotating: a matte charcoal bone-conduction band that hooks over both ears, with the transducers sitting just in front of them.">
+      <div class="stage-slot" data-slot="colors" role="img"
+           aria-label="The Dipsana headset in Obsidian: matte charcoal, the hero. Slowly rotating.">
         <picture>
           <source srcset="/images/product.webp" type="image/webp">
-          <img class="pshot-poster" src="/images/product.png" alt="" width="1200" height="760" fetchpriority="high" decoding="async">
+          <img class="pshot-poster" src="/images/product.png" alt="" width="1200" height="760" decoding="async">
         </picture>
       </div>
     </div>
     <div>
-      <p class="rv" style="margin:0"><a class="btn" href="/product/">See it</a></p>
-      <ul class="facts rv">
-        <li><b>0–110°C</b><span>Sauna to ice</span></li>
-        <li><b>IP68</b><span>2 m under</span></li>
-        <li><b>32 GB</b><span>No phone</span></li>
-        <li><b>10 hrs</b><span>Per charge</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <section class="s-range" id="usage" data-reveal aria-labelledby="range-h">
-    <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Where it goes</p>
-    <h2 class="display display--mid rv" id="range-h">Rated<br class="br-m"> for the<br class="br-m"> whole<br class="br-m"> range.</h2>
-    <p class="lede rv">Five rooms. One device. Nothing left on the bench between them.</p>
-    <figure class="plot rv" aria-hidden="true">
-      <svg viewBox="0 0 720 120" role="presentation">
-        <g fill="none" stroke="rgba(240,235,227,.14)" stroke-width="1">
-          <line x1="0" y1="20" x2="720" y2="20"/>
-          <line x1="0" y1="50" x2="720" y2="50"/>
-          <line x1="0" y1="80" x2="720" y2="80"/>
-          <line x1="0" y1="110" x2="720" y2="110"/>
-        </g>
-        <polyline fill="none" stroke="#d25a28" stroke-width="1.6"
-          points="20,18 150,28 300,62 420,70 560,96 700,108"/>
-        <polyline fill="none" stroke="#8ec4d4" stroke-width="1.2" stroke-dasharray="3 4"
-          points="20,36 180,40 340,68 500,88 700,104"/>
-        <g fill="#8ec4d4">
-          <circle cx="20" cy="18" r="3"/>
-          <circle cx="300" cy="62" r="3"/>
-          <circle cx="420" cy="70" r="3"/>
-          <circle cx="700" cy="108" r="3"/>
-        </g>
-        <g fill="rgba(240,235,227,.45)" font-family="IBM Plex Mono, monospace" font-size="10">
-          <text x="20" y="14">110°</text>
-          <text x="300" y="58">45°</text>
-          <text x="668" y="104">0°</text>
-        </g>
-      </svg>
-      <figcaption class="plot-cap mono">
-        <span>sauna</span><span>steam</span><span>plunge</span><span>ice</span><span>contrast</span>
-      </figcaption>
-    </figure>
-  </section>
-
-  <section class="chapter chapter--heat" data-reveal aria-labelledby="u1">
-    <div class="chapter-frame">
-      <img src="/images/v3-sauna.jpg" alt="Close-up of a young man in a cedar sauna, skin shining with sweat, wearing Dipsana bone-conduction headphones" width="864" height="1152" loading="lazy" decoding="async">
-      <div class="chapter-copy">
-        <p class="mono deg-hot rv">Sauna · 80–100°C · 15–20 min</p>
-        <h2 class="display display--mid rv" id="u1">Sauna</h2>
-        <p class="lede rv">The podcast that makes twenty minutes feel like eight.</p>
+      <div class="cw-readout rv">
+        <p class="cw-name cw-fade" id="cwName">Obsidian</p>
+        <p class="cw-hex cw-fade" id="cwHex">#35383C</p>
+        <p class="cw-note cw-fade" id="cwNote">Matte charcoal, the hero.</p>
       </div>
+      <ul class="swatches rv" id="swatches" role="radiogroup" aria-label="Choose a colorway"></ul>
     </div>
   </section>
 
-  <section class="chapter chapter--heat" data-reveal aria-labelledby="u2">
-    <div class="chapter-frame">
-      <img src="/images/v3-steam.jpg" alt="Close-up of a young woman in a steam room, dewy skin and condensation on Dipsana headphones" width="1152" height="864" loading="lazy" decoding="async">
-      <div class="chapter-copy">
-        <p class="mono deg-hot rv">Steam room · 40–45°C · 100% humidity</p>
-        <h2 class="display display--mid rv" id="u2">Steam room</h2>
-        <p class="lede rv">Where every other pair of headphones has already quit.</p>
-      </div>
-    </div>
-  </section>
 
-  <section class="chapter chapter--cold" data-reveal aria-labelledby="u3">
-    <div class="chapter-frame">
-      <img src="/images/v3-plunge.jpg" alt="Close-up of a young man's head underwater in a cold plunge, wearing Dipsana headphones" width="864" height="1152" loading="lazy" decoding="async">
-      <div class="chapter-copy">
-        <p class="mono deg-cold rv">Cold plunge · 3–10°C · 2–3 min</p>
-        <h2 class="display display--mid rv" id="u3">Cold plunge</h2>
-        <p class="lede rv">One song. Get in, finish the song, get out.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="chapter chapter--cold chapter--ice" data-reveal aria-labelledby="u4">
-    <div class="chapter-frame">
-      <img src="/images/v3-ice.jpg" alt="Close-up of a young man's head in an ice bath, ice cubes at the waterline, wearing Dipsana headphones" width="864" height="1152" loading="lazy" decoding="async">
-      <div class="chapter-copy">
-        <p class="mono deg-cold rv">Ice bath · 0–5°C · 3–5 min</p>
-        <h2 class="display display--mid rv" id="u4">Ice bath</h2>
-        <p class="lede rv">Offline mode, because your phone is in a locker and your hands don’t work anyway.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="s-contrast" data-reveal aria-labelledby="u5">
-    <div class="contrast-frame">
-      <img src="/images/v3-contrast.jpg" alt="Close-up of a young woman's head split between sauna heat and ice, wearing Dipsana headphones" width="1280" height="720" loading="lazy" decoding="async">
-      <div class="contrast-copy">
-        <div>
-          <p class="mono rv" style="margin:0 0 12px"><span class="hot-word">Hot</span> · <span class="cold-word">cold</span> · repeat</p>
-          <h2 class="display display--mid rv" id="u5">Contrast</h2>
-        </div>
-        <p class="lede rv">A playlist that runs the whole cycle, so you are not resetting a timer with wet hands.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="s-story" id="why" data-reveal aria-labelledby="why-h">
+  <section class="s-story" id="story" data-reveal aria-labelledby="story-h">
     <div class="wrap">
       <div class="story-head">
         <div>
-          <p class="mono rv" style="color:var(--ice); margin:0 0 12px">Why audio</p>
-          <h2 class="display display--mid rv" id="why-h">Four headaches</h2>
+          <p class="mono rv" style="color:var(--ember-soft); margin:0 0 12px">Why it exists</p>
+          <h2 class="display display--mid rv" id="story-h">The last four minutes</h2>
         </div>
-        <p class="lede rv">The rooms are the easy part. The minutes are not.</p>
+        <div>
+          <p class="lede rv">The hardest part of every sauna and every plunge. Not the heat. Not the cold. The counting.</p>
+          <p class="turn rv" style="margin-top:12px">So we built something that <em>doesn’t mind</em></p>
+        </div>
       </div>
-      <ol class="swap swap--links swap--hx">
+
+      <ol class="swap">
         <li class="rv">
-          <a href="/learn/headphones-in-sauna/">
-            <span class="tag">Heat</span>
-            <span class="hx-media"><img src="/images/v3-steam.jpg" alt="Steam beading on skin in a hot room" loading="lazy" decoding="async"></span>
-            <span class="mono swap-deg">0–35°C</span>
-            <p class="swap-p">Ruined everyday earbuds</p>
-            <div class="swap-a"><p>AirPods are rated to 35°C. A sauna is not.</p></div>
-          </a>
+          <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-batt"/></svg></div>
+          <span class="mono swap-deg">10 hrs</span>
+          <p class="swap-p">You get out early. Not because it is too hot — because it is too boring.</p>
+          <div class="swap-a"><span class="tag">Playback</span>
+            <p>Long enough that you stop counting.</p></div>
         </li>
         <li class="rv">
-          <a href="/learn/sauna/">
-            <span class="tag">Sauna</span>
-            <span class="hx-media"><img src="/images/v3-sauna.jpg" alt="Sweat running on skin on a sauna bench" loading="lazy" decoding="async"></span>
-            <span class="mono swap-deg">15–20 min</span>
-            <p class="swap-p">Boredom ends sessions</p>
-            <div class="swap-a"><p>You get out early because it is too boring.</p></div>
-          </a>
+          <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-chip"/></svg></div>
+          <span class="mono swap-deg">32 GB</span>
+          <p class="swap-p">A 90°C room is no place for a phone, and you bring it anyway.</p>
+          <div class="swap-a"><span class="tag tag--ice">Onboard</span>
+            <p>Load it at home. Walk in empty-handed.</p></div>
         </li>
         <li class="rv">
-          <a href="/learn/ice/">
-            <span class="tag tag--ice">Plunge</span>
-            <span class="hx-media"><img src="/images/v3-ice.jpg" alt="Face at the surface of an ice bath, ice on the water" loading="lazy" decoding="async"></span>
-            <span class="mono swap-deg">One song</span>
-            <p class="swap-p">Ice needs a finish line</p>
-            <div class="swap-a"><p>Get in, finish the song, get out.</p></div>
-          </a>
+          <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-water"/></svg></div>
+          <span class="mono swap-deg">IP68</span>
+          <p class="swap-p">Bluetooth does not travel through water.</p>
+          <div class="swap-a"><span class="tag tag--ice">2 metres</span>
+            <p>Offline MP3 below the surface.</p></div>
         </li>
         <li class="rv">
-          <a href="/learn/swim/">
-            <span class="tag tag--ice">Water</span>
-            <span class="hx-media"><img src="/images/v3-plunge.jpg" alt="Swimmer underwater, bubbles across the face" loading="lazy" decoding="async"></span>
-            <span class="mono swap-deg">Offline</span>
-            <p class="swap-p">Swim time can be useful</p>
-            <div class="swap-a"><p>Bluetooth does not travel through water.</p></div>
-          </a>
+          <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-temp"/></svg></div>
+          <span class="mono swap-deg">0–110°</span>
+          <p class="swap-p">Silicone softens, slips and dies in sauna heat.</p>
+          <div class="swap-a"><span class="tag">Heat-stable frame</span>
+            <p>Heat-stable pads. The frame remembers its shape.</p></div>
+        </li>
+        <li class="rv">
+          <div class="swap-ico"><svg class="ico" aria-hidden="true"><use href="#i-btn"/></svg></div>
+          <span class="mono swap-deg">Buttons</span>
+          <p class="swap-p">Numb fingers and touch controls do not get along.</p>
+          <div class="swap-a"><span class="tag tag--ice">Magnetic charge</span>
+            <p>Physical clicks. No port to corrode.</p></div>
         </li>
       </ol>
     </div>
   </section>
 
 
+  <section class="s-build" data-reveal aria-labelledby="an-h">
+    <div class="wrap">
+      <div class="build-head">
+        <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Anatomy</p>
+        <h2 class="display display--mid rv" id="an-h">What’s<br class="br-m"> in it</h2>
+        <p class="lede rv">Open-ear bone conduction, sealed for the two worst rooms in the building.</p>
+      </div>
+
+      <div class="anatomy rv">
+        <svg viewBox="0 0 1200 620" role="img"
+             aria-label="Labelled side view of the Dipsana headset. One, heat-stable memory frame. Two, heat-stable transducer pads. Three, bone conduction just in front of the ear. Four, three physical buttons. Five, sealed IP68 housing with 32GB storage. Six, magnetic charging contacts.">
+          <g class="leaders" fill="none" stroke="rgba(240,235,227,.2)" stroke-width="1.25">
+            <polyline points="470,264.2 338,168 262,168"/>
+            <polyline points="370.2,322 318,332 262,332"/>
+            <polyline points="402,364.2 330,494 262,494"/>
+            <polyline points="582,282.6 712,180 938,180"/>
+            <polyline points="818,310.2 886,332 938,332"/>
+            <polyline points="520,376 700,488 938,488"/>
+          </g>
+          <g fill="none" stroke="var(--ice)" stroke-linecap="round">
+            <path d="M 356.2 304.7 A 24 24 0 0 0 356.2 339.3" stroke-opacity=".85"/>
+            <path d="M 344.2 297.5 A 34 34 0 0 0 344.2 346.5" stroke-opacity=".55"/>
+            <path d="M 332.2 290.3 A 44 44 0 0 0 332.2 353.7" stroke-opacity=".3"/>
+          </g>
+          <g fill="rgba(240,235,227,.05)" stroke="rgba(240,235,227,.72)"
+             stroke-width="2.2" stroke-linejoin="round" fill-rule="evenodd">
+            <path d="M 403.3 222.7 L 418.6 223 L 435.8 230.2 L 453.8 246.6 L 478.5 273.5 L 488.5 279.6 L 496.8 282.4 L 517.3 282.4 L 574.5 277.4 L 579.5 279.1 L 582.2 282.9 L 632.7 280.7 L 684.9 280.7 L 763.1 285.2 L 797 290.2 L 821.4 296.8 L 829.4 302.6 L 830 316 L 824.7 322.3 L 804.8 329 L 750.4 336.8 L 683.8 340.1 L 583.9 338.4 L 583.1 342.6 L 577.5 350.9 L 576.4 368.1 L 572.3 375.6 L 565 377.3 L 542.8 377.3 L 493.5 374.5 L 486.2 372.8 L 480.4 368.1 L 471.5 342.6 L 461 320.4 L 436 283.8 L 418.6 267.4 L 408.6 263.5 L 401.9 263.5 L 396.9 265.2 L 391.1 270.5 L 386.1 284.3 L 389.1 289 L 401.9 289.6 L 414.9 299.3 L 420.5 320.9 L 421 347.6 L 417.7 356.5 L 409.1 362.8 L 391.4 366.2 L 381.4 366.2 L 373.9 359.8 L 370 348.7 L 370.6 261 L 375.5 243.8 L 382.8 232.7 L 394.7 224.7 L 403.3 222.7 Z"/>
+            <path d="M 639.7 295.4 L 702.7 295.7 L 750.4 298.5 L 795.3 304.6 L 815.6 310.4 L 786.4 317.9 L 727.6 324 L 640 325.7 L 583.9 323.4 L 577.5 316 L 577.5 313.7 L 583.1 304.9 L 583.1 299.9 L 585 297.9 L 639.7 295.4 Z"/>
+          </g>
+          <g stroke="rgba(240,235,227,.72)" stroke-width="1.7" fill="rgba(240,235,227,.08)">
+            <circle cx="494" cy="288.5" r="5.5"/>
+            <circle cx="516" cy="289.4" r="5.5"/>
+            <circle cx="538" cy="287.6" r="5.5"/>
+            <rect x="463.5" y="331" width="17" height="8" rx="4"/>
+            <rect x="487.5" y="361.6" width="17" height="8" rx="4"/>
+          </g>
+          <g font-size="15" font-weight="700" text-anchor="middle" font-family="IBM Plex Mono, monospace">
+            <g><circle cx="818" cy="310.2" r="13" fill="var(--ember)"/><text x="818" y="315.2" fill="#08090c">1</text></g>
+            <g><circle cx="402" cy="364.2" r="13" fill="var(--ember)"/><text x="402" y="369.2" fill="#08090c">2</text></g>
+            <g><circle cx="370.2" cy="322" r="13" fill="var(--ice)"/><text x="370.2" y="327" fill="#08090c">3</text></g>
+            <g><circle cx="582" cy="282.6" r="13" fill="var(--ice)"/><text x="582" y="287.6" fill="#08090c">4</text></g>
+            <g><circle cx="470" cy="264.2" r="13" fill="var(--ice)"/><text x="470" y="269.2" fill="#08090c">5</text></g>
+            <g><circle cx="520" cy="376" r="13" fill="var(--ice)"/><text x="520" y="381" fill="#08090c">6</text></g>
+          </g>
+        </svg>
+
+        <div class="a-call a-call--r" style="top:53.5%">
+          <p class="a-title"><span class="a-num">1</span> Heat-stable frame</p>
+          <p class="a-desc">Won’t warp, soften or go tacky in heat.</p>
+        </div>
+        <div class="a-call a-call--l" style="top:79.7%">
+          <p class="a-title"><span class="a-num">2</span> Heat-stable pads</p>
+          <p class="a-desc">A heat-stable compound, not standard silicone.</p>
+        </div>
+        <div class="a-call a-call--l" style="top:53.5%">
+          <p class="a-title"><span class="a-num">3</span> Bone conduction</p>
+          <p class="a-desc">Sits just in front of the ear. Nothing goes in the canal. <a href="/how-it-works/">The science</a></p>
+        </div>
+        <div class="a-call a-call--r" style="top:29.0%">
+          <p class="a-title"><span class="a-num">4</span> Physical buttons</p>
+          <p class="a-desc">Sized for numb fingers and wet hands. No touch surfaces.</p>
+        </div>
+        <div class="a-call a-call--l" style="top:27.1%">
+          <p class="a-title"><span class="a-num">5</span> Sealed housing</p>
+          <p class="a-desc">IP68 to 2m. 32GB onboard, Bluetooth 5.4.</p>
+        </div>
+        <div class="a-call a-call--r" style="top:78.7%">
+          <p class="a-title"><span class="a-num">6</span> Magnetic charging</p>
+          <p class="a-desc">No port to corrode. Ten minutes gives three hours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-specs" id="specs" data-reveal aria-labelledby="spec-h">
+    <p class="mono" style="text-align:center; color:var(--ice); margin:0 0 18px">Specification</p>
+    <h2 class="display display--mid" id="spec-h" style="text-align:center; margin:0 0 48px">The list</h2>
+    <dl class="specs">
+      <div class="spec"><dt>Temperature</dt><dd>Rated 0°C to 110°C</dd></div>
+      <div class="spec"><dt>Water</dt><dd>IP68, submersible to 2m</dd></div>
+      <div class="spec"><dt>Storage</dt><dd>32GB onboard</dd></div>
+      <div class="spec"><dt>Above water</dt><dd>Bluetooth 5.4</dd></div>
+      <div class="spec"><dt>Below water</dt><dd>Offline MP3 mode</dd></div>
+      <div class="spec"><dt>Frame</dt><dd>Heat-stable, head-worn</dd></div>
+      <div class="spec"><dt>Contact pads</dt><dd>Heat-stable, not silicone</dd></div>
+      <div class="spec"><dt>Playback</dt><dd>10 hours</dd></div>
+      <div class="spec"><dt>Fast charge</dt><dd>10 minutes = 3 hours</dd></div>
+      <div class="spec"><dt>Controls</dt><dd>Physical buttons</dd></div>
+      <div class="spec"><dt>Charging</dt><dd>Magnetic, no ports</dd></div>
+      <div class="spec"><dt>Colorways</dt><dd>Four</dd></div>
+    </dl>
+    <p class="fine more"><a href="/how-it-works/">How it works</a></p>
+  </section>
 
   <section class="s-list" id="waitlist" data-reveal aria-labelledby="wl-h">
     <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Founding list</p>
@@ -306,7 +314,7 @@
     </div>
     <ul class="foot-nav rv">
       <li><a href="/" aria-current="page">Home</a></li>
-      <li><a href="/product/">Product</a></li>
+      <li><a href="/product/" aria-current="page">Product</a></li>
       <li><a href="/how-it-works/">How it works</a></li>
       <li><a href="/learn/">Learn</a></li>
       <li><a href="/learn/sauna/">Sauna</a></li>
