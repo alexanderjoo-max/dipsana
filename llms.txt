@@ -1,0 +1,38 @@
+# Dipsana
+
+> Pre-launch bone-conduction headphones built for recovery environments: sauna,
+> steam room, cold plunge, ice bath and swimming. Open-ear audio that leaves the
+> ear canal empty, rated 0–110°C, IP68 to 2 metres, with 32GB of onboard storage
+> so no phone is needed in the room.
+
+Dipsana is not shipping yet; the site is a waitlist landing plus reference
+material. The core argument: everyday earbuds are rated to roughly 0–35°C and
+seal the ear canal, which fails in 70–110°C heat and cannot work underwater
+because Bluetooth does not travel through water. Bone conduction moves sound
+through the cheekbone to the cochlea instead, leaving the canal open.
+
+## Product
+- [The product](https://dipsana.com/product/): Colourways, feature list, labelled hardware diagram and the full specification list.
+- [How it works](https://dipsana.com/how-it-works/): The bone-conduction path explained with diagrams, in-ear versus bone comparison table, the hardware, honest limits, and FAQ.
+
+## Guides
+- [How to stay in the sauna longer](https://dipsana.com/learn/sauna/): Why sauna sessions end early, why everyday earbuds fail in 80–100°C heat, and how audio changes perceived time.
+- [How to stay in an ice bath longer](https://dipsana.com/learn/ice/): Why ice baths end when the counting starts, and how a single track works as a finish line.
+- [Listen while you swim](https://dipsana.com/learn/swim/): Why Bluetooth cannot reach a submerged head, and why offline storage plus open-ear bone conduction is the working combination.
+- [Can you wear headphones in a sauna?](https://dipsana.com/learn/headphones-in-sauna/): Consumer earbuds are rated around 0–35°C while saunas run 70–110°C; what heat does to batteries, adhesives and silicone tips.
+- [Learn index](https://dipsana.com/learn/): All guides.
+
+## Key specifications
+- Operating range: 0°C to 110°C
+- Water: IP68, submersible to 2 metres
+- Storage: 32GB onboard, offline MP3 playback
+- Wireless: Bluetooth 5.4 above water; Bluetooth does not work submerged
+- Playback: 10 hours; 10 minutes of charge gives 3 hours
+- Controls: three physical buttons, no touch surfaces
+- Charging: magnetic contacts, no ports
+- Fit: open-ear bone conduction, transducer pads on the cheekbone
+
+## Notes
+- Status: pre-launch, waitlist only. No purchase available.
+- Not noise-cancelling; bass is weaker than a sealed in-ear and some sound leaks at volume.
+- Nothing here is a medical claim. Sauna and cold-exposure guidance should come from a qualified source.

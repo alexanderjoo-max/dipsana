@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://dipsana.com/</loc><changefreq>monthly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://dipsana.com/product/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://dipsana.com/how-it-works/</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://dipsana.com/learn/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://dipsana.com/learn/sauna/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://dipsana.com/learn/ice/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://dipsana.com/learn/swim/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://dipsana.com/learn/headphones-in-sauna/</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://dipsana.com/</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://dipsana.com/product/</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://dipsana.com/how-it-works/</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://dipsana.com/learn/</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://dipsana.com/learn/sauna/</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://dipsana.com/learn/ice/</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://dipsana.com/learn/swim/</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://dipsana.com/learn/headphones-in-sauna/</loc><lastmod>2026-08-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 </urlset>
