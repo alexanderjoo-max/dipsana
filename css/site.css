@@ -910,6 +910,107 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
 .s-specs .more a{ color:var(--ice); text-decoration:none; }
 .s-specs .more a:hover{ text-decoration:underline; text-underline-offset:3px; }
 
+.a-desc a{
+  color:var(--ice);
+  text-decoration:none;
+}
+.a-desc a:hover{ text-decoration:underline; text-underline-offset:2px; }
+
+/* science diagrams */
+.legend{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:10px 22px;
+  max-width:42rem; margin:28px auto 0;
+  list-style:none; padding:0;
+}
+.legend li{
+  display:flex; align-items:center; gap:8px;
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--mute);
+}
+.legend i{
+  display:block; width:22px; height:2px; border-radius:1px;
+  background:currentColor;
+}
+.legend .air{ color:var(--ember-soft); }
+.legend .bone{ color:var(--ice); }
+.legend .dim i{
+  height:0;
+  background:transparent;
+  border-top:1.5px dashed var(--mute);
+}
+
+.diag-pair{
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:16px;
+  width:min(920px, 100%);
+  margin:40px auto 0;
+}
+.diag{
+  margin:40px auto 0;
+  width:min(720px, 100%);
+  background:var(--ash);
+  border:1px solid var(--line);
+}
+.diag-pair .diag{ margin:0; width:auto; }
+.diag svg{ width:100%; height:auto; display:block; }
+.diag figcaption{
+  padding:12px 16px 14px;
+  border-top:1px solid var(--line);
+  color:var(--mute);
+  font-size:13px; line-height:1.45;
+}
+.diag figcaption .mono{
+  display:block;
+  margin:0 0 6px;
+  color:var(--ice);
+}
+.diag--heat{ width:min(720px, 100%); }
+
+.compare-wrap{
+  width:100%; max-width:52rem;
+  margin:36px auto 0;
+  overflow-x:auto;
+  border:1px solid var(--line);
+  background-image:linear-gradient(180deg, rgba(240,235,227,.03), transparent 48px);
+}
+.compare{
+  width:100%; min-width:32rem;
+  border-collapse:collapse;
+  font-size:15px;
+}
+.compare th, .compare td{
+  text-align:left; vertical-align:top;
+  padding:13px 16px;
+  border-top:1px dashed var(--line);
+  color:var(--paper-dim);
+}
+.compare thead th{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  font-weight:500; color:var(--mute);
+  border-top:0; border-bottom:1px solid var(--line);
+  padding-top:16px;
+}
+.compare tbody th{
+  font-family:"IBM Plex Mono", ui-monospace, monospace;
+  font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+  font-weight:500; color:var(--mute);
+  white-space:nowrap; padding-left:16px;
+}
+.compare tbody tr:first-child th,
+.compare tbody tr:first-child td{ border-top:0; }
+
+@media (prefers-reduced-motion:no-preference){
+  .diag-flow{
+    stroke-dasharray:7 9;
+    animation:diag-dash 2.8s linear infinite;
+  }
+}
+@keyframes diag-dash{
+  to{ stroke-dashoffset:-32; }
+}
+
 @media (max-width:820px){
   .swap--links{ grid-template-columns:1fr; }
   .swap--links li > a{ padding:22px 18px 24px; }
@@ -921,12 +1022,14 @@ button[type=submit][disabled]{ opacity:.55; cursor:default; transform:none; }
     max-width:11ch;
   }
   .page-shot{ aspect-ratio:4 / 3; margin-top:32px; }
+  .diag-pair{ grid-template-columns:1fr; }
+  .diag text.lbl{ font-size:15px; }
 }
 
 @media (prefers-reduced-motion:reduce){
   html{ scroll-behavior:auto; }
   .rv{ opacity:1 !important; transform:none !important; transition:none !important; }
   .swatch, .swatch:hover, .swatch[aria-checked="true"]{ transition:box-shadow .2s linear; transform:none; }
-  form, .done, .err, .cw-fade, .btn{ transition:none; }
+  form, .done, .err, .cw-fade, .btn, .diag-flow{ transition:none; animation:none !important; }
   *{ scroll-behavior:auto !important; }
 }
