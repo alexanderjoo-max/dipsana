@@ -32,6 +32,10 @@ through the cheekbone to the cochlea instead, leaving the canal open.
 - Charging: magnetic contacts, no ports
 - Fit: open-ear bone conduction, transducer pads on the cheekbone
 
+## Legal
+- [Terms of Service](https://dipsana.com/terms/): Waitlist is not a purchase. Specs can change. Guides are not medical advice.
+- [Privacy Policy](https://dipsana.com/privacy/): Email for one launch note via Kit. Google Analytics on the site. No sale of addresses.
+
 ## Notes
 - Status: pre-launch, waitlist only. No purchase available.
 - Not noise-cancelling; bass is weaker than a sealed in-ear and some sound leaks at volume.
