@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dipsana — Built for recovery</title>
+<meta name="description" content="Bone conduction audio built for heat and ice. Rated 0–110°C, IP68 to 2m, 32GB onboard. Sauna, steam room, cold plunge, ice bath.">
+<meta name="theme-color" content="#0B0C0E">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://dipsana.com/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0C0E;
+  --bg-2:#101214;
+  --cream:#F3EDE3;
+  --body:#C8C2B8;
+  --mute:#8A8580;
+  --cta:#E86A2A;
+  --cta-hot:#F07838;
+  --ink:#0B0C0E;
+  --line:rgba(243,237,227,.12);
+  --line-strong:rgba(243,237,227,.22);
+  --obsidian:#35383C;
+  --glacier:#B7C5CE;
+  --heat:#6B432C;
+  --ice:#8AADB8;
+  --pad:clamp(20px,4.2vw,72px);
+  --nav:64px;
+  --max:1280px;
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--body);
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block;max-width:100%}
+a{color:inherit}
+button,input{font:inherit}
+:focus-visible{outline:2px solid var(--cream);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.skip{position:absolute;left:var(--pad);top:-48px;z-index:80;background:var(--cta);color:var(--ink);padding:8px 14px;text-decoration:none;font-size:13px;font-weight:500}
+.skip:focus{top:12px}
+
+.display{
+  font-family:"Instrument Sans",Inter,system-ui,sans-serif;
+  font-weight:600;
+  letter-spacing:-.042em;
+  line-height:.94;
+  color:var(--cream);
+  margin:0;
+}
+.kicker{
+  margin:0 0 14px;
+  font-size:11px;
+  font-weight:500;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--mute);
+}
+.lede{margin:0;max-width:42ch;color:var(--body);font-size:clamp(16px,1.4vw,18px)}
+
+/* ── nav ── */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:50;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:16px;
+  padding:14px var(--pad);
+  padding-top:max(14px,env(safe-area-inset-top));
+  background:linear-gradient(180deg,rgba(11,12,14,.62),rgba(11,12,14,0));
+  border-bottom:1px solid transparent;
+  transition:background .35s ease,border-color .35s ease;
+}
+.nav.is-scrolled{
+  background:var(--bg);
+  border-bottom-color:var(--line);
+}
+.nav-mid a,.brand{text-shadow:0 1px 10px rgba(0,0,0,.45)}
+.nav.is-scrolled .nav-mid a,.nav.is-scrolled .brand{text-shadow:none}
+.brand{justify-self:start;display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--cream)}
+.brand img{height:26px;width:auto}
+.wordmark{font-family:"Instrument Sans",Inter,sans-serif;font-weight:600;font-size:15px;letter-spacing:.16em}
+#rooms,#studio,#specs,#waitlist{scroll-margin-top:88px}
+.nav-mid{justify-self:center;display:flex;gap:clamp(18px,2.4vw,36px);list-style:none;margin:0;padding:0}
+.nav-mid a{text-decoration:none;color:var(--cream);font-size:13px;opacity:.55;transition:opacity .2s}
+.nav-mid a:hover{opacity:1}
+.nav-end{justify-self:end}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--cta);color:var(--ink);
+  border:0;border-radius:3px;
+  padding:12px 18px;
+  font-size:14px;font-weight:600;
+  text-decoration:none;cursor:pointer;
+  transition:background .2s ease;
+}
+.btn:hover{background:var(--cta-hot)}
+.btn--sm{padding:9px 14px;font-size:13px}
+.btn-short{display:none}
+.btn--text{
+  background:none;color:var(--cream);padding:12px 4px;font-weight:500;
+  text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(243,237,227,.35);
+}
+.btn--text:hover{text-decoration-color:var(--cream);background:none}
+.btn--ghost{
+  background:transparent;color:var(--cream);
+  border:1px solid var(--line-strong);
+}
+.btn--ghost:hover{background:rgba(243,237,227,.05)}
+.btn[aria-pressed="true"]{background:var(--cream);color:var(--ink)}
+
+/* ── hero ── */
+.hero{
+  display:grid;
+  grid-template-columns:minmax(0,1.28fr) minmax(300px,.92fr);
+  min-height:100svh;
+  min-height:100dvh;
+}
+.hero-visual{
+  position:relative;
+  min-height:100%;
+  background:#16110e;
+  overflow:hidden;
+}
+.hero-photo{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  object-position:14% 42%;
+}
+.hero-photo--heat{
+  opacity:0;
+  filter:url(#heat-shimmer);
+  pointer-events:none;
+  transition:opacity .8s ease;
+}
+.hero-visual[data-phase="heat"] .hero-photo--heat{opacity:.85}
+.climate{
+  position:absolute;inset:0;
+  pointer-events:none;
+}
+.cl{
+  position:absolute;inset:0;
+  opacity:0;
+  transition:opacity .8s ease;
+}
+.hero-visual[data-phase="heat"] .cl-heat,
+.hero-visual[data-phase="steam"] .cl-steam,
+.hero-visual[data-phase="cold"] .cl-cold,
+.hero-visual[data-phase="ice"] .cl-water{opacity:1}
+.cl-heat{
+  background:
+    radial-gradient(ellipse 70% 50% at 40% 70%,rgba(232,106,42,.28),transparent 70%),
+    linear-gradient(180deg,rgba(232,106,42,.08),transparent 45%);
+  mix-blend-mode:overlay;
+  animation:shimmer 5s ease-in-out infinite;
+}
+.cl-steam{
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 110%,rgba(243,237,227,.42),transparent 55%),
+    radial-gradient(ellipse 40% 30% at 20% 40%,rgba(243,237,227,.18),transparent 70%);
+  mix-blend-mode:screen;
+}
+.cl-steam::before,.cl-steam::after{
+  content:"";position:absolute;inset:-30% 0 0;
+  background:radial-gradient(ellipse at 50% 80%,rgba(255,255,255,.22),transparent 50%);
+  filter:blur(28px);
+  animation:steam 9s ease-in-out infinite;
+}
+.cl-steam::after{animation-delay:-4s;opacity:.6}
+.cl-cold{
+  background:
+    linear-gradient(180deg,rgba(40,70,90,.22),rgba(20,50,80,.38)),
+    radial-gradient(ellipse at 70% 20%,rgba(138,173,184,.2),transparent 50%);
+  mix-blend-mode:multiply;
+}
+.cl-water{
+  background:
+    radial-gradient(ellipse 200px 90px at 18% 35%,rgba(190,230,255,.3),transparent 70%),
+    radial-gradient(ellipse 260px 110px at 72% 58%,rgba(120,200,230,.22),transparent 70%),
+    radial-gradient(ellipse 160px 70px at 48% 82%,rgba(210,245,255,.18),transparent 70%),
+    linear-gradient(180deg,rgba(12,36,58,.28),rgba(8,24,40,.42));
+  background-size:130% 130%,140% 140%,120% 120%,100% 100%;
+  mix-blend-mode:screen;
+  animation:caustics 8s ease-in-out infinite;
+}
+@keyframes shimmer{
+  0%,100%{transform:translateY(0);opacity:.75}
+  50%{transform:translateY(-6px);opacity:1}
+}
+@keyframes steam{
+  0%,100%{transform:translate3d(0,8%,0) scale(1);opacity:.35}
+  50%{transform:translate3d(4%,-6%,0) scale(1.08);opacity:.7}
+}
+@keyframes caustics{
+  0%{background-position:0% 10%,100% 20%,40% 80%,0 0}
+  50%{background-position:28% 24%,68% 48%,58% 62%,0 0}
+  100%{background-position:0% 10%,100% 20%,40% 80%,0 0}
+}
+.callout{
+  position:absolute;
+  left:50%;top:31%;
+  width:min(260px,48%);
+  pointer-events:none;
+}
+.callout-dot{
+  position:absolute;left:0;top:0;
+  width:7px;height:7px;border-radius:50%;
+  background:var(--cream);
+  box-shadow:0 0 0 4px rgba(243,237,227,.18);
+}
+.callout-line{
+  position:absolute;left:7px;top:3px;
+  width:34px;height:1px;
+  background:var(--cream);
+  transform:rotate(-28deg);transform-origin:left center;
+}
+.callout p{
+  position:absolute;left:38px;top:-28px;
+  margin:0;width:150px;
+  font-size:12px;line-height:1.35;font-weight:500;
+  color:var(--cream);
+  text-shadow:0 1px 10px rgba(0,0,0,.75);
+}
+.climate-hud{
+  position:absolute;left:20px;bottom:20px;
+  color:var(--cream);
+  font-variant-numeric:tabular-nums;
+}
+.climate-hud .deg{
+  display:block;
+  font-family:"Instrument Sans",Inter,sans-serif;
+  font-size:clamp(28px,3vw,40px);
+  font-weight:600;letter-spacing:-.04em;line-height:1;
+}
+.climate-hud .cycle{
+  display:flex;gap:.45em;margin-top:8px;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);
+}
+.climate-hud .cycle span[aria-current="true"]{color:var(--cream)}
+
+.hero-copy{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(28px,6vh,64px) var(--pad);
+  padding-top:calc(var(--nav) + clamp(20px,4vh,48px));
+  background:var(--bg);
+}
+.hero-copy h1{font-size:clamp(2.6rem,6.2vw,5.2rem);max-width:8ch}
+.hero-sub{margin:14px 0 0;color:var(--cream);font-size:clamp(17px,1.6vw,20px);font-weight:400}
+.hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-top:28px}
+.chips{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:0;
+  margin:36px 0 0;
+  padding:0;list-style:none;
+  border-top:1px solid var(--line);
+}
+.chips li{
+  padding:14px 16px 14px 0;
+  border-bottom:1px solid var(--line);
+}
+.chips li:nth-child(odd){padding-right:18px}
+.chips li:nth-child(even){padding-left:18px;border-left:1px solid var(--line)}
+.chips b{display:block;color:var(--cream);font-size:15px;font-weight:600;letter-spacing:-.02em}
+.chips span{display:block;margin-top:2px;font-size:12px;color:var(--mute)}
+
+/* ── rooms ── */
+.sec-head{padding:clamp(72px,10vh,120px) var(--pad) 28px;max-width:var(--max);margin:0 auto}
+.sec-head h2{font-size:clamp(2.1rem,4.6vw,3.6rem)}
+.sec-head .lede{margin-top:14px}
+.room{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  min-height:min(78vh,820px);
+  border-top:1px solid var(--line);
+}
+.room--flip .room-media{order:2}
+.room-media{position:relative;min-height:min(56vh,640px);background:#111}
+.room-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.room--sauna img{object-position:50% 18%}
+.room--steam img{object-position:16% 48%}
+.room--plunge img{object-position:42% 18%}
+.room--ice img{object-position:50% 12%}
+.room-copy{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:clamp(32px,5vw,72px);
+  background:var(--bg);
+}
+.room-copy h3{font-size:clamp(2rem,4vw,3.2rem);margin:10px 0 16px}
+.room-meta{color:var(--mute);font-size:12px;letter-spacing:.12em;text-transform:uppercase;margin:0}
+.room--sauna .room-meta,.room--steam .room-meta{color:#d08a62}
+.room--plunge .room-meta,.room--ice .room-meta{color:var(--ice)}
+.rooms-close{
+  display:flex;gap:18px;align-items:baseline;flex-wrap:wrap;
+  max-width:var(--max);margin:0 auto;
+  padding:28px var(--pad) 8px;
+  border-top:1px solid var(--line);
+  font-size:15px;color:var(--body);
+}
+.rooms-close strong{color:var(--cream);font-weight:600}
+
+/* ── range ── */
+.range{padding:clamp(80px,12vh,140px) var(--pad);border-top:1px solid var(--line)}
+.range-inner{max-width:var(--max);margin:0 auto}
+.range h2{font-size:clamp(2.1rem,4.6vw,3.6rem);margin-bottom:48px}
+.scale{margin:8px 0 18px;max-width:920px}
+.scale-nums{
+  position:relative;height:1.4em;margin-bottom:10px;
+  font-family:"Instrument Sans",Inter,sans-serif;
+  font-size:clamp(18px,2vw,26px);font-weight:600;letter-spacing:-.03em;color:var(--cream);
+}
+.scale-nums span{position:absolute;top:0;transform:translateX(-50%)}
+.scale-nums span:first-child{transform:none;left:0}
+.scale-nums span:last-child{transform:translateX(-100%);left:100%}
+.scale-track{
+  position:relative;height:2px;
+  background:linear-gradient(90deg,var(--cta),#c9b8a6 50%,var(--ice));
+}
+.scale-track i{
+  position:absolute;top:-5px;width:1px;height:12px;background:var(--cream);
+  transform:translateX(-50%);
+}
+.scale-track i:first-child{transform:none}
+.scale-track i:last-child{transform:translateX(-100%)}
+.scale-rooms{
+  display:flex;justify-content:space-between;
+  margin-top:14px;
+  font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);
+}
+.range .lede{margin-top:28px}
+
+/* ── studio ── */
+.studio{
+  display:grid;
+  grid-template-columns:minmax(0,1.15fr) minmax(280px,.95fr);
+  border-top:1px solid var(--line);
+  background:var(--bg-2);
+}
+.viewer{
+  position:relative;
+  min-height:min(78vh,780px);
+  background:#0a0a0c;
+  display:flex;align-items:center;justify-content:center;
+}
+.viewer-stage{position:relative;width:min(92%,720px);aspect-ratio:1.4;margin:auto}
+.viewer-stage canvas,.viewer-stage img.still,.viewer-stage img.kit-fallback{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;
+}
+.viewer-stage img.still{opacity:0;pointer-events:none;object-fit:cover;object-position:18% 45%}
+.viewer[data-view="head"] img.still{opacity:1}
+.viewer[data-view="head"] canvas,.viewer[data-view="head"] img.kit-fallback{opacity:0}
+.viewer.is-live img.kit-fallback{opacity:0}
+.viewer[data-view="head"] .viewer-stage{
+  width:100%;height:100%;aspect-ratio:auto;max-width:none;
+}
+.viewer[data-view="head"] img.still{object-fit:cover;object-position:16% 42%}
+.viewer-glow{
+  position:absolute;left:50%;bottom:16%;
+  width:58%;height:18%;
+  transform:translateX(-50%);
+  background:radial-gradient(ellipse at center,rgba(243,237,227,.1),transparent 70%);
+  pointer-events:none;
+}
+.viewer[data-view="head"] .viewer-glow{display:none}
+.viewer-tools{
+  position:absolute;left:20px;right:20px;bottom:20px;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:16px;
+}
+.dots{display:flex;gap:10px}
+.dot{
+  width:22px;height:22px;border-radius:50%;
+  border:1px solid rgba(243,237,227,.35);
+  background:var(--sw);cursor:pointer;padding:0;
+  box-shadow:inset 0 0 0 2px var(--bg-2);
+}
+.dot[aria-checked="true"]{box-shadow:inset 0 0 0 2px var(--bg-2),0 0 0 2px var(--cream)}
+.studio-copy{padding:clamp(36px,6vw,72px) var(--pad);display:flex;flex-direction:column;justify-content:center}
+.studio-copy .lede{margin:0 0 28px}
+.swatch-row{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:0 0 28px}
+.swatch-name{font-size:13px;color:var(--cream);min-width:7ch}
+.specs{margin:0;padding:0}
+.spec{
+  display:grid;grid-template-columns:minmax(108px,34%) 1fr;
+  gap:12px;margin:0;
+  padding:11px 0;
+  border-top:1px solid var(--line);
+  font-size:14px;
+}
+.spec:last-child{border-bottom:1px solid var(--line)}
+.spec dt{margin:0;color:var(--mute)}
+.spec dd{margin:0;color:var(--cream)}
+
+/* ── headaches ── */
+.aches{padding:clamp(80px,12vh,140px) var(--pad);border-top:1px solid var(--line)}
+.aches-inner{max-width:var(--max);margin:0 auto}
+.aches h2{font-size:clamp(2.1rem,4.6vw,3.6rem)}
+.ache-list{list-style:none;margin:48px 0 0;padding:0}
+.ache-list li{
+  display:grid;grid-template-columns:minmax(110px,22%) 1fr;
+  gap:16px;align-items:baseline;
+  padding:22px 0;
+  border-top:1px solid var(--line);
+}
+.ache-list li:last-of-type{border-bottom:1px solid var(--line)}
+.ache-k{font-family:"Instrument Sans",Inter,sans-serif;font-size:22px;font-weight:600;color:var(--cream);letter-spacing:-.03em}
+.ache-list p{margin:0;font-size:16px;color:var(--body);max-width:48ch}
+.ache-end{margin:36px 0 0;color:var(--cream);font-size:clamp(16px,1.5vw,18px);max-width:46ch}
+
+/* ── waitlist ── */
+.wait{
+  padding:clamp(88px,14vh,160px) var(--pad);
+  border-top:1px solid var(--line);
+  text-align:center;
+}
+.wait h2{font-size:clamp(2.6rem,6vw,5rem)}
+.wait .lede{margin:16px auto 0}
+.form-wrap{max-width:520px;margin:36px auto 0;text-align:left}
+.form-wrap label{display:block;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mute);margin:0 0 8px}
+.form-row{display:flex;gap:8px}
+.form-row input{
+  flex:1;min-width:0;
+  background:#16181c;color:var(--cream);
+  border:1px solid var(--line-strong);border-radius:3px;
+  padding:14px 14px;
+}
+.form-row input:focus{outline:none;border-color:var(--cream)}
+.form-row .btn{flex:0 0 auto;white-space:nowrap}
+.form-err{display:none;margin:10px 0 0;color:#e07a5a;font-size:13px}
+.form-err.show{display:block}
+.form-done{display:none;margin:8px 0 0;color:var(--cream);font-size:18px;text-align:center}
+.form-wrap.is-done form,.form-wrap.is-done label{display:none}
+.form-wrap.is-done .form-done{display:block}
+.fine{margin:18px 0 0;font-size:13px;color:var(--mute);text-align:center}
+
+/* ── footer ── */
+.foot{
+  padding:48px var(--pad) max(36px,env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);
+}
+.foot-word{font-family:"Instrument Sans",Inter,sans-serif;font-weight:600;letter-spacing:.2em;color:var(--cream);font-size:14px;margin:0 0 12px}
+.foot p{margin:0;font-size:13px;color:var(--mute)}
+
+/* ── motion ── */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.in > .reveal,.in.reveal,.reveal.in{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .cl-heat,.cl-steam::before,.cl-steam::after,.cl-water{animation:none}
+  .hero-photo--heat{opacity:0}
+  .hero-visual .cl{opacity:0}
+  .hero-visual .cl-heat{opacity:.55}
+}
+
+@media(max-width:900px){
+  .nav{grid-template-columns:1fr auto}
+  .nav-mid{display:none}
+  .hero{grid-template-columns:1fr;min-height:0}
+  .hero-visual{min-height:58svh}
+  .hero-photo,.hero-photo--heat{object-position:12% 40%}
+  .callout{display:none}
+  .climate-hud{left:16px;bottom:16px}
+  .hero-copy{padding:24px var(--pad) 40px}
+  .hero-copy h1{font-size:clamp(2.4rem,12vw,3.2rem)}
+  .room,.room--flip{grid-template-columns:1fr}
+  .room--flip .room-media,.room-media{order:0}
+  .room-copy{order:1;padding:28px var(--pad) 40px}
+  .room-media{min-height:52svh}
+  .studio{grid-template-columns:1fr}
+  .viewer{min-height:72vw}
+  .ache-list li{grid-template-columns:1fr;gap:6px;padding:20px 0}
+  .form-row{flex-direction:column}
+  .form-row .btn{width:100%}
+  .btn-full{display:none}
+  .btn-short{display:inline}
+  .hero-copy{padding-top:20px}
+  .hero-visual{min-height:54svh}
+  .viewer{min-height:62svh}
+}
+@media(max-width:420px){
+  .chips{grid-template-columns:1fr}
+  .chips li:nth-child(even){padding-left:0;border-left:0}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<svg class="sr" aria-hidden="true" focusable="false">
+  <filter id="heat-shimmer" x="-8%" y="-8%" width="116%" height="116%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="3" result="n">
+      <animate attributeName="baseFrequency" values="0.01;0.016;0.01" dur="4.5s" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Dipsana">
+    <svg width="28" height="18" viewBox="0 0 32 20" aria-hidden="true">
+      <circle cx="9" cy="12.5" r="6.2" fill="none" stroke="#E86A2A" stroke-width="2.4"/>
+      <circle cx="21" cy="7.5" r="6.2" fill="none" stroke="#7AA3B8" stroke-width="2.4"/>
+      <path d="M21 13.7v5.6" fill="none" stroke="#7AA3B8" stroke-width="2.4" stroke-linecap="round"/>
+    </svg>
+    <span class="wordmark">DIPSANA</span>
+  </a>
+  <ul class="nav-mid">
+    <li><a href="#rooms">Rooms</a></li>
+    <li><a href="#studio">Headset</a></li>
+    <li><a href="#specs">Specs</a></li>
+  </ul>
+  <div class="nav-end">
+    <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Join the waitlist</span><span class="btn-short">Join</span></a>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero" id="top" aria-labelledby="hero-h">
+    <div class="hero-visual" id="heroVisual" data-phase="heat">
+      <!-- HERO_PHOTO: replace with cheekbone crop -->
+      <img class="hero-photo" src="/images/v3-steam.jpg" width="1152" height="864" alt="Close-up of a person in a steam room wearing Dipsana. The contact pad sits on the cheekbone in front of the ear; the ear canal is empty." fetchpriority="high" decoding="async">
+      <img class="hero-photo hero-photo--heat" src="/images/v3-steam.jpg" width="1152" height="864" alt="" aria-hidden="true" decoding="async">
+      <div class="climate" aria-hidden="true">
+        <div class="cl cl-heat"></div>
+        <div class="cl cl-steam"></div>
+        <div class="cl cl-cold"></div>
+        <div class="cl cl-water"></div>
+      </div>
+      <div class="callout">
+        <span class="callout-dot"></span>
+        <span class="callout-line"></span>
+        <p>Sits on the cheekbone, not in the ear</p>
+      </div>
+      <div class="climate-hud" aria-hidden="true">
+        <span class="deg" id="climDeg">110°</span>
+        <div class="cycle" id="climCycle">
+          <span data-p="heat" aria-current="true">sauna</span>
+          <span aria-hidden="true">·</span>
+          <span data-p="steam">steam</span>
+          <span aria-hidden="true">·</span>
+          <span data-p="cold">plunge</span>
+          <span aria-hidden="true">·</span>
+          <span data-p="ice">ice</span>
+        </div>
+      </div>
+    </div>
+    <div class="hero-copy">
+      <p class="kicker">100% waterproof bone conduction audio</p>
+      <h1 class="display" id="hero-h">Built for recovery.</h1>
+      <p class="hero-sub">Sauna. Steam. Ice bath. Swim.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#waitlist">Join the waitlist</a>
+        <a class="btn btn--text" href="#studio">See the headset</a>
+      </div>
+      <ul class="chips">
+        <li><b>0–110°C</b><span>Sauna to ice</span></li>
+        <li><b>IP68</b><span>2 m under</span></li>
+        <li><b>32 GB</b><span>No phone</span></li>
+        <li><b>10 hrs</b><span>Per charge</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="rooms" aria-labelledby="rooms-h">
+    <header class="sec-head">
+      <p class="kicker reveal">Where it goes</p>
+      <h2 class="display reveal" id="rooms-h">Four rooms. One device.</h2>
+      <p class="lede reveal">Nothing left on the bench between them.</p>
+    </header>
+
+    <article class="room room--sauna">
+      <div class="room-media">
+        <img src="/images/v3-sauna.jpg" alt="Person in a cedar sauna, skin damp, Dipsana pad on the cheekbone in front of the ear" width="864" height="1152" loading="lazy" decoding="async">
+      </div>
+      <div class="room-copy">
+        <p class="room-meta">80–100°C · 15–20 min</p>
+        <h3 class="display">Sauna</h3>
+        <p class="lede">The podcast that makes twenty minutes feel like eight.</p>
+      </div>
+    </article>
+
+    <article class="room room--steam room--flip">
+      <div class="room-media">
+        <img src="/images/v3-steam.jpg" alt="Profile in a steam room. Open hook around the ear, canal empty, pad on the cheekbone" width="1152" height="864" loading="lazy" decoding="async">
+      </div>
+      <div class="room-copy">
+        <p class="room-meta">40–45°C · 100% humidity</p>
+        <h3 class="display">Steam room</h3>
+        <p class="lede">Where every other pair of headphones has already quit.</p>
+      </div>
+    </article>
+
+    <article class="room room--plunge">
+      <div class="room-media">
+        <img src="/images/v3-plunge.jpg" alt="Head at the waterline in a cold plunge, Dipsana on the cheek, ear canal empty" width="864" height="1152" loading="lazy" decoding="async">
+      </div>
+      <div class="room-copy">
+        <p class="room-meta">3–10°C · 2–3 min</p>
+        <h3 class="display">Cold plunge</h3>
+        <p class="lede">One song. Get in, finish the song, get out.</p>
+      </div>
+    </article>
+
+    <article class="room room--ice room--flip">
+      <div class="room-media">
+        <img src="/images/v3-ice.jpg" alt="Face at the surface of an ice bath, ice at the waterline, Dipsana worn open-ear" width="864" height="1152" loading="lazy" decoding="async">
+      </div>
+      <div class="room-copy">
+        <p class="room-meta">0–5°C · underwater</p>
+        <h3 class="display">Ice bath / swim</h3>
+        <p class="lede">Offline mode, because your phone is in a locker and Bluetooth does not travel through water.</p>
+      </div>
+    </article>
+
+    <p class="rooms-close">
+      <strong>Contrast</strong>
+      A playlist that runs the whole cycle, so you are not resetting a timer with wet hands.
+    </p>
+  </section>
+
+  <section class="range" aria-labelledby="range-h">
+    <div class="range-inner">
+      <p class="kicker">The range</p>
+      <h2 class="display" id="range-h">Rated for the whole range</h2>
+      <div class="scale" role="img" aria-label="Temperature scale from 110 degrees to 0 degrees. Sauna, steam, plunge, ice.">
+        <div class="scale-nums" aria-hidden="true">
+          <span style="left:0">110°</span>
+          <span style="left:50%">45°</span>
+          <span style="left:100%">0°</span>
+        </div>
+        <div class="scale-track" aria-hidden="true">
+          <i style="left:0"></i>
+          <i style="left:50%"></i>
+          <i style="left:100%"></i>
+        </div>
+        <div class="scale-rooms">
+          <span>sauna</span>
+          <span>steam</span>
+          <span>plunge</span>
+          <span>ice</span>
+        </div>
+      </div>
+      <p class="lede">Heat that kills AirPods. Water that kills Bluetooth. One headset for both.</p>
+    </div>
+  </section>
+
+  <section class="studio" id="studio" aria-labelledby="studio-h">
+    <div class="viewer" id="viewer" data-view="studio" data-color="obsidian">
+      <div class="viewer-stage">
+        <span class="viewer-glow" aria-hidden="true"></span>
+        <img class="kit-fallback" src="/images/product.png" width="1200" height="760" alt="Dipsana headset in three-quarter view. Contact pad visible, open hook around the ear." decoding="async">
+        <canvas id="kit" width="1200" height="760" aria-hidden="true"></canvas>
+        <img class="still" src="/images/v3-steam.jpg" width="1152" height="864" alt="On-head view: pad on the cheekbone, ear canal empty." decoding="async">
+      </div>
+      <div class="viewer-tools">
+        <div class="dots" role="radiogroup" aria-label="Headset color" id="colorDots"></div>
+        <button class="btn btn--ghost btn--sm" type="button" id="headBtn" aria-pressed="false">On-head view</button>
+      </div>
+    </div>
+    <div class="studio-copy" id="specs">
+      <p class="kicker" id="studio-h">The headset</p>
+      <p class="lede">Open-ear bone conduction. Sealed for the two worst rooms in the building. Load it at home. Walk in empty-handed.</p>
+      <div class="swatch-row">
+        <span class="swatch-name" id="colorName">Obsidian</span>
+        <span id="colorHex" style="font-size:12px;color:var(--mute)">#35383C</span>
+      </div>
+      <dl class="specs">
+        <div class="spec"><dt>Temperature</dt><dd>0–110°C</dd></div>
+        <div class="spec"><dt>Water</dt><dd>IP68, 2 m</dd></div>
+        <div class="spec"><dt>Storage</dt><dd>32 GB onboard</dd></div>
+        <div class="spec"><dt>Above water</dt><dd>Bluetooth 5.4</dd></div>
+        <div class="spec"><dt>Below water</dt><dd>Offline MP3</dd></div>
+        <div class="spec"><dt>Playback</dt><dd>10 hours</dd></div>
+        <div class="spec"><dt>Fast charge</dt><dd>10 minutes = 3 hours</dd></div>
+        <div class="spec"><dt>Frame</dt><dd>Heat-stable, will not soften</dd></div>
+        <div class="spec"><dt>Pads</dt><dd>Heat-stable compound, not silicone</dd></div>
+        <div class="spec"><dt>Controls</dt><dd>Physical clicks. Numb fingers. No touch.</dd></div>
+        <div class="spec"><dt>Charge</dt><dd>Magnetic. No port to corrode.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="aches" aria-labelledby="aches-h">
+    <div class="aches-inner">
+      <p class="kicker">Why audio</p>
+      <h2 class="display" id="aches-h">The rooms are the easy part. The minutes are not.</h2>
+      <ul class="ache-list">
+        <li>
+          <span class="ache-k">Heat</span>
+          <p>AirPods are rated to 35°C. A sauna is not.</p>
+        </li>
+        <li>
+          <span class="ache-k">Boredom</span>
+          <p>You get out early because it is too boring, not because you are done.</p>
+        </li>
+        <li>
+          <span class="ache-k">Ice</span>
+          <p>The first minute needs a finish line. One song. Then out.</p>
+        </li>
+        <li>
+          <span class="ache-k">Water</span>
+          <p>Bluetooth dies under the surface. The phone cannot come in.</p>
+        </li>
+      </ul>
+      <p class="ache-end">If you want quiet, take them off. If you want to finish the round, leave them on.</p>
+    </div>
+  </section>
+
+  <section class="wait" id="waitlist" aria-labelledby="wait-h">
+    <p class="kicker">Waitlist</p>
+    <h2 class="display" id="wait-h">First in.</h2>
+    <p class="lede">We’ll email you once, when it’s ready, and not before.</p>
+    <div class="form-wrap" id="formWrap">
+      <form id="waitlist-form" novalidate>
+        <label for="email">Email address</label>
+        <div class="form-row">
+          <input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" required>
+          <button class="btn" type="submit">Join the waitlist</button>
+        </div>
+      </form>
+      <p class="form-err" id="formErr" role="alert"></p>
+      <p class="form-done" id="formDone" aria-live="polite">You’re on the list. Go and sit down somewhere hot.</p>
+      <p class="fine">No drip sequence. No launch spam. One note, when it ships.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <p class="foot-word">DIPSANA</p>
+  <p>© 2026 Dipsana. Sauna. Steam. Ice. Swim.</p>
+</footer>
+
+<script>
+(function () {
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const nav = document.getElementById('nav');
+
+  const onScroll = () => nav.classList.toggle('is-scrolled', window.scrollY > 8);
+  onScroll();
+  window.addEventListener('scroll', onScroll, { passive: true });
+
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', ev => {
+      const id = a.getAttribute('href');
+      if (!id || id === '#') return;
+      const el = document.querySelector(id);
+      if (!el) return;
+      ev.preventDefault();
+      el.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'start' });
+    });
+  });
+
+  if (!reduced) {
+    const io = new IntersectionObserver(entries => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }, { threshold: 0.08, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('#rooms, .range, .studio, .aches, .wait, .sec-head').forEach(n => io.observe(n));
+  } else {
+    document.querySelectorAll('.reveal').forEach(n => n.classList.add('in'));
+  }
+
+  /* climate cycle */
+  const visual = document.getElementById('heroVisual');
+  const degEl = document.getElementById('climDeg');
+  const cycleEl = document.getElementById('climCycle');
+  const PHASES = [
+    { id: 'heat',  deg: '110°' },
+    { id: 'steam', deg: '45°' },
+    { id: 'cold',  deg: '3°' },
+    { id: 'ice',   deg: '0°' }
+  ];
+  const HOLD = 2250;
+
+  function setPhase(i) {
+    const p = PHASES[i];
+    visual.dataset.phase = p.id;
+    degEl.textContent = p.deg;
+    cycleEl.querySelectorAll('[data-p]').forEach(s => {
+      if (s.dataset.p === p.id) s.setAttribute('aria-current', 'true');
+      else s.removeAttribute('aria-current');
+    });
+  }
+
+  if (reduced) {
+    setPhase(0);
+  } else {
+    let i = 0;
+    let timer = 0;
+    let running = true;
+    const vis = new IntersectionObserver(entries => {
+      running = entries.some(e => e.isIntersecting);
+    }, { threshold: 0.15 });
+    vis.observe(visual);
+    setPhase(0);
+    (function loop(now) {
+      if (!timer) timer = now;
+      if (running && now - timer >= HOLD) {
+        timer = now;
+        i = (i + 1) % PHASES.length;
+        setPhase(i);
+      }
+      requestAnimationFrame(loop);
+    })(performance.now());
+  }
+
+  /* studio stills + color */
+  const COLORS = [
+    { id: 'obsidian', name: 'Obsidian', hex: '#35383C' },
+    { id: 'glacier',  name: 'Glacier',  hex: '#B7C5CE' },
+    { id: 'heat',     name: 'Heat',     hex: '#6B432C' }
+  ];
+  const dots = document.getElementById('colorDots');
+  const colorName = document.getElementById('colorName');
+  const colorHex = document.getElementById('colorHex');
+  const canvas = document.getElementById('kit');
+  const ctx = canvas.getContext('2d');
+  const viewer = document.getElementById('viewer');
+  const headBtn = document.getElementById('headBtn');
+  const srcImg = new Image();
+  srcImg.decoding = 'async';
+  let pixels = null;
+  let active = 0;
+
+  function paint(hex, isDefault) {
+    if (!pixels) return;
+    const w = canvas.width, h = canvas.height;
+    const out = ctx.createImageData(w, h);
+    out.data.set(pixels);
+    if (!isDefault) {
+      const tr = parseInt(hex.slice(1, 3), 16);
+      const tg = parseInt(hex.slice(3, 5), 16);
+      const tb = parseInt(hex.slice(5, 7), 16);
+      const d = out.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const r = d[i], g = d[i + 1], b = d[i + 2], a = d[i + 3];
+        if (a < 10) continue;
+        const lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        if (lum < 16) continue;
+        const k = lum / 62;
+        d[i]     = Math.max(0, Math.min(255, tr * k));
+        d[i + 1] = Math.max(0, Math.min(255, tg * k));
+        d[i + 2] = Math.max(0, Math.min(255, tb * k));
+      }
+    }
+    ctx.putImageData(out, 0, 0);
+  }
+
+  srcImg.onload = () => {
+    canvas.width = srcImg.naturalWidth;
+    canvas.height = srcImg.naturalHeight;
+    ctx.drawImage(srcImg, 0, 0);
+    pixels = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    paint(COLORS[0].hex, true);
+    viewer.classList.add('is-live');
+  };
+  srcImg.src = '/images/product.png';
+
+  function selectColor(i, fromKey) {
+    active = i;
+    const c = COLORS[i];
+    colorName.textContent = c.name;
+    colorHex.textContent = c.hex;
+    viewer.dataset.color = c.id;
+    paint(c.hex, c.id === 'obsidian');
+    [...dots.children].forEach((b, k) => {
+      b.setAttribute('aria-checked', String(k === i));
+      b.tabIndex = k === i ? 0 : -1;
+    });
+    if (fromKey) dots.children[i].focus();
+    if (viewer.dataset.view === 'head') {
+      viewer.dataset.view = 'studio';
+      headBtn.setAttribute('aria-pressed', 'false');
+      headBtn.textContent = 'On-head view';
+    }
+  }
+
+  COLORS.forEach((c, i) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'dot';
+    b.style.setProperty('--sw', c.hex);
+    b.setAttribute('role', 'radio');
+    b.setAttribute('aria-checked', String(i === 0));
+    b.setAttribute('aria-label', c.name + ', ' + c.hex);
+    b.tabIndex = i === 0 ? 0 : -1;
+    b.addEventListener('click', () => selectColor(i));
+    b.addEventListener('keydown', ev => {
+      const d = ev.key === 'ArrowRight' || ev.key === 'ArrowDown' ? 1
+              : ev.key === 'ArrowLeft'  || ev.key === 'ArrowUp'   ? -1 : 0;
+      if (!d) return;
+      ev.preventDefault();
+      selectColor((active + d + COLORS.length) % COLORS.length, true);
+    });
+    dots.appendChild(b);
+  });
+
+  headBtn.addEventListener('click', () => {
+    const on = viewer.dataset.view !== 'head';
+    viewer.dataset.view = on ? 'head' : 'studio';
+    headBtn.setAttribute('aria-pressed', String(on));
+    headBtn.textContent = on ? 'Studio view' : 'On-head view';
+  });
+
+  /* waitlist — client-side only */
+  const KEY = 'dipsana-waitlist-email';
+  const form = document.getElementById('waitlist-form');
+  const wrap = document.getElementById('formWrap');
+  const email = document.getElementById('email');
+  const err = document.getElementById('formErr');
+  const ok = v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+
+  function done() {
+    wrap.classList.add('is-done');
+  }
+  if (localStorage.getItem(KEY)) done();
+
+  form.addEventListener('submit', ev => {
+    ev.preventDefault();
+    const v = email.value.trim();
+    if (!ok(v)) {
+      err.textContent = 'Enter a valid email address.';
+      err.classList.add('show');
+      email.setAttribute('aria-invalid', 'true');
+      email.focus();
+      return;
+    }
+    err.classList.remove('show');
+    email.removeAttribute('aria-invalid');
+    // TODO: POST to the real waitlist endpoint.
+    localStorage.setItem(KEY, v);
+    done();
+  });
+  email.addEventListener('input', () => {
+    err.classList.remove('show');
+    email.removeAttribute('aria-invalid');
+  });
+})();
+</script>
+</body>
+</html>
