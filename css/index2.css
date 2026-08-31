@@ -460,12 +460,7 @@ button[type=submit][disabled]{opacity:.55; cursor:default; transform:none}
     var(--void);
   background-size:56px 56px, 56px 56px, auto, auto;
 }
-.studio-head{
-  text-align:center;
-  max-width:40rem;
-  margin:0 auto 28px;
-}
-.studio-head .lede{margin:16px auto 0}
+.studio--proof{padding-top:clamp(56px,8vh,96px)}
 
 .viewer{
   position:relative;
@@ -520,7 +515,6 @@ button[type=submit][disabled]{opacity:.55; cursor:default; transform:none}
 
 .cw-readout{
   text-align:center;
-  min-height:108px;
   margin-top:8px;
 }
 .cw-name{
@@ -531,12 +525,6 @@ button[type=submit][disabled]{opacity:.55; cursor:default; transform:none}
   color:var(--active-ink);
   transition:color .4s linear;
 }
-.cw-hex{
-  font-family:"IBM Plex Mono",monospace;
-  font-size:12px; letter-spacing:.16em; text-transform:uppercase;
-  color:var(--mute); margin:10px 0 0;
-}
-.cw-note{color:var(--paper-dim); margin:8px 0 0; font-weight:300}
 .cw-fade{transition:opacity .18s ease}
 .cw-fade.out{opacity:0}
 .swatches{

@@ -365,9 +365,7 @@
   ];
 
   const cwName = document.getElementById('cwName');
-  const cwHex = document.getElementById('cwHex');
-  const cwNote = document.getElementById('cwNote');
-  const fades = [cwName, cwHex, cwNote].filter(Boolean);
+  const fades = [cwName].filter(Boolean);
   let paintColor = null;
   let activeIndex = 0;
 
@@ -397,8 +395,6 @@
     }
     const write = () => {
       if (cwName) cwName.textContent = cw.name;
-      if (cwHex) cwHex.textContent = cw.hex;
-      if (cwNote) cwNote.textContent = cw.note;
     };
     if (silent || reduced) {
       write();

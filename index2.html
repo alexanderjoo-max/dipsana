@@ -139,6 +139,31 @@
     </div>
   </section>
 
+  <section class="studio" id="studio" data-reveal aria-label="Headset colorways">
+    <div class="viewer" id="viewer">
+      <span class="viewer-glow" aria-hidden="true"></span>
+      <div class="hud" aria-hidden="true">
+        <span class="hud-c hud-c--tl"></span>
+        <span class="hud-c hud-c--tr"></span>
+        <span class="hud-c hud-c--bl"></span>
+        <span class="hud-c hud-c--br"></span>
+      </div>
+      <div class="stage-slot" data-slot="colors" role="img"
+           aria-label="The Dipsana headset in Obsidian: matte charcoal, the hero. Slowly rotating.">
+        <picture>
+          <source srcset="/images/product.webp" type="image/webp">
+          <img class="kit-poster" src="/images/product.png" alt="" width="1200" height="760" decoding="async">
+        </picture>
+        <canvas id="kit" aria-hidden="true"></canvas>
+      </div>
+    </div>
+
+    <div class="cw-readout rv">
+      <p class="cw-name cw-fade" id="cwName">Obsidian</p>
+    </div>
+    <ul class="swatches rv" id="swatches" role="radiogroup" aria-label="Choose a colorway"></ul>
+  </section>
+
   <div class="rooms" id="rooms">
     <section class="room room--heat" data-climate="heat" data-reveal aria-labelledby="u1">
       <div class="room-media">
@@ -198,37 +223,7 @@
     </section>
   </div>
 
-  <section class="studio" id="studio" data-reveal aria-labelledby="studio-h">
-    <div class="studio-head">
-      <p class="mono rv" style="color:var(--ice); margin:0 0 14px" id="studio-h">The headset</p>
-      <p class="lede rv">Open-ear bone conduction, sealed for the two worst rooms in the building. Load it at home. Walk in empty-handed.</p>
-    </div>
-
-    <div class="viewer" id="viewer">
-      <span class="viewer-glow" aria-hidden="true"></span>
-      <div class="hud" aria-hidden="true">
-        <span class="hud-c hud-c--tl"></span>
-        <span class="hud-c hud-c--tr"></span>
-        <span class="hud-c hud-c--bl"></span>
-        <span class="hud-c hud-c--br"></span>
-      </div>
-      <div class="stage-slot" data-slot="colors" role="img"
-           aria-label="The Dipsana headset in Obsidian: matte charcoal, the hero. Slowly rotating.">
-        <picture>
-          <source srcset="/images/product.webp" type="image/webp">
-          <img class="kit-poster" src="/images/product.png" alt="" width="1200" height="760" loading="lazy" decoding="async">
-        </picture>
-        <canvas id="kit" aria-hidden="true"></canvas>
-      </div>
-    </div>
-
-    <div class="cw-readout rv">
-      <p class="cw-name cw-fade" id="cwName">Obsidian</p>
-      <p class="cw-hex cw-fade" id="cwHex">#35383C</p>
-      <p class="cw-note cw-fade" id="cwNote">Matte charcoal, the hero.</p>
-    </div>
-    <ul class="swatches rv" id="swatches" role="radiogroup" aria-label="Choose a colorway"></ul>
-
+  <section class="studio studio--proof" data-reveal aria-labelledby="spec-h">
     <ol class="anatomy rv">
       <li>
         <span class="a-num">01</span>
