@@ -92,6 +92,8 @@ button,input{font:inherit}
   flex:0 0 auto; text-decoration:none; color:var(--paper);
 }
 .mark img{display:block; height:28px; width:auto}
+.mark-hero{display:none}
+.mark-bar{display:block}
 .mark--lg img{height:clamp(88px,14vw,128px)}
 
 .topbar{
@@ -856,11 +858,18 @@ form.invalid input[type=email]{border-color:#e06a5c; background:rgba(60,16,14,.5
   .room--contrast .room-copy{
     flex-direction:column; align-items:flex-start;
   }
-  .anatomy{grid-template-columns:1fr; border-top:0}
+  .anatomy{
+    grid-template-columns:1fr;
+    border-top:0;
+    min-height:calc(100svh - var(--head, 64px));
+    margin-top:0;
+    align-content:center;
+  }
   .anatomy li{
     padding:16px 0;
     border-right:0;
     border-top:1px solid var(--line);
+    text-align:center;
   }
   .specs{grid-template-columns:1fr}
   form{flex-direction:column}
@@ -893,8 +902,28 @@ form.invalid input[type=email]{border-color:#e06a5c; background:rgba(60,16,14,.5
   .nav-tabs::-webkit-scrollbar{display:none}
   .nav-tabs li{flex:0 0 auto}
   .nav-tabs a{opacity:.85; font-size:12px}
-  .topbar .mark img{height:20px}
+  .topbar .mark-bar{height:20px}
   .btn--sm{font-size:12px; padding:8px 12px}
+  .topbar:not(.is-scrolled){
+    grid-template-columns:1fr;
+    justify-items:center;
+    padding-top:max(20px, env(safe-area-inset-top));
+    padding-bottom:12px;
+  }
+  .topbar:not(.is-scrolled) .mark{
+    grid-column:1;
+    grid-row:1;
+  }
+  .topbar:not(.is-scrolled) .nav-tabs,
+  .topbar:not(.is-scrolled) .nav-right{display:none}
+  .topbar:not(.is-scrolled) .mark-hero{
+    display:block;
+    height:clamp(72px, 18vw, 104px);
+    width:auto;
+  }
+  .topbar:not(.is-scrolled) .mark-bar{display:none}
+  .topbar.is-scrolled .mark-hero{display:none}
+  .topbar.is-scrolled .mark-bar{display:block}
 }
 
 @media (max-width:820px){
@@ -910,7 +939,7 @@ form.invalid input[type=email]{border-color:#e06a5c; background:rgba(60,16,14,.5
 }
 
 @media (max-width:520px){
-  .topbar .mark img{height:20px}
+  .topbar .mark-bar{height:20px}
   .display,
   .display--mid,
   .climate-hud .deg{

@@ -17,6 +17,7 @@
       if (next === scrolled) return;
       scrolled = next;
       topbar.classList.toggle('is-scrolled', next);
+      setHead();
     }
     syncHeader();
     window.addEventListener('scroll', syncHeader, { passive: true });
