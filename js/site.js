@@ -13,7 +13,8 @@
   if (topbar) {
     let scrolled = null;
     function syncHeader() {
-      const next = window.scrollY > 48;
+      const y = window.scrollY || document.documentElement.scrollTop || 0;
+      const next = y > 48;
       if (next === scrolled) return;
       scrolled = next;
       topbar.classList.toggle('is-scrolled', next);
