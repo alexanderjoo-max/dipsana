@@ -461,6 +461,15 @@ button[type=submit][disabled]{opacity:.55; cursor:default; transform:none}
   background-size:56px 56px, 56px 56px, auto, auto;
 }
 .studio--proof{padding-top:clamp(56px,8vh,96px)}
+.studio-line{
+  font-variation-settings:'opsz' 48,'wdth' 96,'wght' 600;
+  font-size:clamp(1.35rem,2.8vw,2rem);
+  letter-spacing:-.025em;
+  line-height:1.2;
+  color:var(--paper);
+  margin:0 auto 36px;
+  max-width:18ch;
+}
 
 .viewer{
   position:relative;
