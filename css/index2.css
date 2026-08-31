@@ -857,25 +857,40 @@ form.invalid input[type=email]{border-color:#e06a5c; background:rgba(60,16,14,.5
   form{flex-direction:column}
   .btn-full{display:none}
   .btn-short{display:inline}
-}
-
-@media (max-width:820px){
-  .swap,
-  .swap--hx{grid-template-columns:1fr}
   .topbar{
-    gap:16px;
-    background:#10131a;
-    border-bottom:1px solid var(--line);
+    display:grid;
+    grid-template-columns:1fr auto 1fr;
+    gap:10px 12px;
+    background:transparent;
+    border-bottom-color:transparent;
+  }
+  .topbar .mark{
+    grid-column:2;
+    grid-row:1;
+    justify-self:center;
+  }
+  .nav-right{
+    grid-column:3;
+    grid-row:1;
+    justify-self:end;
   }
   .nav-tabs{
+    grid-column:1 / -1;
+    grid-row:2;
+    justify-content:center;
     overflow-x:auto; scrollbar-width:none;
     -webkit-overflow-scrolling:touch;
   }
   .nav-tabs::-webkit-scrollbar{display:none}
   .nav-tabs li{flex:0 0 auto}
   .nav-tabs a{opacity:.85; font-size:12px}
-  .topbar .mark img{height:18px}
+  .topbar .mark img{height:20px}
   .btn--sm{font-size:12px; padding:8px 12px}
+}
+
+@media (max-width:820px){
+  .swap,
+  .swap--hx{grid-template-columns:1fr}
 }
 
 @media (max-width:700px){
@@ -886,13 +901,7 @@ form.invalid input[type=email]{border-color:#e06a5c; background:rgba(60,16,14,.5
 }
 
 @media (max-width:520px){
-  .topbar{
-    display:flex; flex-wrap:wrap; row-gap:10px; gap:10px 12px;
-  }
-  .topbar .mark{order:1; flex:0 0 auto}
   .topbar .mark img{height:20px}
-  .nav-right{order:2; flex:0 0 auto; margin-left:auto}
-  .nav-tabs{order:3; flex:1 1 100%; justify-content:center}
   .display,
   .display--mid,
   .climate-hud .deg{
