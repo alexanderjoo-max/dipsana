@@ -32,8 +32,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<link rel="stylesheet" href="/css/site.css">
+<link rel="stylesheet" href="/css/index2.css">
 <script src="/js/site.js" defer></script>
+<script type="module" src="/js/index2.js"></script>
 
 <script type="importmap">
 { "imports": {
@@ -41,7 +42,6 @@
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
-
 
 <script type="application/ld+json">
 {
@@ -61,39 +61,30 @@
    "url": "https://dipsana.com/",
    "name": "Dipsana",
    "description": "Bone conduction audio built for heat and ice. Rated 0–110°C, IP68 to 2m, 32GB onboard. Sauna, steam room, cold plunge, ice bath.",
-   "publisher": {
-    "@id": "https://dipsana.com/#org"
-   },
+   "publisher": { "@id": "https://dipsana.com/#org" },
    "inLanguage": "en"
   }
  ]
 }
 </script>
 </head>
-
 <body>
 
-<svg class="sprite" aria-hidden="true" focusable="false"><defs>
-  <symbol id="i-temp" viewBox="0 0 24 24"><path d="M10 13.8V5a2 2 0 1 1 4 0v8.8a4.2 4.2 0 1 1-4 0z"/><path d="M12 9v5"/></symbol>
-  <symbol id="i-water" viewBox="0 0 24 24"><path d="M12 3.2c3.3 3.9 5.4 6.6 5.4 9.3a5.4 5.4 0 0 1-10.8 0c0-2.7 2.1-5.4 5.4-9.3z"/></symbol>
-  <symbol id="i-chip" viewBox="0 0 24 24"><rect x="6.5" y="6.5" width="11" height="11" rx="2.4"/><path d="M9.5 3.5v3M14.5 3.5v3M9.5 17.5v3M14.5 17.5v3M3.5 9.5h3M3.5 14.5h3M17.5 9.5h3M17.5 14.5h3"/></symbol>
-  <symbol id="i-batt" viewBox="0 0 24 24"><rect x="2.5" y="7.5" width="16" height="9" rx="2.4"/><path d="M21.5 11v2"/><path d="M6 11v2M9.5 11v2M13 11v2"/></symbol>
-  <symbol id="i-btn" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="2.2"/><circle cx="12" cy="12" r="2.2"/><circle cx="18.5" cy="12" r="2.2"/></symbol>
-</defs></svg>
+<a class="skip" href="#main">Skip to content</a>
 
+<canvas id="wx" aria-hidden="true"></canvas>
 
-<div class="rail" aria-hidden="true">
+<div class="rail is-hero" aria-hidden="true">
   <span class="rail-deg">110°</span>
   <div class="rail-track"><div class="rail-fill" id="railFill"></div></div>
   <span class="rail-deg rail-live" id="railLive">110°</span>
   <span class="rail-deg">0°</span>
 </div>
 
-<canvas id="stage" aria-hidden="true"></canvas>
-
 <header class="topbar" id="topbar">
   <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
   <ul class="nav-tabs">
+    <li><a href="/" aria-current="page" class="is-active">Home</a></li>
     <li><a href="/product/">Product</a></li>
     <li><a href="/how-it-works/">How it works</a></li>
     <li><a href="/learn/">Learn</a></li>
@@ -103,31 +94,42 @@
   </div>
 </header>
 
-<main id="top">
-  <section class="s-hero" data-reveal aria-labelledby="hero-h">
-    <div>
+<main id="main">
+
+  <section class="hero" id="top" data-phase="heat" aria-labelledby="hero-h">
+    <div class="hero-stage">
+      <img class="hero-photo" src="/images/v3-steam.jpg" width="1152" height="864" alt="Close-up of a person wearing Dipsana. The transducer pad sits on the cheek in front of the ear; the ear canal is empty." fetchpriority="high" decoding="async">
+      <div class="hero-climate" aria-hidden="true">
+        <div class="cl cl-heat"></div>
+        <div class="cl cl-steam"></div>
+        <div class="cl cl-plunge"></div>
+        <div class="cl cl-ice"></div>
+      </div>
+      <div class="hero-shade"></div>
+    </div>
+
+    <div class="climate-hud" aria-hidden="true">
+      <span class="deg" id="climDeg">110°</span>
+      <span class="hud-name" id="climName">Sauna</span>
+      <div class="cycle" id="climCycle">
+        <span data-p="heat" aria-current="true">sauna</span>
+        <span aria-hidden="true">·</span>
+        <span data-p="steam">steam</span>
+        <span aria-hidden="true">·</span>
+        <span data-p="plunge">plunge</span>
+        <span aria-hidden="true">·</span>
+        <span data-p="ice">ice</span>
+      </div>
+    </div>
+
+    <div class="hero-copy" data-reveal>
       <p class="mono hero-kicker rv">100% waterproof<br class="br-m"> bone conduction audio</p>
-      <h1 class="display display--hero rv" id="hero-h">Built for recovery.</h1>
+      <h1 class="display rv" id="hero-h">Built for recovery.</h1>
       <p class="hero-sub rv">Sauna. Steam. Ice bath. Swim.</p>
-    </div>
-    <div class="pshot pshot--hero">
-      <div class="hud" aria-hidden="true">
-        <span class="hud-c hud-c--tl"></span>
-        <span class="hud-c hud-c--tr"></span>
-        <span class="hud-c hud-c--bl"></span>
-        <span class="hud-c hud-c--br"></span>
+      <div class="hero-actions rv">
+        <a class="btn" href="#waitlist">Join the waitlist</a>
+        <a class="btn btn--ghost" href="#studio">See it</a>
       </div>
-      <div class="pshot-glow" aria-hidden="true"></div>
-      <div class="stage-slot" data-slot="hero" role="img"
-           aria-label="The Dipsana headset in Obsidian, slowly rotating: a matte charcoal bone-conduction band that hooks over both ears, with the transducers sitting just in front of them.">
-        <picture>
-          <source srcset="/images/product.webp" type="image/webp">
-          <img class="pshot-poster" src="/images/product.png" alt="" width="1200" height="760" fetchpriority="high" decoding="async">
-        </picture>
-      </div>
-    </div>
-    <div>
-      <p class="rv" style="margin:0"><a class="btn" href="/product/">See it</a></p>
       <ul class="facts rv">
         <li><b>0–110°C</b><span>Sauna to ice</span></li>
         <li><b>IP68</b><span>2 m under</span></li>
@@ -137,111 +139,152 @@
     </div>
   </section>
 
-  <section class="s-range" id="usage" data-reveal aria-labelledby="range-h">
-    <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Where it goes</p>
-    <h2 class="display display--mid rv" id="range-h">Rated<br class="br-m"> for the<br class="br-m"> whole<br class="br-m"> range.</h2>
-    <p class="lede rv">Five rooms. One device. Nothing left on the bench between them.</p>
-    <figure class="plot rv" aria-hidden="true">
-      <svg viewBox="0 0 720 120" role="presentation">
-        <g fill="none" stroke="rgba(240,235,227,.14)" stroke-width="1">
-          <line x1="0" y1="20" x2="720" y2="20"/>
-          <line x1="0" y1="50" x2="720" y2="50"/>
-          <line x1="0" y1="80" x2="720" y2="80"/>
-          <line x1="0" y1="110" x2="720" y2="110"/>
-        </g>
-        <polyline fill="none" stroke="#d25a28" stroke-width="1.6"
-          points="20,18 150,28 300,62 420,70 560,96 700,108"/>
-        <polyline fill="none" stroke="#8ec4d4" stroke-width="1.2" stroke-dasharray="3 4"
-          points="20,36 180,40 340,68 500,88 700,104"/>
-        <g fill="#8ec4d4">
-          <circle cx="20" cy="18" r="3"/>
-          <circle cx="300" cy="62" r="3"/>
-          <circle cx="420" cy="70" r="3"/>
-          <circle cx="700" cy="108" r="3"/>
-        </g>
-        <g fill="rgba(240,235,227,.45)" font-family="IBM Plex Mono, monospace" font-size="10">
-          <text x="20" y="14">110°</text>
-          <text x="300" y="58">45°</text>
-          <text x="668" y="104">0°</text>
-        </g>
-      </svg>
-      <figcaption class="plot-cap mono">
-        <span>sauna</span><span>steam</span><span>plunge</span><span>ice</span><span>contrast</span>
-      </figcaption>
-    </figure>
+  <section class="studio" id="studio" data-reveal aria-label="Headset colorways">
+    <div class="viewer" id="viewer">
+      <span class="viewer-glow" aria-hidden="true"></span>
+      <div class="hud" aria-hidden="true">
+        <span class="hud-c hud-c--tl"></span>
+        <span class="hud-c hud-c--tr"></span>
+        <span class="hud-c hud-c--bl"></span>
+        <span class="hud-c hud-c--br"></span>
+      </div>
+      <div class="stage-slot" data-slot="colors" role="img"
+           aria-label="The Dipsana headset in Obsidian: matte charcoal, the hero. Slowly rotating.">
+        <picture>
+          <source srcset="/images/product.webp" type="image/webp">
+          <img class="kit-poster" src="/images/product.png" alt="" width="1200" height="760" decoding="async">
+        </picture>
+        <canvas id="kit" aria-hidden="true"></canvas>
+      </div>
+    </div>
+
+    <div class="cw-readout rv">
+      <p class="cw-name cw-fade" id="cwName">Obsidian</p>
+    </div>
+    <ul class="swatches rv" id="swatches" role="radiogroup" aria-label="Choose a colorway"></ul>
   </section>
 
-  <section class="chapter chapter--heat" data-reveal aria-labelledby="u1">
-    <div class="chapter-frame">
-      <img src="/images/v3-sauna.jpg" alt="Close-up of a young man in a cedar sauna, skin shining with sweat, wearing Dipsana bone-conduction headphones" width="864" height="1152" loading="lazy" decoding="async">
-      <div class="chapter-copy">
+  <div class="rooms" id="rooms">
+    <section class="room room--heat" data-climate="heat" data-reveal aria-labelledby="u1">
+      <div class="room-media">
+        <img src="/images/v3-sauna.jpg" alt="Close-up of a person in a cedar sauna, skin shining with sweat, Dipsana transducer pad on the cheek in front of the ear" width="864" height="1152" loading="lazy" decoding="async">
+      </div>
+      <div class="room-copy">
         <p class="mono deg-hot rv">Sauna · 80–100°C · 15–20 min</p>
         <h2 class="display display--mid rv" id="u1">Sauna</h2>
         <p class="lede rv">The podcast that makes twenty minutes feel like eight.</p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="chapter chapter--heat" data-reveal aria-labelledby="u2">
-    <div class="chapter-frame">
-      <img src="/images/v3-steam.jpg" alt="Close-up of a young woman in a steam room, dewy skin and condensation on Dipsana headphones" width="1152" height="864" loading="lazy" decoding="async">
-      <div class="chapter-copy">
+    <section class="room room--steam" data-climate="steam" data-reveal aria-labelledby="u2">
+      <div class="room-media">
+        <img src="/images/v3-steam.jpg" alt="Profile in a steam room. Open hook around the ear, canal empty, pad sitting on the cheekbone" width="1152" height="864" loading="lazy" decoding="async">
+      </div>
+      <div class="room-copy">
         <p class="mono deg-hot rv">Steam room · 40–45°C · 100% humidity</p>
         <h2 class="display display--mid rv" id="u2">Steam room</h2>
         <p class="lede rv">Where every other pair of headphones has already quit.</p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="chapter chapter--cold" data-reveal aria-labelledby="u3">
-    <div class="chapter-frame">
-      <img src="/images/v3-plunge.jpg" alt="Close-up of a young man's head underwater in a cold plunge, wearing Dipsana headphones" width="864" height="1152" loading="lazy" decoding="async">
-      <div class="chapter-copy">
+    <section class="room room--plunge" data-climate="plunge" data-reveal aria-labelledby="u3">
+      <div class="room-media">
+        <img src="/images/v3-plunge.jpg" alt="Head at the waterline in a cold plunge, Dipsana on the cheek, ear canal empty" width="864" height="1152" loading="lazy" decoding="async">
+      </div>
+      <div class="room-copy">
         <p class="mono deg-cold rv">Cold plunge · 3–10°C · 2–3 min</p>
         <h2 class="display display--mid rv" id="u3">Cold plunge</h2>
         <p class="lede rv">One song. Get in, finish the song, get out.</p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="chapter chapter--cold chapter--ice" data-reveal aria-labelledby="u4">
-    <div class="chapter-frame">
-      <img src="/images/v3-ice.jpg" alt="Close-up of a young man's head in an ice bath, ice cubes at the waterline, wearing Dipsana headphones" width="864" height="1152" loading="lazy" decoding="async">
-      <div class="chapter-copy">
+    <section class="room room--ice" data-climate="ice" data-reveal aria-labelledby="u4">
+      <div class="room-media">
+        <img src="/images/v3-ice.jpg" alt="Face at the surface of an ice bath, ice at the waterline, Dipsana worn open-ear on the cheek" width="864" height="1152" loading="lazy" decoding="async">
+      </div>
+      <div class="room-copy">
         <p class="mono deg-cold rv">Ice bath · 0–5°C · 3–5 min</p>
         <h2 class="display display--mid rv" id="u4">Ice bath</h2>
         <p class="lede rv">Offline mode, because your phone is in a locker and your hands don’t work anyway.</p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="s-contrast" data-reveal aria-labelledby="u5">
-    <div class="contrast-frame">
-      <img src="/images/v3-contrast.jpg" alt="Close-up of a young woman's head split between sauna heat and ice, wearing Dipsana headphones" width="1280" height="720" loading="lazy" decoding="async">
-      <div class="contrast-copy">
+    <section class="room room--contrast" data-climate="contrast" data-reveal aria-labelledby="u5">
+      <div class="room-media">
+        <img src="/images/v3-contrast.jpg" alt="Close-up of a face split between sauna heat and ice, Dipsana on both cheeks, canals empty" width="1280" height="720" loading="lazy" decoding="async">
+      </div>
+      <div class="room-copy">
         <div>
           <p class="mono rv" style="margin:0 0 12px"><span class="hot-word">Hot</span> · <span class="cold-word">cold</span> · repeat</p>
           <h2 class="display display--mid rv" id="u5">Contrast</h2>
         </div>
         <p class="lede rv">A playlist that runs the whole cycle, so you are not resetting a timer with wet hands.</p>
       </div>
+    </section>
+  </div>
+
+  <section class="studio studio--proof" data-reveal aria-labelledby="spec-h">
+    <ol class="anatomy rv">
+      <li>
+        <span class="a-num">01</span>
+        <h3>Bone conduction</h3>
+        <p>Sits just in front of the ear. Nothing goes in the canal. <a href="/how-it-works/">The science</a></p>
+      </li>
+      <li>
+        <span class="a-num">02</span>
+        <h3>Heat-stable pads</h3>
+        <p>A heat-stable compound, not standard silicone.</p>
+      </li>
+      <li>
+        <span class="a-num">03</span>
+        <h3>Sealed housing</h3>
+        <p>IP68 to 2m. 32GB onboard, Bluetooth 5.4.</p>
+      </li>
+      <li>
+        <span class="a-num">04</span>
+        <h3>Physical buttons</h3>
+        <p>Sized for numb fingers and wet hands. No touch surfaces.</p>
+      </li>
+      <li>
+        <span class="a-num">05</span>
+        <h3>Magnetic charge</h3>
+        <p>No port to corrode. Ten minutes gives three hours.</p>
+      </li>
+    </ol>
+
+    <div class="s-specs" id="specs">
+      <p class="mono">Specification</p>
+      <h2 class="display display--mid" id="spec-h">The list</h2>
+      <dl class="specs">
+        <div class="spec"><dt>Temperature</dt><dd>Rated 0°C to 110°C</dd></div>
+        <div class="spec"><dt>Water</dt><dd>IP68, submersible to 2m</dd></div>
+        <div class="spec"><dt>Storage</dt><dd>32GB onboard</dd></div>
+        <div class="spec"><dt>Above water</dt><dd>Bluetooth 5.4</dd></div>
+        <div class="spec"><dt>Below water</dt><dd>Offline MP3 mode</dd></div>
+        <div class="spec"><dt>Frame</dt><dd>Heat-stable, head-worn</dd></div>
+        <div class="spec"><dt>Contact pads</dt><dd>Heat-stable, not silicone</dd></div>
+        <div class="spec"><dt>Playback</dt><dd>10 hours</dd></div>
+        <div class="spec"><dt>Fast charge</dt><dd>10 minutes = 3 hours</dd></div>
+        <div class="spec"><dt>Controls</dt><dd>Physical buttons</dd></div>
+        <div class="spec"><dt>Charging</dt><dd>Magnetic, no ports</dd></div>
+        <div class="spec"><dt>Colorways</dt><dd>Four</dd></div>
+      </dl>
+      <p class="fine more"><a href="/how-it-works/">How it works</a></p>
     </div>
   </section>
 
-  <section class="s-story" id="why" data-reveal aria-labelledby="why-h">
-    <div class="wrap">
-      <div class="story-head">
-        <div>
-          <p class="mono rv" style="color:var(--ice); margin:0 0 12px">Why audio</p>
-          <h2 class="display display--mid rv" id="why-h">Four headaches</h2>
-        </div>
+  <section class="aches" id="why" data-reveal aria-labelledby="why-h">
+    <div class="aches-inner">
+      <div class="aches-head">
+        <p class="mono rv" style="color:var(--ice); margin:0">Why audio</p>
+        <h2 class="display display--mid rv" id="why-h">Four headaches</h2>
         <p class="lede rv">The rooms are the easy part. The minutes are not.</p>
       </div>
       <ol class="swap swap--links swap--hx">
         <li class="rv">
           <a href="/learn/headphones-in-sauna/">
             <span class="tag">Heat</span>
-            <span class="hx-media"><img src="/images/v3-steam.jpg" alt="Steam beading on skin in a hot room" loading="lazy" decoding="async"></span>
+            <span class="hx-media"><img src="/images/v3-steam.jpg" alt="Steam beading on skin in a hot room" loading="lazy" decoding="async" width="1152" height="864"></span>
             <span class="mono swap-deg">0–35°C</span>
             <p class="swap-p">Ruined everyday earbuds</p>
             <div class="swap-a"><p>AirPods are rated to 35°C. A sauna is not.</p></div>
@@ -250,7 +293,7 @@
         <li class="rv">
           <a href="/learn/sauna/">
             <span class="tag">Sauna</span>
-            <span class="hx-media"><img src="/images/v3-sauna.jpg" alt="Sweat running on skin on a sauna bench" loading="lazy" decoding="async"></span>
+            <span class="hx-media"><img src="/images/v3-sauna.jpg" alt="Sweat running on skin on a sauna bench" loading="lazy" decoding="async" width="864" height="1152"></span>
             <span class="mono swap-deg">15–20 min</span>
             <p class="swap-p">Boredom ends sessions</p>
             <div class="swap-a"><p>You get out early because it is too boring.</p></div>
@@ -259,7 +302,7 @@
         <li class="rv">
           <a href="/learn/ice/">
             <span class="tag tag--ice">Plunge</span>
-            <span class="hx-media"><img src="/images/v3-ice.jpg" alt="Face at the surface of an ice bath, ice on the water" loading="lazy" decoding="async"></span>
+            <span class="hx-media"><img src="/images/v3-ice.jpg" alt="Face at the surface of an ice bath, ice on the water" loading="lazy" decoding="async" width="864" height="1152"></span>
             <span class="mono swap-deg">One song</span>
             <p class="swap-p">Ice needs a finish line</p>
             <div class="swap-a"><p>Get in, finish the song, get out.</p></div>
@@ -268,7 +311,7 @@
         <li class="rv">
           <a href="/learn/swim/">
             <span class="tag tag--ice">Water</span>
-            <span class="hx-media"><img src="/images/v3-plunge.jpg" alt="Swimmer underwater, bubbles across the face" loading="lazy" decoding="async"></span>
+            <span class="hx-media"><img src="/images/v3-plunge.jpg" alt="Swimmer underwater, bubbles across the face" loading="lazy" decoding="async" width="864" height="1152"></span>
             <span class="mono swap-deg">Offline</span>
             <p class="swap-p">Swim time can be useful</p>
             <div class="swap-a"><p>Bluetooth does not travel through water.</p></div>
@@ -278,14 +321,15 @@
     </div>
   </section>
 
-
-
-  <section class="s-list" id="waitlist" data-reveal aria-labelledby="wl-h">
+  <section class="wait" id="waitlist" data-reveal aria-labelledby="wl-h">
+    <div class="wait-bg" aria-hidden="true">
+      <img src="/images/v3-sauna.jpg" alt="" width="864" height="1152" decoding="async">
+    </div>
     <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Founding list</p>
     <h2 class="display rv" id="wl-h">First in.</h2>
-    <p class="lede rv" style="margin:24px auto 0; text-align:center">We’ll email you once, when it’s ready, and not before.</p>
+    <p class="lede rv">We’ll email you once, when it’s ready, and not before.</p>
 
-    <div class="form-wrap rv">
+    <div class="form-wrap">
       <form id="waitlist-form" action="https://app.kit.com/forms/9811187/subscriptions" method="post" novalidate>
         <label class="sr" for="email">Email address</label>
         <input type="email" id="email" name="email_address" placeholder="you@example.com" required autocomplete="email" inputmode="email">
@@ -312,7 +356,7 @@
       <li><a href="/" aria-current="page">Home</a></li>
       <li><a href="/product/">Product</a></li>
       <li><a href="/how-it-works/">How it works</a></li>
-      <li>
+      <li class="foot-learn">
         <a href="/learn/">Learn</a>
         <ul class="foot-sub">
           <li><a href="/learn/sauna/">Sauna</a></li>
@@ -329,337 +373,6 @@
     <p class="fine safety rv">Listen to your body, not just your playlist — follow the sauna and cold exposure guidance that applies to you.</p>
   </footer>
 
-
 </main>
-
-<script type="module">
-import * as THREE from 'three';
-import { GLTFLoader }     from 'three/addons/loaders/GLTFLoader.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-
-const COLORWAYS = [
-  { name:'Obsidian', hex:'#35383C', note:'Matte charcoal, the hero.', rough:.58, cc:.34 },
-  { name:'Glacier',  hex:'#A8D5E2', note:'Pale ice blue.',            rough:.50, cc:.42 },
-  { name:'Ember',    hex:'#E2542C', note:'The loud one.',             rough:.42, cc:.55 },
-  { name:'Chalk',    hex:'#EDE8E0', note:'Off-white.',                rough:.62, cc:.28 },
-];
-
-const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const coarse  = window.matchMedia('(hover: none), (pointer: coarse)').matches;
-const lerp  = (a,b,t) => a + (b-a)*t;
-const clamp = (v,lo,hi) => v < lo ? lo : v > hi ? hi : v;
-
-/* ── stage ────────────────────────────────────────────────────────────────
-   One WebGL context for the whole page. Each .stage-slot marks out a box in
-   the document; the renderer scissors to that box and draws the headset into
-   it, so both sections share a single context and a single copy of the mesh. */
-
-const canvas = document.getElementById('stage');
-const renderer = new THREE.WebGLRenderer({
-  canvas, antialias:true, alpha:true, powerPreference:'high-performance'
-});
-renderer.setClearAlpha(0);                       // the page shows through
-renderer.outputColorSpace = THREE.SRGBColorSpace;
-renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.12;
-renderer.setScissorTest(true);
-
-const scene  = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(26, 1, 0.01, 100);
-
-const envRT = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04);
-scene.environment = envRT.texture;   /* Scene.environmentIntensity only lands in r163,
-                                        so the dial is envMapIntensity on the material */
-
-const key  = new THREE.DirectionalLight(0xFFF2E4, 2.4); key.position.set(3, 4, 3);
-const rim  = new THREE.DirectionalLight(0x8EC4D4, 1.5); rim.position.set(-3, 1.5, -3);
-const fill = new THREE.DirectionalLight(0xBFC9D0, 0.55); fill.position.set(-2, -1.5, 2);
-scene.add(key, rim, fill, new THREE.AmbientLight(0xF0E8DC, 0.3));
-
-const bodyMat = new THREE.MeshPhysicalMaterial({
-  color:new THREE.Color(COLORWAYS[0].hex),
-  roughness:COLORWAYS[0].rough, metalness:0.04,
-  clearcoat:COLORWAYS[0].cc, clearcoatRoughness:0.35,
-  envMapIntensity:0.42,
-});
-
-const rig = new THREE.Group();
-scene.add(rig);
-let modelRadius = 0.5, ready = false, handedOver = false;
-
-/* the three-quarter view the product is normally shot from */
-const BASE_AZ = -75 * Math.PI/180;
-const CAM_EL  =  14 * Math.PI/180;
-
-new GLTFLoader().load('/models/headset.glb', gltf => {
-  let geo = null;
-  gltf.scene.traverse(o => { if (o.isMesh && !geo) geo = o.geometry; });
-  if (!geo) return;
-
-  geo.computeVertexNormals();                    // the file ships positions only
-  geo.computeBoundingBox();
-  const size = geo.boundingBox.getSize(new THREE.Vector3());
-  const mid  = geo.boundingBox.getCenter(new THREE.Vector3());
-  geo.translate(-mid.x, -mid.y, -mid.z);
-  const k = 1 / Math.max(size.x, size.y, size.z);
-  geo.scale(k, k, k);
-  geo.computeBoundingSphere();
-  modelRadius = geo.boundingSphere.radius;
-
-  rig.add(new THREE.Mesh(geo, bodyMat));
-  ready = true;
-}, undefined, () => {
-  /* mesh unavailable — the poster photograph simply stays put */
-});
-
-/* distance that fits the model inside the slot on both axes */
-function fitDistance(aspect, fill){
-  const vFov = camera.fov * Math.PI/180;
-  const hFov = 2 * Math.atan(Math.tan(vFov/2) * aspect);
-  return Math.max(modelRadius / Math.sin(vFov/2), modelRadius / Math.sin(hFov/2)) / fill;
-}
-
-const SLOTS = [...document.querySelectorAll('.stage-slot')].map(el => ({
-  el,
-  rect: null,
-  fill: el.dataset.slot === 'colors' ? 1.26 : 1.20,
-}));
-
-let needMeasure = true;
-const remeasure = () => { needMeasure = true; };
-window.addEventListener('scroll', remeasure, { passive:true });
-window.addEventListener('resize', remeasure, { passive:true });
-
-function resize(){
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, coarse ? 1.6 : 2));
-  renderer.setSize(window.innerWidth, window.innerHeight, false);
-  const tb = document.getElementById('topbar');
-  if (tb) document.documentElement.style.setProperty('--head', tb.offsetHeight + 'px');
-  needMeasure = true;
-}
-resize();
-window.addEventListener('resize', resize, { passive:true });
-
-/* ── motion ───────────────────────────────────────────────────────────────
-   A slow idle turn, plus a little push from the pointer so it feels held
-   rather than played back. Drag to spin it yourself. */
-
-let spin = 0, spinVel = 0;
-let ptrLive = false, ptrX = 0, ptrY = 0;
-let dragging = false, dragLast = 0, tiltX = 0, tiltXTarget = 0;
-
-if (!coarse){
-  window.addEventListener('pointermove', ev => {
-    ptrLive = true; ptrX = ev.clientX; ptrY = ev.clientY;
-    if (dragging){
-      spinVel += (ev.clientX - dragLast) * 0.00042;
-      dragLast = ev.clientX;
-    }
-  }, { passive:true });
-  document.addEventListener('pointerleave', () => { ptrLive = false; }, { passive:true });
-}
-
-for (const slot of SLOTS){
-  slot.el.addEventListener('pointerdown', ev => {
-    dragging = true; dragLast = ev.clientX;
-    slot.el.setPointerCapture?.(ev.pointerId);
-  });
-  slot.el.addEventListener('pointerup',     () => { dragging = false; });
-  slot.el.addEventListener('pointercancel', () => { dragging = false; });
-}
-
-let last = performance.now();
-
-function drawSlot(slot){
-  const r = slot.rect;
-  if (!r || r.width < 1 || r.height < 1) return;
-  const h = window.innerHeight;
-  if (r.bottom <= 0 || r.top >= h) return;
-
-  const y = h - r.bottom;
-  renderer.setViewport(r.left, y, r.width, r.height);
-  renderer.setScissor(r.left, y, r.width, r.height);
-
-  const aspect = r.width / r.height;
-  camera.aspect = aspect;
-  camera.updateProjectionMatrix();
-
-  const d  = fitDistance(aspect, slot.fill);
-  const el = CAM_EL + tiltX;
-  camera.position.set(0, d * Math.sin(el), d * Math.cos(el));
-  camera.lookAt(0, 0, 0);
-
-  renderer.render(scene, camera);
-}
-
-function frame(now){
-  const dt = Math.min(now - last, 64);
-  last = now;
-
-  if (needMeasure){
-    for (const s of SLOTS) s.rect = s.el.getBoundingClientRect();
-    needMeasure = false;
-  }
-
-  if (!reduced){
-    spin += (dt * 0.00016 + spinVel);
-    spinVel *= Math.pow(0.0025, dt/1000);        // drag momentum bleeds off
-
-    if (ptrLive && !coarse && SLOTS.length){
-      const r = SLOTS[0].rect;
-      if (r && r.height) tiltXTarget = clamp((ptrY - (r.top + r.height/2)) / (r.height/2), -1, 1) * 0.16;
-    } else {
-      tiltXTarget = 0;
-    }
-    tiltX = lerp(tiltX, tiltXTarget, 1 - Math.pow(0.004, dt/1000));
-  }
-
-  rig.rotation.y = BASE_AZ + spin;
-
-  if (colT < 1){
-    colT = Math.min(1, colT + dt / COLOR_MS);
-    const e = colT * colT * (3 - 2*colT);
-    bodyMat.color.copy(colFrom).lerp(colTo, e);
-    bodyMat.roughness = lerp(roughFrom, roughTo, e);
-    bodyMat.clearcoat = lerp(ccFrom, ccTo, e);
-  }
-
-  if (ready){
-    renderer.setScissorTest(false);
-    renderer.clear();
-    renderer.setScissorTest(true);
-    for (const slot of SLOTS) drawSlot(slot);
-
-    if (!handedOver){          // only drop the poster once there is a frame behind it
-      handedOver = true;
-      document.querySelectorAll('.pshot').forEach(el => el.classList.add('is-live'));
-    }
-  }
-  requestAnimationFrame(frame);
-}
-requestAnimationFrame(frame);
-
-const anatomySvg = document.querySelector('.anatomy svg');
-function fitAnatomy(){
-  if (!anatomySvg) return;
-  anatomySvg.setAttribute('viewBox',
-    window.innerWidth <= 900 ? '270 200 580 210' : '0 0 1200 620');
-}
-fitAnatomy();
-window.addEventListener('resize', fitAnatomy, { passive:true });
-
-/* ── colourways ───────────────────────────────────────────────────────── */
-
-const swatchList = document.getElementById('swatches');
-const cwName = document.getElementById('cwName');
-const cwHex  = document.getElementById('cwHex');
-const cwNote = document.getElementById('cwNote');
-const fades  = [cwName, cwHex, cwNote];
-const cwShot = document.querySelector('.pshot--cw');
-
-const colFrom = new THREE.Color(COLORWAYS[0].hex);
-const colTo   = new THREE.Color(COLORWAYS[0].hex);
-let colT = 1, activeIndex = 0;
-let roughFrom = COLORWAYS[0].rough, roughTo = COLORWAYS[0].rough;
-let ccFrom = COLORWAYS[0].cc, ccTo = COLORWAYS[0].cc;
-const COLOR_MS = 460;
-
-const lumOf = rgb => (0.2126*rgb[0] + 0.7152*rgb[1] + 0.0722*rgb[2]) / 255;
-function inkFor(hex){
-  const n = parseInt(hex.slice(1), 16);
-  let rgb = [n >> 16 & 255, n >> 8 & 255, n & 255];
-  while (lumOf(rgb) < 0.55) rgb = rgb.map(v => v + (255 - v) * 0.22);
-  return rgb;
-}
-function setInk(rgb){
-  document.documentElement.style.setProperty(
-    '--active-ink',
-    `rgb(${Math.round(rgb[0])} ${Math.round(rgb[1])} ${Math.round(rgb[2])})`
-  );
-}
-
-function selectColorway(i, silent){
-  activeIndex = i;
-  const cw = COLORWAYS[i];
-  const n = parseInt(cw.hex.slice(1), 16);
-
-  colFrom.copy(bodyMat.color);
-  colTo.set(cw.hex);
-  roughFrom = bodyMat.roughness; roughTo = cw.rough;
-  ccFrom    = bodyMat.clearcoat; ccTo    = cw.cc;
-  colT = silent ? 1 : 0;
-  if (silent){
-    bodyMat.color.copy(colTo);
-    bodyMat.roughness = roughTo;
-    bodyMat.clearcoat = ccTo;
-  }
-
-  document.documentElement.style.setProperty('--active', cw.hex);
-  if (cwShot) cwShot.style.setProperty(
-    '--active-glow', `rgba(${n>>16&255},${n>>8&255},${n&255},.20)`
-  );
-  setInk(inkFor(cw.hex));
-
-  [...swatchList.children].forEach((li, k) => {
-    li.firstElementChild.setAttribute('aria-checked', String(k === i));
-    li.firstElementChild.tabIndex = k === i ? 0 : -1;
-  });
-
-  const slot = SLOTS.find(s => s.el.dataset.slot === 'colors');
-  if (slot) slot.el.setAttribute('aria-label',
-    `The Dipsana headset in ${cw.name}: ${cw.note.toLowerCase()} Slowly rotating.`);
-
-  if (silent){
-    cwName.textContent = cw.name; cwHex.textContent = cw.hex; cwNote.textContent = cw.note;
-    return;
-  }
-  fades.forEach(el => el.classList.add('out'));
-  setTimeout(() => {
-    cwName.textContent = cw.name;
-    cwHex.textContent  = cw.hex;
-    cwNote.textContent = cw.note;
-    fades.forEach(el => el.classList.remove('out'));
-  }, reduced ? 0 : 180);
-}
-
-if (swatchList) {
-COLORWAYS.forEach((cw, i) => {
-  const li = document.createElement('li');
-  const b  = document.createElement('button');
-  b.className = 'swatch';
-  b.type = 'button';
-  b.style.setProperty('--sw', cw.hex);
-  b.setAttribute('role', 'radio');
-  b.setAttribute('aria-checked', String(i === 0));
-  b.setAttribute('aria-label', `${cw.name}, ${cw.hex}`);
-  b.tabIndex = i === 0 ? 0 : -1;
-  b.addEventListener('click', () => selectColorway(i));
-  b.addEventListener('keydown', ev => {
-    const d = ev.key === 'ArrowRight' || ev.key === 'ArrowDown' ?  1
-            : ev.key === 'ArrowLeft'  || ev.key === 'ArrowUp'   ? -1 : 0;
-    if (!d) return;
-    ev.preventDefault();
-    const k = (activeIndex + d + COLORWAYS.length) % COLORWAYS.length;
-    selectColorway(k);
-    swatchList.children[k].firstElementChild.focus();
-  });
-  li.appendChild(b);
-  swatchList.appendChild(li);
-});
-selectColorway(0, true);
-}
-
-const railFill = document.getElementById('railFill');
-const railLive = document.getElementById('railLive');
-function syncRail(){
-  const max = document.documentElement.scrollHeight - window.innerHeight;
-  const t = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
-  railFill.style.height = (t * 100) + '%';
-  railLive.textContent = Math.round(110 - t * 110) + '°';
-}
-syncRail();
-window.addEventListener('scroll', syncRail, { passive:true });
-window.addEventListener('resize', syncRail, { passive:true });
-</script>
 </body>
 </html>
