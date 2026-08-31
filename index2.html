@@ -72,15 +72,6 @@
 
 <a class="skip" href="#main">Skip to content</a>
 
-<svg class="svg-fx" aria-hidden="true" focusable="false">
-  <filter id="heat-shimmer" x="-12%" y="-12%" width="124%" height="124%">
-    <feTurbulence type="fractalNoise" baseFrequency="0.01 0.02" numOctaves="2" seed="3" result="n">
-      <animate attributeName="baseFrequency" values="0.008 0.018;0.016 0.03;0.008 0.018" dur="4.8s" repeatCount="indefinite"/>
-    </feTurbulence>
-    <feDisplacementMap in="SourceGraphic" in2="n" scale="7" xChannelSelector="R" yChannelSelector="G"/>
-  </filter>
-</svg>
-
 <canvas id="wx" aria-hidden="true"></canvas>
 
 <div class="rail is-hero" aria-hidden="true">
@@ -107,29 +98,12 @@
 
   <section class="hero" id="top" data-phase="heat" aria-labelledby="hero-h">
     <div class="hero-stage">
-      <img class="hero-photo" data-p="heat" src="/images/v3-sauna.jpg" width="864" height="1152" alt="Close-up of a person in a cedar sauna wearing Dipsana. The transducer pad sits on the cheek in front of the ear; the ear canal is empty." fetchpriority="high" decoding="async">
-      <img class="hero-photo" data-p="steam" src="/images/v3-steam.jpg" width="1152" height="864" alt="" aria-hidden="true" decoding="async">
-      <img class="hero-photo" data-p="plunge" src="/images/v3-plunge.jpg" width="864" height="1152" alt="" aria-hidden="true" decoding="async">
-      <img class="hero-photo" data-p="ice" src="/images/v3-ice.jpg" width="864" height="1152" alt="" aria-hidden="true" decoding="async">
-      <img class="hero-photo hero-photo--haze" src="/images/v3-sauna.jpg" width="864" height="1152" alt="" aria-hidden="true" decoding="async">
+      <img class="hero-photo" src="/images/v3-steam.jpg" width="1152" height="864" alt="Close-up of a person wearing Dipsana. The transducer pad sits on the cheek in front of the ear; the ear canal is empty." fetchpriority="high" decoding="async">
       <div class="hero-climate" aria-hidden="true">
-        <div class="cl cl-heat"><span class="ember-veil"></span></div>
-        <div class="cl cl-steam">
-          <span class="vapor"></span>
-          <span class="vapor-2"></span>
-        </div>
-        <div class="cl cl-plunge">
-          <span class="caustic"></span>
-          <span class="waterline"></span>
-        </div>
-        <div class="cl cl-ice">
-          <span class="frost"></span>
-          <span class="ice-spark"></span>
-          <span class="ice-spark"></span>
-          <span class="ice-spark"></span>
-          <span class="ice-spark"></span>
-          <span class="ice-spark"></span>
-        </div>
+        <div class="cl cl-heat"></div>
+        <div class="cl cl-steam"></div>
+        <div class="cl cl-plunge"></div>
+        <div class="cl cl-ice"></div>
       </div>
       <div class="hero-shade"></div>
     </div>
@@ -150,10 +124,7 @@
 
     <div class="hero-copy" data-reveal>
       <p class="mono hero-kicker rv">100% waterproof<br class="br-m"> bone conduction audio</p>
-      <div class="hero-title-row rv">
-        <h1 class="display" id="hero-h">Built for recovery.</h1>
-        <p class="callout">Bone conduction · on the cheek · not in the ear.</p>
-      </div>
+      <h1 class="display rv" id="hero-h">Built for recovery.</h1>
       <p class="hero-sub rv">Sauna. Steam. Ice bath. Swim.</p>
       <div class="hero-actions rv">
         <a class="btn" href="#waitlist">Join the waitlist</a>
@@ -172,29 +143,20 @@
     <section class="room room--heat" data-climate="heat" data-reveal aria-labelledby="u1">
       <div class="room-media">
         <img src="/images/v3-sauna.jpg" alt="Close-up of a person in a cedar sauna, skin shining with sweat, Dipsana transducer pad on the cheek in front of the ear" width="864" height="1152" loading="lazy" decoding="async">
-        <div class="room-wx" aria-hidden="true">
-          <span class="haze"></span>
-          <span class="smoke"></span>
-          <span class="smoke-2"></span>
-        </div>
       </div>
       <div class="room-copy">
-        <p class="mono deg-hot rv">Sauna · <span class="room-tick" id="tickHeat">80–100°C</span> · 15–20 min</p>
+        <p class="mono deg-hot rv">Sauna · 80–100°C · 15–20 min</p>
         <h2 class="display display--mid rv" id="u1">Sauna</h2>
         <p class="lede rv">The podcast that makes twenty minutes feel like eight.</p>
-        <p class="fine rv" style="margin-top:16px">Five rooms. One device. Nothing left on the bench between them.</p>
       </div>
     </section>
 
     <section class="room room--steam" data-climate="steam" data-reveal aria-labelledby="u2">
       <div class="room-media">
         <img src="/images/v3-steam.jpg" alt="Profile in a steam room. Open hook around the ear, canal empty, pad sitting on the cheekbone" width="1152" height="864" loading="lazy" decoding="async">
-        <div class="room-wx" aria-hidden="true">
-          <span class="vapor-sheet"></span>
-        </div>
       </div>
       <div class="room-copy">
-        <p class="mono deg-hot rv">Steam room · <span class="room-tick" id="tickSteam">40–45°C</span> · 100% humidity</p>
+        <p class="mono deg-hot rv">Steam room · 40–45°C · 100% humidity</p>
         <h2 class="display display--mid rv" id="u2">Steam room</h2>
         <p class="lede rv">Where every other pair of headphones has already quit.</p>
       </div>
@@ -203,13 +165,9 @@
     <section class="room room--plunge" data-climate="plunge" data-reveal aria-labelledby="u3">
       <div class="room-media">
         <img src="/images/v3-plunge.jpg" alt="Head at the waterline in a cold plunge, Dipsana on the cheek, ear canal empty" width="864" height="1152" loading="lazy" decoding="async">
-        <div class="room-wx" aria-hidden="true">
-          <span class="caustics"></span>
-          <span class="waterline"></span>
-        </div>
       </div>
       <div class="room-copy">
-        <p class="mono deg-cold rv">Cold plunge · <span class="room-tick" id="tickPlunge">3–10°C</span> · 2–3 min</p>
+        <p class="mono deg-cold rv">Cold plunge · 3–10°C · 2–3 min</p>
         <h2 class="display display--mid rv" id="u3">Cold plunge</h2>
         <p class="lede rv">One song. Get in, finish the song, get out.</p>
       </div>
@@ -218,12 +176,9 @@
     <section class="room room--ice" data-climate="ice" data-reveal aria-labelledby="u4">
       <div class="room-media">
         <img src="/images/v3-ice.jpg" alt="Face at the surface of an ice bath, ice at the waterline, Dipsana worn open-ear on the cheek" width="864" height="1152" loading="lazy" decoding="async">
-        <div class="room-wx" aria-hidden="true">
-          <span class="frost-bloom"></span>
-        </div>
       </div>
       <div class="room-copy">
-        <p class="mono deg-cold rv">Ice bath · <span class="room-tick" id="tickIce">0–5°C</span> · 3–5 min</p>
+        <p class="mono deg-cold rv">Ice bath · 0–5°C · 3–5 min</p>
         <h2 class="display display--mid rv" id="u4">Ice bath</h2>
         <p class="lede rv">Offline mode, because your phone is in a locker and your hands don’t work anyway.</p>
       </div>
@@ -232,12 +187,6 @@
     <section class="room room--contrast" data-climate="contrast" data-reveal aria-labelledby="u5">
       <div class="room-media">
         <img src="/images/v3-contrast.jpg" alt="Close-up of a face split between sauna heat and ice, Dipsana on both cheeks, canals empty" width="1280" height="720" loading="lazy" decoding="async">
-        <div class="room-wx" aria-hidden="true">
-          <div class="split-wx">
-            <span class="hot"></span>
-            <span class="cold"></span>
-          </div>
-        </div>
       </div>
       <div class="room-copy">
         <div>

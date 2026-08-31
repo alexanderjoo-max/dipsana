@@ -21,12 +21,7 @@
   const railFill = document.getElementById('railFill');
   const railLive = document.getElementById('railLive');
   const rooms = [...document.querySelectorAll('.room')];
-  const ticks = {
-    heat: document.getElementById('tickHeat'),
-    steam: document.getElementById('tickSteam'),
-    plunge: document.getElementById('tickPlunge'),
-    ice: document.getElementById('tickIce')
-  };
+  const ticks = {};
 
   let heroPhase = 0;
   let heroPause = reduced;
@@ -97,6 +92,7 @@
     if (hvis > 0.42) {
       next[PHASES[heroPhase].id] = 1;
       total = 1;
+      climateOn = true;
     } else {
       for (const room of rooms) {
         const r = room.getBoundingClientRect();
@@ -119,7 +115,7 @@
       return;
     }
 
-    climateOn = true;
+    climateOn = hvis > 0.42;
     for (const k of Object.keys(next)) next[k] /= total;
     mix = next;
 
