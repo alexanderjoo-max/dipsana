@@ -107,17 +107,16 @@
 
   <section class="hero" id="top" data-phase="heat" aria-labelledby="hero-h">
     <div class="hero-stage">
-      <img class="hero-photo" src="/images/v3-steam.jpg" width="1152" height="864" alt="Close-up of a person in a steam room wearing Dipsana. The transducer pad sits on the cheekbone in front of the ear; the ear canal is empty." fetchpriority="high" decoding="async">
-      <img class="hero-photo hero-photo--haze" src="/images/v3-steam.jpg" width="1152" height="864" alt="" aria-hidden="true" decoding="async">
+      <img class="hero-photo" data-p="heat" src="/images/v3-sauna.jpg" width="864" height="1152" alt="Close-up of a person in a cedar sauna wearing Dipsana. The transducer pad sits on the cheek in front of the ear; the ear canal is empty." fetchpriority="high" decoding="async">
+      <img class="hero-photo" data-p="steam" src="/images/v3-steam.jpg" width="1152" height="864" alt="" aria-hidden="true" decoding="async">
+      <img class="hero-photo" data-p="plunge" src="/images/v3-plunge.jpg" width="864" height="1152" alt="" aria-hidden="true" decoding="async">
+      <img class="hero-photo" data-p="ice" src="/images/v3-ice.jpg" width="864" height="1152" alt="" aria-hidden="true" decoding="async">
+      <img class="hero-photo hero-photo--haze" src="/images/v3-sauna.jpg" width="864" height="1152" alt="" aria-hidden="true" decoding="async">
       <div class="hero-climate" aria-hidden="true">
         <div class="cl cl-heat"><span class="ember-veil"></span></div>
         <div class="cl cl-steam">
           <span class="vapor"></span>
           <span class="vapor-2"></span>
-          <span class="bead bead-1"></span>
-          <span class="bead bead-2"></span>
-          <span class="bead bead-3"></span>
-          <span class="bead bead-4"></span>
         </div>
         <div class="cl cl-plunge">
           <span class="caustic"></span>
@@ -133,12 +132,6 @@
         </div>
       </div>
       <div class="hero-shade"></div>
-    </div>
-
-    <div class="callout" aria-hidden="true">
-      <span class="callout-dot"></span>
-      <span class="callout-line"></span>
-      <p>Bone conduction · on the cheek · not in the ear.</p>
     </div>
 
     <div class="climate-hud" aria-hidden="true">
@@ -157,7 +150,10 @@
 
     <div class="hero-copy" data-reveal>
       <p class="mono hero-kicker rv">100% waterproof<br class="br-m"> bone conduction audio</p>
-      <h1 class="display rv" id="hero-h">Built for recovery.</h1>
+      <div class="hero-title-row rv">
+        <h1 class="display" id="hero-h">Built for recovery.</h1>
+        <p class="callout">Bone conduction · on the cheek · not in the ear.</p>
+      </div>
       <p class="hero-sub rv">Sauna. Steam. Ice bath. Swim.</p>
       <div class="hero-actions rv">
         <a class="btn" href="#waitlist">Join the waitlist</a>
@@ -340,45 +336,41 @@
         <h2 class="display display--mid rv" id="why-h">Four headaches</h2>
         <p class="lede rv">The rooms are the easy part. The minutes are not.</p>
       </div>
-      <ol class="ache-list">
+      <ol class="swap swap--links swap--hx">
         <li class="rv">
           <a href="/learn/headphones-in-sauna/">
-            <span class="ache-k">Heat</span>
-            <span class="ache-copy">
-              <p>AirPods are rated to 35°C. A sauna is not.</p>
-              <span>Ruined everyday earbuds · 0–35°C</span>
-            </span>
-            <span class="ache-media"><img src="/images/v3-steam.jpg" alt="Steam beading on skin in a hot room" loading="lazy" decoding="async" width="1152" height="864"></span>
+            <span class="tag">Heat</span>
+            <span class="hx-media"><img src="/images/v3-steam.jpg" alt="Steam beading on skin in a hot room" loading="lazy" decoding="async" width="1152" height="864"></span>
+            <span class="mono swap-deg">0–35°C</span>
+            <p class="swap-p">Ruined everyday earbuds</p>
+            <div class="swap-a"><p>AirPods are rated to 35°C. A sauna is not.</p></div>
           </a>
         </li>
         <li class="rv">
           <a href="/learn/sauna/">
-            <span class="ache-k">Sauna</span>
-            <span class="ache-copy">
-              <p>Boredom ends sessions.</p>
-              <span>You get out early because it is too boring. · 15–20 min</span>
-            </span>
-            <span class="ache-media"><img src="/images/v3-sauna.jpg" alt="Sweat running on skin on a sauna bench" loading="lazy" decoding="async" width="864" height="1152"></span>
+            <span class="tag">Sauna</span>
+            <span class="hx-media"><img src="/images/v3-sauna.jpg" alt="Sweat running on skin on a sauna bench" loading="lazy" decoding="async" width="864" height="1152"></span>
+            <span class="mono swap-deg">15–20 min</span>
+            <p class="swap-p">Boredom ends sessions</p>
+            <div class="swap-a"><p>You get out early because it is too boring.</p></div>
           </a>
         </li>
         <li class="rv">
           <a href="/learn/ice/">
-            <span class="ache-k">Plunge</span>
-            <span class="ache-copy">
-              <p>Ice needs a finish line.</p>
-              <span>Get in, finish the song, get out. · One song</span>
-            </span>
-            <span class="ache-media"><img src="/images/v3-ice.jpg" alt="Face at the surface of an ice bath, ice on the water" loading="lazy" decoding="async" width="864" height="1152"></span>
+            <span class="tag tag--ice">Plunge</span>
+            <span class="hx-media"><img src="/images/v3-ice.jpg" alt="Face at the surface of an ice bath, ice on the water" loading="lazy" decoding="async" width="864" height="1152"></span>
+            <span class="mono swap-deg">One song</span>
+            <p class="swap-p">Ice needs a finish line</p>
+            <div class="swap-a"><p>Get in, finish the song, get out.</p></div>
           </a>
         </li>
         <li class="rv">
           <a href="/learn/swim/">
-            <span class="ache-k">Water</span>
-            <span class="ache-copy">
-              <p>Bluetooth does not travel through water.</p>
-              <span>Swim time can be useful. · Offline</span>
-            </span>
-            <span class="ache-media"><img src="/images/v3-plunge.jpg" alt="Swimmer underwater, bubbles across the face" loading="lazy" decoding="async" width="864" height="1152"></span>
+            <span class="tag tag--ice">Water</span>
+            <span class="hx-media"><img src="/images/v3-plunge.jpg" alt="Swimmer underwater, bubbles across the face" loading="lazy" decoding="async" width="864" height="1152"></span>
+            <span class="mono swap-deg">Offline</span>
+            <p class="swap-p">Swim time can be useful</p>
+            <div class="swap-a"><p>Bluetooth does not travel through water.</p></div>
           </a>
         </li>
       </ol>

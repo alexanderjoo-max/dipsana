@@ -12,7 +12,7 @@
     { id: 'ice', temp: 0, name: 'Ice' }
   ];
   const ROOM_TEMP = { heat: 92, steam: 42, plunge: 6, ice: 2, contrast: 50 };
-  const HOLD = 6200;
+  const HOLD = 2000;
 
   const hero = document.querySelector('.hero');
   const degEl = document.getElementById('climDeg');
@@ -315,7 +315,7 @@
       lastMix = now;
     }
 
-    shownTemp = lerp(shownTemp, targetTemp, 1 - Math.pow(0.012, dt / 1000));
+    shownTemp = lerp(shownTemp, targetTemp, Math.min(1, dt / 220));
     if (heroVisible && degEl) degEl.textContent = Math.round(shownTemp) + '°';
     syncRail();
     if (!reduced) pulseTicks(now);
