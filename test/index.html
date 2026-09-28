@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dipsana — From 110° to 0°</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Experimental Dipsana site. Bone conduction audio built for heat and ice.">
+<meta name="theme-color" content="#050507">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/test/test.css">
+<script src="/test/test.js" defer></script>
+</head>
+<body class="is-loading">
+
+<!-- PRELOADER -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader-deg"><span id="loadNum">110</span><i>°C</i></div>
+  <div class="loader-bar"><span id="loadBar"></span></div>
+  <p class="mono loader-cap">Calibrating heat → ice</p>
+</div>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div class="cursor" id="cursor" aria-hidden="true"><span></span></div>
+<div class="progress" aria-hidden="true"><span id="prog"></span></div>
+
+<header class="bar">
+  <a class="bar-logo" href="/test/" aria-label="Dipsana"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+  <nav class="bar-nav">
+    <a href="#rooms" data-mag>Rooms</a>
+    <a href="#split" data-mag>Contrast</a>
+    <a href="#anatomy" data-mag>Anatomy</a>
+    <a href="/" data-mag>Classic site</a>
+  </nav>
+  <a class="pill" href="#waitlist" data-mag><span>Join the waitlist</span></a>
+</header>
+
+<main>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="hero-inner">
+    <p class="mono kicker reveal-line"><span>100% waterproof bone conduction audio</span></p>
+    <h1 class="mega" aria-label="Built for recovery.">
+      <span class="w w-hot" data-split>Built for</span>
+      <span class="w w-cold" data-split>recovery.</span>
+    </h1>
+    <div class="hero-row">
+      <p class="hero-sub">Sauna. Steam. Ice bath. Swim.<br><em>One headset, 110 degrees of range.</em></p>
+      <a class="pill pill--big" href="#waitlist" data-mag><span>Get first in</span></a>
+    </div>
+  </div>
+  <div class="hero-product" id="heroProduct">
+    <div class="orbit orbit-1"></div>
+    <div class="orbit orbit-2"></div>
+    <svg class="ring-text" viewBox="0 0 300 300" aria-hidden="true"><defs><path id="circ" d="M150,150 m-120,0 a120,120 0 1,1 240,0 a120,120 0 1,1 -240,0"/></defs><text><textPath href="#circ">0–110°C · IP68 · 32 GB ONBOARD · 10 HRS · BONE CONDUCTION · </textPath></text></svg>
+    <img src="/images/product.webp" alt="The Dipsana headset" width="1200" height="760">
+  </div>
+  <div class="hero-temp mono" aria-hidden="true">
+    <span class="t-hot">110°</span><span class="t-line"><i id="heroDot"></i></span><span class="t-cold">0°</span>
+  </div>
+  <a href="#rooms" class="scroll-cue mono" aria-label="Scroll down"><span>Scroll to cool down</span><i></i></a>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="mq mq-a"><div>SAUNA<b>✺</b>STEAM<b>✺</b>COLD PLUNGE<b>❄</b>ICE BATH<b>❄</b>SWIM<b>≋</b>CONTRAST<b>◐</b>SAUNA<b>✺</b>STEAM<b>✺</b>COLD PLUNGE<b>❄</b>ICE BATH<b>❄</b>SWIM<b>≋</b>CONTRAST<b>◐</b></div></div>
+  <div class="mq mq-b"><div>110°C<b>·</b>100% HUMIDITY<b>·</b>3°C<b>·</b>0°C<b>·</b>2 M UNDER<b>·</b>NO PHONE<b>·</b>110°C<b>·</b>100% HUMIDITY<b>·</b>3°C<b>·</b>0°C<b>·</b>2 M UNDER<b>·</b>NO PHONE<b>·</b></div></div>
+</div>
+
+<!-- SCROLL THERMOMETER: THE ROOMS -->
+<section class="rooms" id="rooms" aria-label="Where it works">
+  <div class="rooms-pin">
+    <div class="rooms-bg">
+      <img data-room="0" src="/images/v3-sauna.jpg" alt="" class="on">
+      <img data-room="1" src="/images/v3-steam.jpg" alt="">
+      <img data-room="2" src="/images/v3-plunge.jpg" alt="">
+      <img data-room="3" src="/images/v3-ice.jpg" alt="">
+      <img data-room="4" src="/images/v3-contrast.jpg" alt="">
+    </div>
+    <div class="rooms-tint" id="roomsTint"></div>
+    <div class="rooms-frost" id="roomsFrost"></div>
+
+    <div class="thermo" aria-hidden="true">
+      <div class="thermo-tube"><div class="thermo-fill" id="thermoFill"></div></div>
+      <div class="thermo-bulb" id="thermoBulb"></div>
+      <ol class="thermo-ticks"><li>110</li><li>80</li><li>45</li><li>10</li><li>0</li></ol>
+    </div>
+
+    <div class="big-deg" id="bigDeg" aria-hidden="true">110<sup>°</sup></div>
+
+    <div class="room-cards">
+      <article class="rc on" data-i="0">
+        <p class="mono rc-meta hot">01 · Sauna · 80–100°C · 15–20 min</p>
+        <h2 class="rc-h">Sauna</h2>
+        <p class="rc-p">The podcast that makes twenty minutes feel like eight. Heat-stable pads, not standard silicone.</p>
+      </article>
+      <article class="rc" data-i="1">
+        <p class="mono rc-meta hot">02 · Steam room · 40–45°C · 100% humidity</p>
+        <h2 class="rc-h">Steam</h2>
+        <p class="rc-p">Where every other pair of headphones has already quit. Sealed housing, no port to corrode.</p>
+      </article>
+      <article class="rc" data-i="2">
+        <p class="mono rc-meta cold">03 · Cold plunge · 3–10°C · 2–3 min</p>
+        <h2 class="rc-h">Plunge</h2>
+        <p class="rc-p">One song. Get in, finish the song, get out.</p>
+      </article>
+      <article class="rc" data-i="3">
+        <p class="mono rc-meta cold">04 · Ice bath · 0–5°C · 3–5 min</p>
+        <h2 class="rc-h">Ice</h2>
+        <p class="rc-p">Offline mode, because your phone is in a locker and your hands don’t work anyway.</p>
+      </article>
+      <article class="rc" data-i="4">
+        <p class="mono rc-meta"><span class="hot">Hot</span> · <span class="cold">cold</span> · repeat</p>
+        <h2 class="rc-h">Contrast</h2>
+        <p class="rc-p">A playlist that runs the whole cycle, so you are not resetting a timer with wet hands.</p>
+      </article>
+    </div>
+
+    <ol class="room-dots" aria-hidden="true"><li class="on"></li><li></li><li></li><li></li><li></li></ol>
+  </div>
+</section>
+
+<!-- SPLIT SLIDER -->
+<section class="split" id="split" aria-labelledby="split-h">
+  <div class="split-head">
+    <p class="mono kicker"><span class="hot">Hot</span> / <span class="cold">Cold</span></p>
+    <h2 class="display" id="split-h" data-split>Drag the line.</h2>
+    <p class="lede">Same headset. Two extremes. Nothing in your ear canal either way.</p>
+  </div>
+  <div class="split-stage" id="splitStage">
+    <div class="split-side split-hot"><img src="/images/v3-sauna.jpg" alt="Dipsana in a sauna"><span class="split-lab mono">110°C · Sauna</span></div>
+    <div class="split-side split-cold" id="splitCold"><img src="/images/v3-ice.jpg" alt="Dipsana in an ice bath"><span class="split-lab mono">0°C · Ice</span></div>
+    <div class="split-handle" id="splitHandle"><span>◀ ▶</span></div>
+    <div class="split-readout mono" id="splitRead">55°C</div>
+  </div>
+</section>
+
+<!-- ANATOMY -->
+<section class="anat" id="anatomy" aria-labelledby="anat-h">
+  <div class="anat-head">
+    <p class="mono kicker">Anatomy</p>
+    <h2 class="display" id="anat-h" data-split>On the cheek. Not in the ear.</h2>
+  </div>
+  <div class="anat-stage">
+    <div class="tilt" id="tilt">
+      <div class="tilt-glow"></div>
+      <img src="/images/product.webp" alt="Dipsana headset" width="1200" height="760">
+      <button class="hot-spot" style="left:18%;top:52%" data-t="Bone conduction — sits just in front of the ear. Vibrations travel through the cheekbone.">1</button>
+      <button class="hot-spot" style="left:42%;top:30%" data-t="Heat-stable pads — a compound rated for 110°C, not standard silicone.">2</button>
+      <button class="hot-spot" style="left:66%;top:56%" data-t="Sealed housing — IP68 to 2 m. 32 GB onboard, Bluetooth 5.4.">3</button>
+      <button class="hot-spot" style="left:84%;top:40%" data-t="Physical buttons — sized for numb fingers and wet hands.">4</button>
+      <button class="hot-spot" style="left:55%;top:78%" data-t="Magnetic charge — no port. Ten minutes gives three hours.">5</button>
+    </div>
+    <p class="spot-read mono" id="spotRead">Hover a number.</p>
+  </div>
+  <ul class="stats">
+    <li><b data-count="110">0</b><i>°C max</i></li>
+    <li><b data-count="2">0</b><i>m under water</i></li>
+    <li><b data-count="32">0</b><i>GB onboard</i></li>
+    <li><b data-count="10">0</b><i>hrs per charge</i></li>
+  </ul>
+</section>
+
+<!-- HORIZONTAL HEADACHES -->
+<section class="hz" id="why" aria-labelledby="hz-h">
+  <div class="hz-pin">
+    <div class="hz-head">
+      <p class="mono kicker cold">Why audio</p>
+      <h2 class="display" id="hz-h">Four headaches.</h2>
+    </div>
+    <div class="hz-track" id="hzTrack">
+      <a class="hc" href="/learn/headphones-in-sauna/"><img src="/images/v3-steam.jpg" alt="" loading="lazy"><span class="mono hc-tag hot">Heat · 35–110°C</span><h3>Ruined everyday earbuds</h3><p>AirPods are rated to 35°C. A sauna is not.</p></a>
+      <a class="hc" href="/learn/sauna/"><img src="/images/v3-sauna.jpg" alt="" loading="lazy"><span class="mono hc-tag hot">Sauna · 15–20 min</span><h3>Boredom ends sessions</h3><p>You get out early because it is too boring.</p></a>
+      <a class="hc" href="/learn/ice/"><img src="/images/v3-ice.jpg" alt="" loading="lazy"><span class="mono hc-tag cold">Plunge · one song</span><h3>Ice needs a finish line</h3><p>Get in, finish the song, get out.</p></a>
+      <a class="hc" href="/learn/swim/"><img src="/images/v3-plunge.jpg" alt="" loading="lazy"><span class="mono hc-tag cold">Water · offline</span><h3>Swim time can be useful</h3><p>Bluetooth does not travel through water.</p></a>
+      <div class="hc hc-end"><p class="display">So we built<br><span class="hot">one</span> for <span class="cold">all</span> of it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="wait" id="waitlist" aria-labelledby="wl-h">
+  <div class="wait-orb wait-orb--hot"></div>
+  <div class="wait-orb wait-orb--cold"></div>
+  <p class="mono kicker">Founding list</p>
+  <h2 class="mega mega--sm" id="wl-h" data-split>First in.</h2>
+  <p class="lede">We’ll email you once, when it’s ready, and not before.</p>
+  <form id="wl" class="wl" novalidate>
+    <label class="sr" for="email">Email address</label>
+    <input type="email" id="email" placeholder="you@example.com" required autocomplete="email">
+    <button class="pill pill--big" type="submit" data-mag><span>Join</span></button>
+  </form>
+  <p class="wl-msg mono" id="wlMsg" role="status"></p>
+</section>
+
+<footer class="foot">
+  <img src="/images/logo-footer.svg" alt="Dipsana" width="300" height="177">
+  <p class="mono">© 2026 Dipsana · <a href="/">Classic site</a> · <a href="/privacy/">Privacy</a> · <a href="/terms/">Terms</a></p>
+  <p class="fine">Listen to your body, not just your playlist — follow the sauna and cold exposure guidance that applies to you.</p>
+</footer>
+</main>
+</body>
+</html>
