@@ -6,11 +6,11 @@
 <title>Dipsana — From 110° to 0°</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Experimental Dipsana site. Bone conduction audio built for heat and ice.">
-<meta name="theme-color" content="#fbf4ec">
+<meta name="theme-color" content="#050507">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..800,0..100,0..1;1,9..144,300..800,0..100,0..1&family=DM+Sans:opsz,wght@9..40,400..600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/test/test.css">
 <script type="importmap">
 { "imports": {
@@ -27,12 +27,12 @@
 <div class="loader" id="loader" aria-hidden="true">
   <div class="loader-deg"><span id="loadNum">110</span><i>°C</i></div>
   <div class="loader-bar"><span id="loadBar"></span></div>
-  <p class="mono loader-cap">Breathe in… and out</p>
+  <p class="mono loader-cap">Calibrating heat → ice</p>
 </div>
 
 <canvas id="three" aria-hidden="true"></canvas>
 <canvas id="fx" aria-hidden="true"></canvas>
-<div class="blobs" aria-hidden="true"><i class="b1"></i><i class="b2"></i><i class="b3"></i></div>
+<div class="letterbox" aria-hidden="true"><i></i><i></i></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true"><span></span></div>
 <div class="progress" aria-hidden="true"><span id="prog"></span></div>
@@ -58,7 +58,6 @@
     <h1 class="mega" aria-label="Built for recovery.">
       <span class="w w-hot" data-split>Built for</span>
       <span class="w w-cold" data-split>recovery.</span>
-      <svg class="squiggle" viewBox="0 0 600 40" preserveAspectRatio="none" aria-hidden="true"><path d="M5 25 C 60 5, 110 40, 170 20 S 280 5, 340 22 S 460 38, 520 18 S 580 10, 595 20"/></svg>
     </h1>
     <div class="hero-row">
       <p class="hero-sub">Sauna. Steam. Ice bath. Swim.<br><em>One headset, 110 degrees of range.</em></p>
@@ -66,50 +65,51 @@
     </div>
   </div>
   <div class="hero-product" id="heroProduct">
-    <div class="aura"></div>
     <div class="orbit orbit-1"></div>
     <div class="orbit orbit-2"></div>
-    <svg class="ring-text" viewBox="0 0 300 300" aria-hidden="true"><defs><path id="circ" d="M150,150 m-120,0 a120,120 0 1,1 240,0 a120,120 0 1,1 -240,0"/></defs><text><textPath href="#circ">made for your rituals ✿ sauna ☼ steam ≈ plunge ❄ ice ✿ </textPath></text></svg>
+    <svg class="ring-text" viewBox="0 0 300 300" aria-hidden="true"><defs><path id="circ" d="M150,150 m-120,0 a120,120 0 1,1 240,0 a120,120 0 1,1 -240,0"/></defs><text><textPath href="#circ">0–110°C · IP68 · 32 GB ONBOARD · 10 HRS · BONE CONDUCTION · </textPath></text></svg>
     <img class="fallback" src="/images/product.webp" alt="The Dipsana headset" width="1200" height="760">
     <div class="flare"></div>
   </div>
   <div class="hero-temp mono" aria-hidden="true">
     <span class="t-hot">110°</span><span class="t-line"><i id="heroDot"></i></span><span class="t-cold">0°</span>
   </div>
-  <a href="#rooms" class="scroll-cue mono" aria-label="Scroll down"><span>Scroll, slowly</span><i></i></a>
+  <a href="#rooms" class="scroll-cue mono" aria-label="Scroll down"><span>Scroll to cool down</span><i></i></a>
 </section>
 
 <!-- MARQUEE -->
 <div class="marquee" aria-hidden="true">
-  <div class="mq mq-a"><div>sauna<b>☼</b>steam<b>☁</b>cold plunge<b>≈</b>ice bath<b>❄</b>swim<b>✿</b>contrast<b>◐</b>sauna<b>☼</b>steam<b>☁</b>cold plunge<b>≈</b>ice bath<b>❄</b>swim<b>✿</b>contrast<b>◐</b></div></div>
-  <div class="mq mq-b"><div>slow down<b>·</b>sweat it out<b>·</b>breathe<b>·</b>one song, then out<b>·</b>leave your phone<b>·</b>be here<b>·</b>slow down<b>·</b>sweat it out<b>·</b>breathe<b>·</b>one song, then out<b>·</b>leave your phone<b>·</b>be here<b>·</b></div></div>
+  <div class="mq mq-a"><div>SAUNA<b>✺</b>STEAM<b>✺</b>COLD PLUNGE<b>❄</b>ICE BATH<b>❄</b>SWIM<b>≋</b>CONTRAST<b>◐</b>SAUNA<b>✺</b>STEAM<b>✺</b>COLD PLUNGE<b>❄</b>ICE BATH<b>❄</b>SWIM<b>≋</b>CONTRAST<b>◐</b></div></div>
+  <div class="mq mq-b"><div>110°C<b>·</b>100% HUMIDITY<b>·</b>3°C<b>·</b>0°C<b>·</b>2 M UNDER<b>·</b>NO PHONE<b>·</b>110°C<b>·</b>100% HUMIDITY<b>·</b>3°C<b>·</b>0°C<b>·</b>2 M UNDER<b>·</b>NO PHONE<b>·</b></div></div>
 </div>
 
 
 <!-- FILM: scroll-driven 3D product sequence -->
 <section class="film" id="film" aria-label="The product">
   <div class="film-pin">
-    <div class="film-aura" id="filmAura" aria-hidden="true"></div>
-    <div class="breath" aria-hidden="true"><span class="breath-dot"></span><span class="mono breath-txt" id="breathTxt">breathe in</span></div>
-    <span id="tc" hidden></span><span id="lens" hidden></span>
+    <div class="film-hud mono" aria-hidden="true">
+      <span class="rec"><i></i>REC</span>
+      <span id="tc">00:00:00:00</span>
+      <span id="lens">35mm · f/1.4</span>
+    </div>
     <div class="chapters">
       <article class="chap" data-c="0">
-        <p class="mono chap-n">01 · warm</p>
+        <p class="mono chap-n">Chapter 01 — Heat</p>
         <h2 class="chap-h">Rated to <span class="hot">110°C</span>.</h2>
         <p class="chap-p">A heat-stable compound, not standard silicone. The sauna is the spec, not the exception.</p>
       </article>
       <article class="chap" data-c="1">
-        <p class="mono chap-n">02 · water</p>
+        <p class="mono chap-n">Chapter 02 — Water</p>
         <h2 class="chap-h">Sealed to <span class="cold">two metres</span>.</h2>
         <p class="chap-p">IP68. No port to corrode — it charges by magnet. 32 GB onboard, because Bluetooth doesn’t swim.</p>
       </article>
       <article class="chap" data-c="2">
-        <p class="mono chap-n">03 · sound</p>
+        <p class="mono chap-n">Chapter 03 — Sound</p>
         <h2 class="chap-h">On the cheek.<br>Not in the ear.</h2>
         <p class="chap-p">Bone conduction through the cheekbone. Your ear canal stays open, dry and aware.</p>
       </article>
       <article class="chap" data-c="3">
-        <p class="mono chap-n">04 · colour</p>
+        <p class="mono chap-n">Chapter 04 — Finish</p>
         <h2 class="chap-h" id="cwName">Obsidian</h2>
         <p class="chap-p">Four colourways. Physical buttons sized for numb fingers. Ten hours a charge.</p>
       </article>
@@ -212,18 +212,20 @@
   </ul>
 </section>
 
-<!-- HEADACHES -->
-<section class="aches" id="why" aria-labelledby="hz-h">
-  <div class="aches-head">
-    <p class="mono kicker">why audio</p>
-    <h2 class="display" id="hz-h" data-split>Four little headaches.</h2>
-    <p class="lede">The rooms are the easy part. The minutes are not.</p>
-  </div>
-  <div class="aches-grid">
-    <a class="hc" href="/learn/headphones-in-sauna/" style="--r:-2.5deg;--c:var(--peach)"><span class="hc-img"><img src="/images/v3-steam.jpg" alt="" loading="lazy"></span><span class="mono hc-tag">heat · 35–110°C</span><h3>Ruined everyday earbuds</h3><p>AirPods are rated to 35°C. A sauna is not.</p><i class="hc-sticker">☼</i></a>
-    <a class="hc" href="/learn/sauna/" style="--r:1.8deg;--c:var(--blush)"><span class="hc-img"><img src="/images/v3-sauna.jpg" alt="" loading="lazy"></span><span class="mono hc-tag">sauna · 15–20 min</span><h3>Boredom ends sessions</h3><p>You get out early because it is too boring.</p><i class="hc-sticker">✿</i></a>
-    <a class="hc" href="/learn/ice/" style="--r:-1.5deg;--c:var(--aqua)"><span class="hc-img"><img src="/images/v3-ice.jpg" alt="" loading="lazy"></span><span class="mono hc-tag">plunge · one song</span><h3>Ice needs a finish line</h3><p>Get in, finish the song, get out.</p><i class="hc-sticker">❄</i></a>
-    <a class="hc" href="/learn/swim/" style="--r:2.2deg;--c:var(--lilac)"><span class="hc-img"><img src="/images/v3-plunge.jpg" alt="" loading="lazy"></span><span class="mono hc-tag">water · offline</span><h3>Swim time can be useful</h3><p>Bluetooth does not travel through water.</p><i class="hc-sticker">≈</i></a>
+<!-- HORIZONTAL HEADACHES -->
+<section class="hz" id="why" aria-labelledby="hz-h">
+  <div class="hz-pin">
+    <div class="hz-head">
+      <p class="mono kicker cold">Why audio</p>
+      <h2 class="display" id="hz-h">Four headaches.</h2>
+    </div>
+    <div class="hz-track" id="hzTrack">
+      <a class="hc" href="/learn/headphones-in-sauna/"><img src="/images/v3-steam.jpg" alt="" loading="lazy"><span class="mono hc-tag hot">Heat · 35–110°C</span><h3>Ruined everyday earbuds</h3><p>AirPods are rated to 35°C. A sauna is not.</p></a>
+      <a class="hc" href="/learn/sauna/"><img src="/images/v3-sauna.jpg" alt="" loading="lazy"><span class="mono hc-tag hot">Sauna · 15–20 min</span><h3>Boredom ends sessions</h3><p>You get out early because it is too boring.</p></a>
+      <a class="hc" href="/learn/ice/"><img src="/images/v3-ice.jpg" alt="" loading="lazy"><span class="mono hc-tag cold">Plunge · one song</span><h3>Ice needs a finish line</h3><p>Get in, finish the song, get out.</p></a>
+      <a class="hc" href="/learn/swim/"><img src="/images/v3-plunge.jpg" alt="" loading="lazy"><span class="mono hc-tag cold">Water · offline</span><h3>Swim time can be useful</h3><p>Bluetooth does not travel through water.</p></a>
+      <div class="hc hc-end"><p class="display">So we built<br><span class="hot">one</span> for <span class="cold">all</span> of it.</p></div>
+    </div>
   </div>
 </section>
 
