@@ -7,6 +7,8 @@ const film = document.getElementById('film');
 const hero = document.getElementById('hero');
 const chaps = [...document.querySelectorAll('.chap')];
 const tc = document.getElementById('tc'), lens = document.getElementById('lens');
+const aura = document.getElementById('filmAura'), breathTxt = document.getElementById('breathTxt');
+const AURAS = [['#ffb996','#ffc9d6'],['#9fdbe6','#cdb8ff'],['#cdb8ff','#ffc9d6'],['#ffe7a3','#9fdbe6']];
 const filmBar = document.getElementById('filmBar'), cwName = document.getElementById('cwName');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = () => innerWidth < 760;
@@ -29,7 +31,7 @@ try {
 renderer.setClearAlpha(0);
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.2;
+renderer.toneMappingExposure = 1.35;
 renderer.setPixelRatio(Math.min(devicePixelRatio, mobile() ? 1.5 : 2));
 
 const scene = new THREE.Scene();
@@ -38,11 +40,11 @@ camera.position.set(0, 0, 4);
 scene.environment = new THREE.PMREMGenerator(renderer).fromScene(new RoomEnvironment(), 0.04).texture;
 
 // Studio: a hot key, a cold rim, a white top spot
-const hotKey = new THREE.SpotLight(0xff7a2a, 60, 20, .5, .6, 1.4); hotKey.position.set(-3.2, 1.2, 2.6);
-const coldRim = new THREE.SpotLight(0x6fcaff, 60, 20, .5, .6, 1.4); coldRim.position.set(3.2, 1.6, -2.2);
+const hotKey = new THREE.SpotLight(0xffa585, 60, 20, .5, .6, 1.4); hotKey.position.set(-3.2, 1.2, 2.6);
+const coldRim = new THREE.SpotLight(0x9fd8ff, 60, 20, .5, .6, 1.4); coldRim.position.set(3.2, 1.6, -2.2);
 const top = new THREE.DirectionalLight(0xfff4ea, 1.1); top.position.set(0, 4, 2);
 const under = new THREE.PointLight(0xffffff, 0, 6); under.position.set(0, -1.5, 1.5);
-scene.add(hotKey, coldRim, top, under, new THREE.AmbientLight(0xffffff, .12));
+scene.add(hotKey, coldRim, top, under, new THREE.AmbientLight(0xfff0f4, .5));
 
 const mat = new THREE.MeshPhysicalMaterial({
   color: new THREE.Color(COLORWAYS[0].hex), roughness: .5, metalness: .05,
@@ -141,7 +143,9 @@ function frame(now) {
     tgt.ry += mouse.sx * .5 + Math.sin(now / 2000) * .08; tgt.rx += mouse.sy * .3;
     if (mobile()) { tgt.x = 0; tgt.y = .2; }
     const chap = Math.min(3, Math.floor(fp * 4));
-    if (chap !== lastChap) { lastChap = chap; chaps.forEach((c, i) => c.classList.toggle('on', i === chap)); }
+    if (chap !== lastChap) { lastChap = chap; chaps.forEach((c, i) => c.classList.toggle('on', i === chap));
+      aura.style.background = `radial-gradient(circle at 50% 50%, ${AURAS[chap][0]}, ${AURAS[chap][1]} 45%, transparent 70%)`; }
+    breathTxt.textContent = Math.sin(now / 8000 * Math.PI * 2 - Math.PI / 2) > 0 ? 'breathe out' : 'breathe in';
     if (chap === 3) setColorway(Math.min(3, Math.floor(((fp - .75) / .25) * 4)));
     else setColorway(0);
     // HUD
