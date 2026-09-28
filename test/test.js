@@ -59,7 +59,7 @@
       document.body.classList.remove('is-loading');
       document.body.classList.add('ready');
       paintGradientChars();
-      burst(innerWidth * .3, innerHeight * .6, 'hot', 70);
+      burst(innerWidth * .5, innerHeight * .55, 'hot', 60);
       
       setTimeout(() => loader.remove(), 1400);
     }, 250);
@@ -104,27 +104,17 @@ void main(){
  vec2 q=vec2(fbm(p*1.6+T),fbm(p*1.6-T+4.3));
  vec2 w=vec2(fbm(p*2.+q*2.5+vec2(1.7,9.2)+T*1.3),fbm(p*2.+q*2.5+vec2(8.3,2.8)-T));
  float f=fbm(p*1.8+w*2.2);
- // boundary follows mouse, wobbling
- float edge=m.x+ (fbm(vec2(uv.y*3.,T*3.))-.5)*.35 + (w.x-.5)*.25 - s*.9;
- float side=smoothstep(edge-.06,edge+.06,uv.x); // 0 hot,1 cold
- // hot palette
- vec3 hot=mix(vec3(.05,.01,.0),vec3(.75,.12,.02),smoothstep(.2,.6,f));
- hot=mix(hot,vec3(1.,.55,.12),smoothstep(.55,.8,f));
- hot=mix(hot,vec3(1.,.93,.7),smoothstep(.78,.95,f)*.9);
- // cold palette: cracked ice
- float cr=abs(sin((w.x+w.y)*18.));cr=pow(1.-cr,18.);
- vec3 cold=mix(vec3(.0,.02,.05),vec3(.04,.25,.42),smoothstep(.2,.65,f));
- cold=mix(cold,vec3(.55,.85,1.),smoothstep(.6,.85,f));
- cold+=cr*vec3(.7,.9,1.)*.35;
- vec3 col=mix(hot,cold,side);
- // steam seam
- float seam=exp(-pow((uv.x-edge)*9.,2.));
- col+=seam*vec3(1.)*.35*fbm(p*6.+vec2(0.,-t*.4));
- // mouse glow
- float md=length(uv-m);col+=.12*exp(-md*6.)*mix(vec3(1.,.5,.2),vec3(.5,.8,1.),side);
- col*=smoothstep(1.35,.2,length(p))*.9+.1;
- col=pow(col,vec3(.95));
- gl_FragColor=vec4(col*.85,1.);
+ float edge=m.x+(fbm(vec2(uv.y*2.,T*2.))-.5)*.4+(w.x-.5)*.3-s*.9;
+ float side=smoothstep(edge-.25,edge+.25,uv.x);
+ vec3 cream=vec3(.984,.957,.925);
+ vec3 warm=mix(vec3(1.,.73,.59),vec3(1.,.79,.84),smoothstep(.3,.7,w.y));
+ warm=mix(warm,vec3(1.,.9,.64),smoothstep(.6,.85,f)*.6);
+ vec3 cool=mix(vec3(.62,.86,.9),vec3(.8,.72,1.),smoothstep(.3,.7,w.x));
+ vec3 col=mix(warm,cool,side);
+ col=mix(cream,col,smoothstep(.25,.75,f)*.85+.1);
+ float md=length(uv-m);col=mix(col,vec3(1.),.35*exp(-md*5.));
+ col=mix(col,cream,smoothstep(.55,1.,uv.y)*.25);
+ gl_FragColor=vec4(col,1.);
 }`;
     const sh = (type, src) => { const o = gl.createShader(type); gl.shaderSource(o, src); gl.compileShader(o); return o; };
     const pr = gl.createProgram();
@@ -153,12 +143,13 @@ void main(){
   const sizeFx = () => { W = innerWidth; H = innerHeight; fx.width = W * DPR; fx.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0); };
   sizeFx(); addEventListener('resize', sizeFx);
   const P = [];
+  const PASTEL = ['255,185,150', '255,201,214', '205,184,255', '255,231,163', '240,122,85'];
   const MAX = innerWidth < 700 ? 110 : 220;
   function spawn(kind, x, y, vx, vy) {
     const p = { kind, x, y, vx: vx || 0, vy: vy || 0, life: 0, max: 200 + Math.random() * 300, r: 1, a: 1, seed: Math.random() * 100 };
     if (kind === 'ember') { p.r = 1 + Math.random() * 2.4; p.vy = vy ?? -(0.6 + Math.random() * 1.6); p.vx = vx ?? (Math.random() - .5) * .6; }
     if (kind === 'steam') { p.r = 40 + Math.random() * 90; p.vy = -(0.3 + Math.random() * .6); p.vx = (Math.random() - .5) * .4; p.max = 400; }
-    if (kind === 'bubble') { p.r = 2 + Math.random() * 7; p.vy = -(0.8 + Math.random() * 1.8); }
+    if (kind === 'bubble') { p.r = 4 + Math.random() * 16; p.max = 600; p.vy = -(0.4 + Math.random() * 1); }
     if (kind === 'snow') { p.r = 1 + Math.random() * 3; p.vy = vy ?? (0.4 + Math.random() * 1.1); p.vx = vx ?? (Math.random() - .5) * .5; }
     if (kind === 'shard') { p.r = 3 + Math.random() * 6; p.rot = Math.random() * 6; p.vr = (Math.random() - .5) * .2; p.max = 120; }
     P.push(p); return p;
@@ -166,8 +157,7 @@ void main(){
   function burst(x, y, type, n) {
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, sp = 2 + Math.random() * 7;
-      if (type !== 'hot') return;
-      const p = spawn('ember', x, y, Math.cos(a) * sp, Math.sin(a) * sp);
+      const p = spawn(i % 3 ? 'ember' : 'bubble', x, y, Math.cos(a) * sp, Math.sin(a) * sp);
       p.max = 90 + Math.random() * 80; p.burst = true;
     }
   }
@@ -176,10 +166,11 @@ void main(){
     if (reduce || P.length > MAX) return;
     const r = Math.random();
     if (fxMode === 'hero') {
-      if (r < .35) spawn('ember', Math.random() * W * mouse.sx, H + 10);
+      if (r < .12) spawn('bubble', Math.random() * W, H + 20);
       return;
     }
     if (fxMode === 'off' || fxMode === 'film') return;
+    if (r > .5) return;
     // temperature-driven
     if (heat > .72) spawn('ember', Math.random() * W, H + 10);
     else if (heat > .4) { if (r < .15) spawn('steam', Math.random() * W, H + 80); else if (r < .5) spawn('ember', Math.random() * W, H + 10); }
@@ -191,22 +182,23 @@ void main(){
       const p = P[i]; p.life += fxMode === 'film' ? 6 : 1;
       // mouse repel
       const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
-      if (d2 < 14000 && p.kind !== 'steam') { const f = (14000 - d2) / 14000 * .9; p.vx += dx / Math.sqrt(d2 + 1) * f; p.vy += dy / Math.sqrt(d2 + 1) * f; }
-      if (p.burst) { p.vx *= .95; p.vy *= .95; if (p.kind === 'ember') p.vy -= .03; else p.vy += .08; }
+      if (fine && d2 < 14000 && p.kind !== 'steam') { const f = (14000 - d2) / 14000 * .9; p.vx += dx / Math.sqrt(d2 + 1) * f; p.vy += dy / Math.sqrt(d2 + 1) * f; }
+      if (p.burst) { p.vx *= .95; p.vy *= .95; p.vy -= .03; }
       else {
         p.vx *= .98;
         if (p.kind === 'ember') { p.vx += Math.sin(p.life * .05 + p.seed) * .03; p.vy = Math.max(p.vy - .002, -3); }
         if (p.kind === 'snow') { p.vx += Math.sin(p.life * .03 + p.seed) * .02; p.vy = Math.min(p.vy + .003, 1.6); }
-        if (p.kind === 'bubble') p.vx = Math.sin(p.life * .08 + p.seed) * .6;
+        if (p.kind === 'bubble' && !p.burst) p.vx = Math.sin(p.life * .03 + p.seed) * .5;
       }
       p.x += p.vx; p.y += p.vy;
       const fade = Math.min(1, p.life / 20) * (1 - p.life / p.max);
       if (fade <= 0 || p.y < -150 || p.y > H + 150) { P.splice(i, 1); continue; }
       if (p.kind === 'ember') {
-        ctx.globalCompositeOperation = 'lighter';
+        ctx.globalCompositeOperation = 'source-over';
+        const hue = PASTEL[p.seed * 10 % PASTEL.length | 0];
         const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 5);
-        g.addColorStop(0, `rgba(255,220,150,${fade})`); g.addColorStop(.3, `rgba(255,110,30,${fade * .7})`); g.addColorStop(1, 'rgba(255,60,0,0)');
-        ctx.fillStyle = g; ctx.fillRect(p.x - p.r * 5, p.y - p.r * 5, p.r * 10, p.r * 10);
+        g.addColorStop(0, `rgba(${hue},${fade * .75})`); g.addColorStop(1, `rgba(${hue},0)`);
+        ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 5, 0, 7); ctx.fill();
       } else if (p.kind === 'steam') {
         ctx.globalCompositeOperation = 'screen';
         const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r);
@@ -214,9 +206,11 @@ void main(){
         ctx.fillStyle = g; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill(); p.r += .15;
       } else if (p.kind === 'bubble') {
         ctx.globalCompositeOperation = 'source-over';
-        ctx.strokeStyle = `rgba(190,235,255,${fade * .7})`; ctx.lineWidth = 1;
-        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.stroke();
-        ctx.fillStyle = `rgba(255,255,255,${fade * .6})`; ctx.beginPath(); ctx.arc(p.x - p.r * .35, p.y - p.r * .35, p.r * .25, 0, 7); ctx.fill();
+        const ig = ctx.createLinearGradient(p.x - p.r, p.y - p.r, p.x + p.r, p.y + p.r);
+        ig.addColorStop(0, `rgba(255,185,150,${fade * .8})`); ig.addColorStop(.5, `rgba(205,184,255,${fade * .8})`); ig.addColorStop(1, `rgba(159,219,230,${fade * .8})`);
+        ctx.fillStyle = `rgba(255,255,255,${fade * .18})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill();
+        ctx.strokeStyle = ig; ctx.lineWidth = 1.4; ctx.stroke();
+        ctx.fillStyle = `rgba(255,255,255,${fade * .9})`; ctx.beginPath(); ctx.ellipse(p.x - p.r * .38, p.y - p.r * .4, p.r * .22, p.r * .12, -.7, 0, 7); ctx.fill();
       } else if (p.kind === 'snow') {
         ctx.globalCompositeOperation = 'lighter';
         ctx.fillStyle = `rgba(220,245,255,${fade * .85})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill();
@@ -235,11 +229,10 @@ void main(){
   const temps = [100, 44, 6, 1, 55]; // per room
   const heats = [1, .6, .25, 0, .5];
   let room = -1;
-  const hot = [255, 106, 31], cold = [127, 211, 255];
+  const hot = [240, 122, 85], cold = [61, 159, 184];
   const mix = t => hot.map((h, i) => Math.round(lerp(cold[i], h, t))).join(',');
 
   const film = $('#film');
-  const hzTrack = $('#hzTrack'), hz = $('#why');
   const prog = $('#prog'), bar = $('.bar'), heroDot = $('#heroDot'), heroProd = $('#heroProduct');
   let scrollHeroP = 0;
 
@@ -281,15 +274,9 @@ void main(){
       fxMode = 'rooms';
     } else if (y < vh * .9) { fxMode = 'hero'; heat = 1 - mouse.sx; }
     else if (inFilm) fxMode = 'film';
-    else fxMode = rr.bottom < vh * .5 ? 'rooms' : 'hero';
+    else fxMode = 'hero';
     document.documentElement.style.setProperty('--temp', heat.toFixed(3));
 
-    // horizontal track
-    const hr = hz.getBoundingClientRect();
-    const hp = clamp(-hr.top / (hr.height - vh));
-    const maxX = hzTrack.scrollWidth - innerWidth;
-    hzTrack.style.transform = `translate3d(${-hp * maxX}px,0,0)`;
-    $$('.hc', hzTrack).forEach((c2, k) => { c2.style.transform = `rotate(${(hp * 4 - k * .8) * 1.2}deg) translateY(${Math.sin(hp * 6 + k) * 16}px)`; });
   }
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', onScroll);
@@ -359,7 +346,7 @@ void main(){
     msg.textContent = 'You’re on the list. Go and sit down somewhere hot.';
     email.value = '';
     const r = form.getBoundingClientRect();
-    burst(r.left + r.width * .3, r.top, 'hot', 90); burst(r.left + r.width * .7, r.top, 'cold', 90);
+    burst(r.left + r.width * .3, r.top, 'hot', 70); burst(r.left + r.width * .7, r.top, 'hot', 70);
   });
 
   /* ---------- main loop ---------- */
