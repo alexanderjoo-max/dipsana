@@ -60,7 +60,7 @@
       document.body.classList.add('ready');
       paintGradientChars();
       burst(innerWidth * .3, innerHeight * .6, 'hot', 70);
-      burst(innerWidth * .7, innerHeight * .6, 'cold', 70);
+      
       setTimeout(() => loader.remove(), 1400);
     }, 250);
   })(t0);
@@ -166,7 +166,8 @@ void main(){
   function burst(x, y, type, n) {
     for (let i = 0; i < n; i++) {
       const a = Math.random() * Math.PI * 2, sp = 2 + Math.random() * 7;
-      const p = spawn(type === 'hot' ? 'ember' : 'shard', x, y, Math.cos(a) * sp, Math.sin(a) * sp);
+      if (type !== 'hot') return;
+      const p = spawn('ember', x, y, Math.cos(a) * sp, Math.sin(a) * sp);
       p.max = 90 + Math.random() * 80; p.burst = true;
     }
   }
@@ -175,21 +176,19 @@ void main(){
     if (reduce || P.length > MAX) return;
     const r = Math.random();
     if (fxMode === 'hero') {
-      if (r < .5) spawn('ember', Math.random() * W * mouse.sx, H + 10);
-      else spawn('snow', W * mouse.sx + Math.random() * W * (1 - mouse.sx), -10);
+      if (r < .35) spawn('ember', Math.random() * W * mouse.sx, H + 10);
       return;
     }
-    if (fxMode === 'off') return;
+    if (fxMode === 'off' || fxMode === 'film') return;
     // temperature-driven
     if (heat > .72) spawn('ember', Math.random() * W, H + 10);
     else if (heat > .4) { if (r < .15) spawn('steam', Math.random() * W, H + 80); else if (r < .5) spawn('ember', Math.random() * W, H + 10); }
     else if (heat > .12) spawn('bubble', Math.random() * W, H + 10);
-    else spawn('snow', Math.random() * W, -10);
   }
   function drawParticles() {
     ctx.clearRect(0, 0, W, H);
     for (let i = P.length - 1; i >= 0; i--) {
-      const p = P[i]; p.life++;
+      const p = P[i]; p.life += fxMode === 'film' ? 6 : 1;
       // mouse repel
       const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
       if (d2 < 14000 && p.kind !== 'steam') { const f = (14000 - d2) / 14000 * .9; p.vx += dx / Math.sqrt(d2 + 1) * f; p.vy += dy / Math.sqrt(d2 + 1) * f; }
@@ -230,15 +229,6 @@ void main(){
     }
     ctx.globalCompositeOperation = 'source-over';
   }
-  // cursor trail sparks
-  let lastTrail = 0;
-  addEventListener('pointermove', e => {
-    if (reduce || !fine) return;
-    const now = performance.now(); if (now - lastTrail < 30) return; lastTrail = now;
-    const p = spawn(heat > .5 ? 'ember' : 'snow', e.clientX, e.clientY, (Math.random() - .5) * 1.5, heat > .5 ? -1 : 1);
-    p.max = 60;
-  }, { passive: true });
-
   /* ---------- scroll-driven ---------- */
   const rooms = $('#rooms'), bgImgs = $$('.rooms-bg img'), cards = $$('.rc'), dots = $$('.room-dots li');
   const bigDeg = $('#bigDeg'), fill = $('#thermoFill'), bulb = $('#thermoBulb'), tint = $('#roomsTint'), frost = $('#roomsFrost');
@@ -248,6 +238,7 @@ void main(){
   const hot = [255, 106, 31], cold = [127, 211, 255];
   const mix = t => hot.map((h, i) => Math.round(lerp(cold[i], h, t))).join(',');
 
+  const film = $('#film');
   const hzTrack = $('#hzTrack'), hz = $('#why');
   const prog = $('#prog'), bar = $('.bar'), heroDot = $('#heroDot'), heroProd = $('#heroProduct');
   let scrollHeroP = 0;
@@ -258,6 +249,9 @@ void main(){
     bar.classList.toggle('scrolled', y > 40);
     scrollHeroP = clamp(y / vh);
 
+    const fr = film.getBoundingClientRect();
+    const inFilm = fr.top < vh * .5 && fr.bottom > vh * .5;
+    document.body.classList.toggle('cine', inFilm || (rooms.getBoundingClientRect().top < 0 && rooms.getBoundingClientRect().bottom > vh));
     // rooms
     const rr = rooms.getBoundingClientRect();
     const total = rr.height - vh;
@@ -286,6 +280,7 @@ void main(){
       }
       fxMode = 'rooms';
     } else if (y < vh * .9) { fxMode = 'hero'; heat = 1 - mouse.sx; }
+    else if (inFilm) fxMode = 'film';
     else fxMode = rr.bottom < vh * .5 ? 'rooms' : 'hero';
     document.documentElement.style.setProperty('--temp', heat.toFixed(3));
 
