@@ -12,7 +12,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/test/test.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
 <script src="/test/test.js" defer></script>
+<script type="module" src="/test/test3d.js"></script>
 </head>
 <body class="is-loading">
 
@@ -23,7 +30,9 @@
   <p class="mono loader-cap">Calibrating heat → ice</p>
 </div>
 
+<canvas id="three" aria-hidden="true"></canvas>
 <canvas id="fx" aria-hidden="true"></canvas>
+<div class="letterbox" aria-hidden="true"><i></i><i></i></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="cursor" id="cursor" aria-hidden="true"><span></span></div>
 <div class="progress" aria-hidden="true"><span id="prog"></span></div>
@@ -59,7 +68,8 @@
     <div class="orbit orbit-1"></div>
     <div class="orbit orbit-2"></div>
     <svg class="ring-text" viewBox="0 0 300 300" aria-hidden="true"><defs><path id="circ" d="M150,150 m-120,0 a120,120 0 1,1 240,0 a120,120 0 1,1 -240,0"/></defs><text><textPath href="#circ">0–110°C · IP68 · 32 GB ONBOARD · 10 HRS · BONE CONDUCTION · </textPath></text></svg>
-    <img src="/images/product.webp" alt="The Dipsana headset" width="1200" height="760">
+    <img class="fallback" src="/images/product.webp" alt="The Dipsana headset" width="1200" height="760">
+    <div class="flare"></div>
   </div>
   <div class="hero-temp mono" aria-hidden="true">
     <span class="t-hot">110°</span><span class="t-line"><i id="heroDot"></i></span><span class="t-cold">0°</span>
@@ -72,6 +82,41 @@
   <div class="mq mq-a"><div>SAUNA<b>✺</b>STEAM<b>✺</b>COLD PLUNGE<b>❄</b>ICE BATH<b>❄</b>SWIM<b>≋</b>CONTRAST<b>◐</b>SAUNA<b>✺</b>STEAM<b>✺</b>COLD PLUNGE<b>❄</b>ICE BATH<b>❄</b>SWIM<b>≋</b>CONTRAST<b>◐</b></div></div>
   <div class="mq mq-b"><div>110°C<b>·</b>100% HUMIDITY<b>·</b>3°C<b>·</b>0°C<b>·</b>2 M UNDER<b>·</b>NO PHONE<b>·</b>110°C<b>·</b>100% HUMIDITY<b>·</b>3°C<b>·</b>0°C<b>·</b>2 M UNDER<b>·</b>NO PHONE<b>·</b></div></div>
 </div>
+
+
+<!-- FILM: scroll-driven 3D product sequence -->
+<section class="film" id="film" aria-label="The product">
+  <div class="film-pin">
+    <div class="film-hud mono" aria-hidden="true">
+      <span class="rec"><i></i>REC</span>
+      <span id="tc">00:00:00:00</span>
+      <span id="lens">35mm · f/1.4</span>
+    </div>
+    <div class="chapters">
+      <article class="chap" data-c="0">
+        <p class="mono chap-n">Chapter 01 — Heat</p>
+        <h2 class="chap-h">Rated to <span class="hot">110°C</span>.</h2>
+        <p class="chap-p">A heat-stable compound, not standard silicone. The sauna is the spec, not the exception.</p>
+      </article>
+      <article class="chap" data-c="1">
+        <p class="mono chap-n">Chapter 02 — Water</p>
+        <h2 class="chap-h">Sealed to <span class="cold">two metres</span>.</h2>
+        <p class="chap-p">IP68. No port to corrode — it charges by magnet. 32 GB onboard, because Bluetooth doesn’t swim.</p>
+      </article>
+      <article class="chap" data-c="2">
+        <p class="mono chap-n">Chapter 03 — Sound</p>
+        <h2 class="chap-h">On the cheek.<br>Not in the ear.</h2>
+        <p class="chap-p">Bone conduction through the cheekbone. Your ear canal stays open, dry and aware.</p>
+      </article>
+      <article class="chap" data-c="3">
+        <p class="mono chap-n">Chapter 04 — Finish</p>
+        <h2 class="chap-h" id="cwName">Obsidian</h2>
+        <p class="chap-p">Four colourways. Physical buttons sized for numb fingers. Ten hours a charge.</p>
+      </article>
+    </div>
+    <div class="film-bar" aria-hidden="true"><span id="filmBar"></span></div>
+  </div>
+</section>
 
 <!-- SCROLL THERMOMETER: THE ROOMS -->
 <section class="rooms" id="rooms" aria-label="Where it works">
