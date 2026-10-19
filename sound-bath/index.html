@@ -21,7 +21,7 @@
 <meta property="og:url" content="https://dipsana.com/sound-bath/">
 <meta property="og:title" content="Dipsana — The portable sound bath">
 <meta property="og:description" content="A sound bath you wear. Through the cheekbones, ears open, anywhere.">
-<meta property="og:image" content="https://dipsana.com/images/product.png">
+<meta property="og:image" content="https://dipsana.com/images/v3-steam.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -45,6 +45,14 @@
 
 <canvas class="silk" id="silk" aria-hidden="true"></canvas>
 <canvas class="plate" id="plate" aria-hidden="true"></canvas>
+<!-- the headset sits at the centre of the plate, where the vibration comes from -->
+<div class="plate-hs" id="plateHs" aria-hidden="true">
+  <picture class="plate-poster">
+    <source srcset="/images/product.webp" type="image/webp">
+    <img src="/images/product.png" alt="" width="1200" height="760">
+  </picture>
+  <canvas id="plateHsCanvas"></canvas>
+</div>
 
 <header class="topbar" id="topbar">
   <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
@@ -53,39 +61,46 @@
 
 <main id="main">
 
-  <section class="hero" aria-labelledby="hero-h">
+  <section class="hero" id="hero" aria-labelledby="hero-h">
     <svg class="halo" viewBox="0 0 600 600" aria-hidden="true">
       <defs><path id="rim" d="M300,300 m-282,0 a282,282 0 1,1 564,0 a282,282 0 1,1 -564,0"/></defs>
       <text><textPath href="#rim">the portable sound bath · open-ear · through the cheekbone · the portable sound bath · open-ear · through the cheekbone ·</textPath></text>
     </svg>
 
-    <p class="mono kicker" data-load="1">Dipsana · wellness</p>
-    <h1 class="hero-h" id="hero-h">
-      <span data-load="2">A sound bath</span>
-      <span data-load="3"><em>you can wear.</em></span>
-    </h1>
-    <p class="hero-sub" data-load="4">Played through your cheekbones, so it arrives as a soft vibration. Your ears stay open. Your shoulders drop.</p>
-    <div class="hero-actions" data-load="5">
-      <button class="play" id="play" type="button" aria-pressed="false">
-        <span class="play-ring" aria-hidden="true"></span>
-        <span class="play-label" id="playLabel">Listen for a moment</span>
-      </button>
-      <a class="btn btn--ghost" href="#waitlist">Hold my place</a>
+    <div class="hero-copy">
+      <p class="mono kicker" data-load="1">Dipsana · the portable sound bath</p>
+      <h1 class="hero-h" id="hero-h">
+        <span data-load="2">A sound bath</span>
+        <span data-load="3"><em>you can wear.</em></span>
+      </h1>
+      <p class="hero-sub" data-load="4">Two soft pads rest on your cheekbones and play sound as a gentle vibration. Your ears stay open. Your shoulders drop.</p>
+      <div class="hero-actions" data-load="5">
+        <button class="play" id="play" type="button" aria-pressed="false">
+          <span class="play-ring" aria-hidden="true"></span>
+          <span class="play-label" id="playLabel">Listen for a moment</span>
+        </button>
+        <a class="btn btn--ghost" href="#waitlist">Hold my place</a>
+      </div>
+      <p class="mono hint" data-load="5" id="hint">Tones are made live in your browser · sound on</p>
     </div>
-    <p class="mono hint" data-load="5" id="hint">Tones are made live in your browser · sound on</p>
   </section>
 
-  <section class="feel" data-reveal aria-labelledby="feel-h">
-    <svg class="wave" id="wave" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
-      <path/><path/><path/><path/><path/>
-    </svg>
-    <div class="feel-in">
-      <p class="mono rv">Why it feels different</p>
-      <h2 class="h2 rv" id="feel-h">Vibration, <em>not volume.</em></h2>
-      <div class="feel-grid">
-        <p class="rv">A singing bowl works because you feel it as much as hear it. Dipsana does the same thing on purpose: two small pads rest on your cheekbones and pass sound through the bone to your inner ear.</p>
-        <p class="rv">Nothing goes in your ear canal, so there is no pressure, no seal and no muffled world. You stay aware of the room around you, and the sound settles underneath it.</p>
-      </div>
+  <!-- How you wear it: the real product on a real cheekbone -->
+  <section class="wear" id="wear" data-reveal aria-labelledby="wear-h">
+    <figure class="wear-photo rv">
+      <img src="/images/v3-steam.jpg" alt="A woman in a steam room with her eyes closed, wearing Dipsana. The band hooks over her ear and the pad rests on her cheekbone, in front of the ear; her ear canal is open." width="1152" height="864" loading="lazy">
+      <svg viewBox="0 0 1152 864" aria-hidden="true">
+        <g class="vib"><circle cx="500" cy="322" r="30"/><circle cx="500" cy="322" r="30"/><circle cx="500" cy="322" r="30"/><circle cx="500" cy="322" r="30"/></g>
+      </svg>
+      <span class="pin" style="--x:43.4%;--y:37.3%"><i></i><b>Pad on the cheekbone</b></span>
+      <span class="pin" style="--x:29%;--y:49%"><i></i><b>Buttons, found by feel</b></span>
+      <span class="pin pin--up" style="--x:37.5%;--y:23%"><i></i><b>Hooks over the ear</b></span>
+    </figure>
+    <div class="wear-copy">
+      <p class="mono rv">How it feels</p>
+      <h2 class="h2 rv" id="wear-h">Vibration, <em>not volume.</em></h2>
+      <p class="rv">A singing bowl works because you feel it as much as hear it. Dipsana does the same thing on purpose: the pads pass sound through your cheekbones to the inner ear.</p>
+      <p class="rv">Nothing goes in your ear canal, so there’s no pressure, no seal and no muffled world. You stay aware of the room around you, and the sound settles underneath it.</p>
     </div>
   </section>
 
@@ -103,7 +118,7 @@
     </div>
   </section>
 
-  <!-- A day: the plate re-forms for each moment -->
+  <!-- A day: the plate re-forms around the headset for each moment -->
   <section class="day" id="day" aria-label="A day with Dipsana">
     <article class="moment" data-mode="0" data-sky="dawn">
       <p class="mono"><time>06:40</time> · At home</p>
@@ -141,18 +156,22 @@
     </div>
   </section>
 
-  <section class="object" id="object" data-reveal aria-labelledby="obj-h">
-    <div class="obj-media rv">
-      <picture class="obj-poster">
+  <!-- Four finishes -->
+  <section class="finish" id="finish" data-reveal aria-labelledby="fin-h">
+    <div class="fin-stage rv" id="finStage">
+      <span class="fin-glow" aria-hidden="true"></span>
+      <picture class="fin-poster">
         <source srcset="/images/product.webp" type="image/webp">
-        <img src="/images/product.png" alt="The Dipsana headset in a pale chalk finish: an open-ear band with a soft pad at each end" width="1200" height="760" loading="lazy">
+        <img src="/images/product.png" alt="" width="1200" height="760" loading="lazy">
       </picture>
       <canvas id="chalk" aria-hidden="true"></canvas>
-      <span class="obj-tag mono">Shown in Chalk</span>
+      <p class="mono fin-hint" aria-hidden="true">Drag to turn</p>
     </div>
-    <div class="obj-copy">
+    <div class="fin-copy">
       <p class="mono rv">The object</p>
-      <h2 class="h2 rv" id="obj-h">Light enough <em>to forget.</em></h2>
+      <h2 class="h2 rv" id="fin-h">Four <em>finishes.</em></h2>
+      <div class="fin-name rv" aria-live="polite"><b id="finName">Chalk</b><span id="finNote">Soft off-white. Our pick for the bath.</span></div>
+      <ul class="fin-swatches rv" id="finSwatches" role="radiogroup" aria-label="Choose a finish"></ul>
       <ul class="obj-list">
         <li class="rv"><b>Open-ear</b><span>Pads on the cheekbone. The ear canal stays empty.</span></li>
         <li class="rv"><b>32 GB onboard</b><span>Load your sound baths once. Leave the phone in another room.</span></li>

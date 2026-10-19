@@ -251,3 +251,110 @@ if (wpool) {
     wpool.addRipple(e.clientX - r.left, e.clientY - r.top, 0.5);
   });
 }
+
+/* ═════════ the headset, hovering over the lane ═════════ */
+const hover = document.getElementById('hover');
+const WET = { roughness: 0.3, clearcoat: 0.95, clearcoatRoughness: 0.12, envMapIntensity: 0.7 };
+import('/js/lp-headset.js').then(({ headset }) => headset(document.getElementById('heroHs'), {
+  color: '#A8D5E2', key: 0xeafcff, rim: 0x6fe0e3, fill: 0xbfe9f0, material: WET
+})).then(hs => {
+  let heroOn = true;
+  new IntersectionObserver(es => { heroOn = es[0].isIntersecting; }).observe(hero);
+  hs.state.fill = 1.0;
+  function frame(now) {
+    const s = now / 1000;
+    hs.state.az = -75 * Math.PI / 180 + (reduced ? 0 : s * 0.25);
+    hs.state.el = (52 + (reduced ? 0 : Math.sin(s * 0.7) * 6)) * Math.PI / 180;
+    hs.state.y = reduced ? 0 : Math.sin(s * 1.1) * 0.03;
+    hover.style.setProperty('--sh', (1 - hs.state.y * 3).toFixed(3));
+    hs.render();
+  }
+  if (reduced) { frame(0); return; }
+  (function loop(now) { requestAnimationFrame(loop); if (heroOn) frame(now); })(performance.now());
+  // its vibration rings the water below it
+  if (pool) setInterval(() => {
+    if (!heroOn) return;
+    const h = hero.getBoundingClientRect(), r = hover.getBoundingClientRect();
+    pool.addRipple(r.left - h.left + r.width * 0.52, r.top - h.top + r.height * 0.62, 0.55);
+  }, 1500);
+}).catch(() => { /* the pool still carries the hero */ });
+
+/* ═════════ the kit: turn it underwater, pick a colourway ═════════ */
+const kitStage = document.getElementById('kitStage');
+const kitCanvas = document.getElementById('kitHs');
+const kitWaterCv = document.getElementById('kitWater');
+const kpool = makePool(kitWaterCv, {
+  maxDpr: 1, dim: 0.85,
+  beforeDraw() {
+    kpool.set('uLaneX', -0.05);
+    kpool.set('uRopeD', 0.62);
+    kpool.set('uTravel', kpool.time * 0.025);
+  }
+});
+if (kpool) reduced ? kpool.still(4) : kpool.start();
+
+const KIT = [
+  { name: 'Glacier',  hex: '#A8D5E2', note: 'Pale ice blue. Easy to spot on the pool deck.' },
+  { name: 'Obsidian', hex: '#35383C', note: 'Matte charcoal. Goes with every cap.' },
+  { name: 'Ember',    hex: '#E2542C', note: 'Lane-rope orange. Hard to lose.' },
+  { name: 'Chalk',    hex: '#EDE8E0', note: 'Soft off-white, for the sauna after.' }
+];
+const kitName = document.getElementById('kitName');
+const kitNote = document.getElementById('kitNote');
+const kitList = document.getElementById('kitSw');
+let kitPaint = () => {}, kitActive = 0;
+function pickKit(i) {
+  kitActive = i;
+  [...kitList.children].forEach((li, k) => li.firstChild.setAttribute('aria-checked', String(k === i)));
+  kitName.parentElement.classList.add('out');
+  setTimeout(() => { kitName.textContent = KIT[i].name; kitNote.textContent = KIT[i].note; kitName.parentElement.classList.remove('out'); }, 200);
+  kitPaint(i);
+}
+KIT.forEach((c, i) => {
+  const li = document.createElement('li');
+  const b = document.createElement('button');
+  b.type = 'button'; b.setAttribute('role', 'radio');
+  b.setAttribute('aria-checked', String(i === 0)); b.setAttribute('aria-label', c.name);
+  b.style.setProperty('--sw', c.hex);
+  b.addEventListener('click', () => pickKit(i));
+  b.addEventListener('keydown', e => {
+    const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    const k = (kitActive + d + KIT.length) % KIT.length;
+    pickKit(k); kitList.children[k].firstChild.focus();
+  });
+  li.appendChild(b); kitList.appendChild(li);
+});
+
+import('/js/lp-headset.js').then(({ headset }) => headset(kitCanvas, {
+  color: KIT[0].hex, key: 0xeafcff, rim: 0x6fe0e3, fill: 0xbfe9f0, material: WET
+})).then(hs => {
+  kitStage.classList.add('is-live');
+  const { THREE, mat } = hs;
+  const from = new THREE.Color(), to = new THREE.Color(KIT[0].hex);
+  let ct = 1;
+  kitPaint = i => { from.copy(mat.color); to.set(KIT[i].hex); ct = 0; };
+  hs.state.fill = 0.88;
+  let spin = 0, vel = 0, drag = false, lastX = 0, visible = false, t0 = performance.now();
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(kitCanvas);
+  kitCanvas.addEventListener('pointerdown', e => { drag = true; lastX = e.clientX; kitCanvas.setPointerCapture(e.pointerId); });
+  kitCanvas.addEventListener('pointermove', e => { if (drag) { vel += (e.clientX - lastX) * 0.0006; lastX = e.clientX; } });
+  kitCanvas.addEventListener('pointerup', () => { drag = false; });
+  kitCanvas.addEventListener('pointercancel', () => { drag = false; });
+  function frame(now) {
+    const dt = Math.min(64, now - t0); t0 = now;
+    spin += (reduced ? 0 : dt * 0.00014) + vel;
+    vel *= 0.94;
+    if (ct < 1) {
+      ct = Math.min(1, ct + dt / 500);
+      mat.color.copy(from).lerp(to, ct * ct * (3 - 2 * ct));
+    }
+    hs.state.az = -75 * Math.PI / 180 + spin;
+    hs.state.el = (24 + (reduced ? 0 : Math.sin(now / 2200) * 6)) * Math.PI / 180;
+    hs.state.y = reduced ? 0 : Math.sin(now / 1700) * 0.02;
+    hs.render();
+  }
+  if (reduced) { frame(performance.now()); kitPaint = i => { mat.color.set(KIT[i].hex); frame(performance.now()); }; }
+  else (function loop(now) { requestAnimationFrame(loop); if (visible || ct < 1) frame(now); })(performance.now());
+}).catch(() => { /* the poster stays */ });

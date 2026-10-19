@@ -1,4 +1,4 @@
-/* Sound bath — dusk silk, a cymatic plate, Italiana for the voice. */
+/* Sound bath — dusk silk, a cymatic plate with the headset at its centre, Italiana for the voice. */
 :root{
   --bg:#1b1120;
   --ink:#f7ede9;
@@ -14,11 +14,23 @@
   --apricot:#f4c2ae;
   --focus:#c9b6ee;
   --serif:"Italiana","Didot","Bodoni 72",serif;
+  /* where the plate sits; JS keeps these in step with the canvas */
+  --px:68vw; --py:50svh; --pr:min(28vw,42svh);
 }
 
 body{font-variation-settings:'opsz' 14,'wdth' 100,'wght' 330; background:#1b1120}
 .silk{position:fixed; inset:0; width:100%; height:100%; z-index:0; display:block; pointer-events:none}
 .plate{position:fixed; inset:0; width:100%; height:100%; z-index:1; display:block; pointer-events:none}
+.plate-hs{
+  position:fixed; left:0; top:0; z-index:1; pointer-events:none;
+  width:var(--hs-w,400px); height:var(--hs-h,300px);
+  transform:translate3d(var(--hs-x,0),var(--hs-y,0),0);
+  opacity:var(--hs-o,0);
+}
+.plate-hs canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+.plate-poster{position:absolute; inset:0; display:grid; place-items:center; transition:opacity .8s ease}
+.plate-poster img{width:100%; filter:invert(1) sepia(.28) saturate(1.2) brightness(.98)}
+.plate-hs.is-live .plate-poster{opacity:0}
 main,.lp-foot{position:relative; z-index:2}
 .lp-foot{background:rgba(12,6,14,.55); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px)}
 .no-gl body{background:linear-gradient(180deg,#3a2136,#1b1120 60%,#120a16)}
@@ -27,8 +39,8 @@ em{font-style:normal; background:linear-gradient(100deg, var(--apricot), var(--r
 .lede{color:var(--ink-dim); font-size:clamp(16px,1.5vw,19px); max-width:42ch; margin:0}
 .h2{
   font-family:var(--serif); font-weight:400;
-  font-size:clamp(48px,7.4vw,112px); line-height:.96; letter-spacing:-.01em;
-  margin:14px 0 30px;
+  font-size:clamp(48px,7vw,108px); line-height:.96; letter-spacing:-.01em;
+  margin:14px 0 28px;
 }
 .mono{color:var(--mute)}
 
@@ -44,13 +56,13 @@ em{font-style:normal; background:linear-gradient(100deg, var(--apricot), var(--r
 .hero{
   position:relative; overflow:hidden;
   min-height:100svh;
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  text-align:center;
+  display:flex; align-items:center;
   padding:calc(var(--head) + 30px) var(--pad) 60px;
 }
+.hero-copy{position:relative; z-index:2; max-width:min(640px,46vw)}
 .halo{
-  position:absolute; left:50%; top:52%;
-  width:min(96vw,96svh); height:min(96vw,96svh);
+  position:absolute; left:var(--px); top:var(--py);
+  width:calc(var(--pr) * 2.24); height:calc(var(--pr) * 2.24);
   transform:translate(-50%,-50%);
   pointer-events:none; overflow:visible;
   opacity:0; animation:haloIn 3s ease 1.6s forwards, spin 90s linear infinite;
@@ -65,12 +77,12 @@ em{font-style:normal; background:linear-gradient(100deg, var(--apricot), var(--r
 .hero-h{
   margin:0;
   font-family:var(--serif); font-weight:400;
-  font-size:clamp(58px,10.6vw,176px); line-height:.9; letter-spacing:-.015em;
+  font-size:clamp(58px,8.4vw,150px); line-height:.9; letter-spacing:-.015em;
   text-shadow:0 2px 50px rgba(30,10,30,.6);
 }
 .hero-h span{display:block}
-.hero-sub{max-width:34ch; margin:28px auto 0; font-size:clamp(17px,1.6vw,20px); color:var(--ink-dim)}
-.hero-actions{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px; margin-top:38px}
+.hero-sub{max-width:36ch; margin:26px 0 0; font-size:clamp(17px,1.5vw,20px); color:var(--ink-dim)}
+.hero-actions{display:flex; flex-wrap:wrap; align-items:center; gap:14px; margin-top:34px}
 .hint{margin:22px 0 0; font-size:10px}
 
 .play{
@@ -105,26 +117,45 @@ em{font-style:normal; background:linear-gradient(100deg, var(--apricot), var(--r
 }
 .play[aria-pressed="true"] .play-ring::after{animation-duration:1.4s}
 
-/* ───────── feel ───────── */
-.feel{position:relative; padding:clamp(120px,20vh,220px) 0}
-.feel-in{position:relative; max-width:calc(var(--max) + var(--pad)*2); margin:0 auto; padding:0 var(--pad)}
-.feel .mono{margin:0}
-.feel-grid{display:grid; grid-template-columns:1fr 1fr; gap:clamp(24px,4vw,64px); max-width:920px}
-.feel-grid p{margin:0; font-size:clamp(16px,1.4vw,18.5px); color:var(--ink-dim)}
-.wave{position:absolute; left:0; right:0; top:50%; width:100%; height:clamp(160px,30vh,320px); transform:translateY(-50%); opacity:.55}
-.wave path{fill:none; stroke-width:1.1; vector-effect:non-scaling-stroke}
-.wave path:nth-child(1){stroke:var(--apricot)}
-.wave path:nth-child(2){stroke:var(--rose); opacity:.8}
-.wave path:nth-child(3){stroke:var(--lilac); opacity:.7}
-.wave path:nth-child(4){stroke:var(--rose); opacity:.4}
-.wave path:nth-child(5){stroke:var(--apricot); opacity:.3}
+/* ───────── how you wear it ───────── */
+.wear{
+  display:grid; grid-template-columns:minmax(0,1.25fr) minmax(0,1fr); gap:clamp(32px,5vw,80px); align-items:center;
+  max-width:calc(var(--max) + var(--pad)*2); margin:0 auto;
+  padding:clamp(100px,16vh,180px) var(--pad);
+}
+.wear-photo{position:relative; margin:0; aspect-ratio:1152/864; border-radius:18px; overflow:hidden; box-shadow:0 40px 80px rgba(10,3,12,.45)}
+.wear-photo img{width:100%; height:100%; object-fit:cover}
+.wear-photo::after{content:""; position:absolute; inset:0; background:linear-gradient(180deg, rgba(60,20,50,.12), rgba(27,17,32,.25)); pointer-events:none}
+.wear-photo svg{position:absolute; inset:0; width:100%; height:100%; z-index:1}
+.vib circle{fill:none; stroke:#fff1ea; stroke-width:2.5; transform-origin:500px 322px; animation:vib 3.2s cubic-bezier(.2,.6,.3,1) infinite; opacity:0}
+.vib circle:nth-child(2){animation-delay:.8s}
+.vib circle:nth-child(3){animation-delay:1.6s}
+.vib circle:nth-child(4){animation-delay:2.4s}
+@keyframes vib{0%{transform:scale(.6); opacity:.9} 100%{transform:scale(6); opacity:0}}
+.pin{
+  position:absolute; z-index:2; left:var(--x); top:var(--y);
+  display:flex; align-items:center; gap:10px;
+  transform:translate(-7px,-7px);
+}
+.pin i{
+  width:14px; height:14px; border-radius:50%; flex:0 0 auto;
+  background:#fff4ee; box-shadow:0 0 0 5px rgba(255,244,238,.25), 0 0 18px rgba(244,194,174,.9);
+}
+.pin b{
+  font-family:"IBM Plex Mono",monospace; font-weight:500; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--accent-ink); background:rgba(255,244,238,.88); padding:6px 10px; border-radius:999px; white-space:nowrap;
+  opacity:0; transform:translateX(-6px); transition:opacity .6s ease, transform .8s var(--ease);
+}
+.pin--l{flex-direction:row-reverse; transform:translate(calc(-100% + 7px),-7px)}
+.pin--l b{transform:translateX(6px)}
+.in .pin b{opacity:1; transform:none}
+.in .pin:nth-of-type(2) b{transition-delay:.25s}
+.in .pin:nth-of-type(3) b{transition-delay:.5s}
+.wear-copy .mono{margin:0}
+.wear-copy p:not(.mono){color:var(--ink-dim); font-size:clamp(16px,1.35vw,18px); margin:0 0 16px; max-width:42ch}
 
 /* ───────── breath ───────── */
-.breath{
-  position:relative; min-height:100svh;
-  display:grid; place-items:center;
-  padding:80px var(--pad);
-}
+.breath{position:relative; min-height:100svh; display:grid; place-items:center; padding:80px var(--pad)}
 .br-orb{position:absolute; left:50%; top:50%; width:min(78vw,70svh); aspect-ratio:1; transform:translate(-50%,-50%)}
 .br-core,.br-ring{position:absolute; inset:0; border-radius:50%; transform:scale(var(--s,.45)); transition:transform .1s linear}
 .br-core{
@@ -136,11 +167,7 @@ em{font-style:normal; background:linear-gradient(100deg, var(--apricot), var(--r
 .br-ring:nth-child(3){transform:scale(calc(var(--s,.45) * 1.26)); opacity:.25}
 .br-copy{position:relative; text-align:center}
 .br-copy .mono{margin:0 0 18px; color:var(--apricot)}
-.br-word{
-  margin:0;
-  font-family:var(--serif); font-size:clamp(56px,9vw,140px); line-height:1;
-  transition:opacity .6s ease, filter .6s ease;
-}
+.br-word{margin:0; font-family:var(--serif); font-size:clamp(56px,9vw,140px); line-height:1; transition:opacity .6s ease, filter .6s ease}
 .br-word.swap{opacity:0; filter:blur(8px)}
 .br-count{margin:18px 0 0; font-size:13px; color:var(--ink)}
 .br-note{margin:28px 0 0; color:var(--ink-dim); font-size:15px}
@@ -158,10 +185,7 @@ em{font-style:normal; background:linear-gradient(100deg, var(--apricot), var(--r
 .moment.is-on{opacity:1; transform:none; filter:none}
 .moment .mono{margin:0; color:var(--apricot)}
 .moment time{font-size:13px; letter-spacing:.08em; color:var(--ink)}
-.moment h3{
-  font-family:var(--serif); font-weight:400;
-  font-size:clamp(68px,9.6vw,150px); line-height:.9; margin:14px 0 18px;
-}
+.moment h3{font-family:var(--serif); font-weight:400; font-size:clamp(68px,9.6vw,150px); line-height:.9; margin:14px 0 18px}
 .moment p:last-child{margin:0; font-size:clamp(16px,1.5vw,19px); color:var(--ink-dim); max-width:36ch}
 .day-clock{
   position:fixed; right:var(--pad); bottom:clamp(24px,5vh,48px); z-index:3;
@@ -175,51 +199,68 @@ em{font-style:normal; background:linear-gradient(100deg, var(--apricot), var(--r
 .day-clock .dc-arc{stroke:var(--apricot); stroke-width:2; stroke-dasharray:289; stroke-dashoffset:var(--o,289); stroke-linecap:round; transition:stroke-dashoffset .3s linear}
 .day-clock span{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink)}
 
-/* ───────── object ───────── */
-.object{
-  display:grid; grid-template-columns:1.15fr 1fr; align-items:center; gap:clamp(32px,5vw,80px);
+/* ───────── four finishes ───────── */
+.finish{
+  display:grid; grid-template-columns:minmax(0,1.2fr) minmax(0,1fr); align-items:center; gap:clamp(32px,5vw,80px);
   max-width:calc(var(--max) + var(--pad)*2); margin:0 auto;
   padding:clamp(100px,16vh,180px) var(--pad);
 }
-.obj-media{position:relative; aspect-ratio:1/.8}
-.obj-media::before{
-  content:""; position:absolute; inset:2% 6%; border-radius:50%;
-  background:radial-gradient(closest-side, rgba(244,194,174,.4), rgba(201,182,238,.14) 60%, transparent);
-  filter:blur(30px);
+.fin-stage{position:relative; aspect-ratio:1/.85; touch-action:pan-y}
+.fin-glow{
+  position:absolute; inset:4% 6%; border-radius:50%;
+  background:radial-gradient(closest-side, color-mix(in srgb, var(--fin, #EDE8E0) 45%, transparent), rgba(201,182,238,.12) 62%, transparent);
+  filter:blur(34px); transition:background .6s ease;
 }
-.obj-poster{position:absolute; inset:0; display:grid; place-items:center; transition:opacity .8s ease}
-.obj-poster img{filter:invert(1) sepia(.28) saturate(1.2) brightness(.98) drop-shadow(0 30px 40px rgba(10,4,12,.55))}
-.obj-media.is-live .obj-poster{opacity:0}
+.fin-poster{position:absolute; inset:0; display:grid; place-items:center; transition:opacity .8s ease}
+.fin-poster img{filter:invert(1) sepia(.28) saturate(1.2) brightness(.98) drop-shadow(0 30px 40px rgba(10,4,12,.55))}
+.fin-stage.is-live .fin-poster{opacity:0}
 #chalk{position:absolute; inset:0; width:100%; height:100%; display:block; cursor:grab}
 #chalk:active{cursor:grabbing}
-.obj-tag{position:absolute; left:6%; bottom:2%; color:var(--ink-dim)}
-.obj-copy .mono{margin:0}
+.fin-hint{position:absolute; left:50%; bottom:2%; transform:translateX(-50%); margin:0; color:var(--ink-dim)}
+.fin-copy .mono{margin:0}
+.fin-name{display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; margin:0 0 18px}
+.fin-name b{font-family:var(--serif); font-weight:400; font-size:clamp(36px,4vw,56px); line-height:1; transition:opacity .2s ease}
+.fin-name span{color:var(--ink-dim); font-size:15px; transition:opacity .2s ease}
+.fin-name.out b,.fin-name.out span{opacity:0}
+.fin-swatches{display:flex; gap:14px; list-style:none; margin:0 0 34px; padding:0}
+.fin-sw{
+  width:40px; height:40px; border-radius:50%; border:0; padding:0; cursor:pointer;
+  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.55), transparent 45%), var(--sw);
+  box-shadow:0 0 0 1px rgba(255,255,255,.22);
+  transition:transform .3s var(--ease), box-shadow .3s ease;
+}
+.fin-sw:hover{transform:translateY(-3px)}
+.fin-sw[aria-checked="true"]{box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 0 0 6px rgba(244,194,174,.35); transform:translateY(-3px) scale(1.06)}
 .obj-list{list-style:none; margin:0; padding:0; border-top:1px solid var(--line)}
-.obj-list li{display:grid; grid-template-columns:150px 1fr; gap:16px; padding:16px 0; border-bottom:1px solid var(--line)}
+.obj-list li{display:grid; grid-template-columns:150px 1fr; gap:16px; padding:15px 0; border-bottom:1px solid var(--line)}
 .obj-list b{font-weight:500; color:var(--ink)}
 .obj-list span{color:var(--ink-dim); font-size:15px}
 
 /* ───────── waitlist ───────── */
 .wait{text-align:center; padding:clamp(120px,20vh,220px) var(--pad)}
 .wait .mono{margin:0}
-.wait-h{
-  font-family:var(--serif); font-weight:400;
-  font-size:clamp(72px,13vw,210px); line-height:.92; margin:18px 0 22px;
-}
+.wait-h{font-family:var(--serif); font-weight:400; font-size:clamp(72px,13vw,210px); line-height:.92; margin:18px 0 22px}
 .wait .lede{margin:0 auto}
 .btn{font-weight:600}
 input[type=email]{background:rgba(20,10,22,.45); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px)}
 .done{font-family:var(--serif); font-size:clamp(28px,4vw,44px)}
 
 @media (max-width:900px){
-  .feel-grid{grid-template-columns:1fr}
-  .moment{max-width:none; justify-content:flex-end; padding-bottom:14vh; text-shadow:0 2px 24px rgba(15,6,16,.9)}
+  :root{--px:50vw; --py:31svh; --pr:min(40vw,30svh)}
+  .hero{align-items:flex-end; padding-bottom:48px}
+  .hero-copy{max-width:none; text-align:center; margin:0 auto}
+  .hero-sub{margin-left:auto; margin-right:auto}
+  .hero-actions{justify-content:center}
+  .hero-h{font-size:clamp(52px,14vw,96px)}
+  .wear,.finish{grid-template-columns:1fr}
+  .pin b{font-size:9px; padding:5px 8px}
+  .moment{max-width:none; justify-content:flex-end; padding-bottom:12vh; text-shadow:0 2px 24px rgba(15,6,16,.9)}
   .day-clock{width:60px; height:60px; top:calc(var(--head) + 14px); bottom:auto}
-  .object{grid-template-columns:1fr}
   .obj-list li{grid-template-columns:1fr; gap:4px}
 }
 @media (prefers-reduced-motion: reduce){
   [data-load]{opacity:1; transform:none; filter:none; animation:none}
   .halo{opacity:1; animation:none}
+  .vib circle{animation:none}
   .moment{opacity:1; transform:none; filter:none}
 }

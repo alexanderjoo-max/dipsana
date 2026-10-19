@@ -14,11 +14,12 @@
   gtag('js', new Date());
   gtag('config', 'G-F26GGJJMGX');
 </script>
-<meta name="theme-color" content="#050307">
+<meta name="theme-color" content="#08090c">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://dipsana.com/recovery/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dipsana.com/recovery/">
+<meta property="og:site_name" content="Dipsana">
 <meta property="og:title" content="Dipsana — Sauna to ice bath, one pair">
 <meta property="og:description" content="Bone conduction audio rated 0–110°C. Sauna, steam, cold plunge, ice bath.">
 <meta property="og:image" content="https://dipsana.com/images/v3-sauna.jpg">
@@ -28,8 +29,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-<link rel="preload" as="image" href="/images/v3-sauna.jpg">
-<link rel="stylesheet" href="/css/lp.css">
+<!-- Same base as the homepage, plus this page's own sections -->
+<link rel="stylesheet" href="/css/index2.css">
 <link rel="stylesheet" href="/recovery/recovery.css">
 <script type="importmap">
 { "imports": {
@@ -45,41 +46,90 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="topbar" id="topbar">
-  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
-  <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Join the waitlist</span><span class="btn-short">Waitlist</span></a>
+  <a class="mark" href="/" aria-label="Dipsana, home">
+    <img class="mark-hero" src="/images/logo-footer.svg" alt="" width="300" height="177">
+    <img class="mark-bar" src="/images/logo-header.svg" alt="" width="423" height="60">
+  </a>
+  <ul class="nav-tabs">
+    <li><a href="/">Home</a></li>
+    <li><a href="/product/">Product</a></li>
+    <li><a href="/how-it-works/">How it works</a></li>
+    <li><a href="/learn/">Learn</a></li>
+  </ul>
+  <div class="nav-right">
+    <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Join the waitlist</span><span class="btn-short">Waitlist</span></a>
+  </div>
 </header>
 
 <main id="main">
 
-  <!-- ─────────── Hero: the sauna, seen through a thermal camera ─────────── -->
-  <section class="hero" id="hero" aria-labelledby="hero-h">
-    <img class="hero-fallback" src="/images/v3-sauna.jpg" alt="Close-up of a person in a cedar sauna, sweat on the skin, Dipsana on the cheekbone in front of the ear" width="864" height="1152">
-    <canvas class="hero-gl" id="thermal" aria-hidden="true"></canvas>
-
-    <div class="hud" aria-hidden="true">
-      <span class="hud-c hud-c--tl"></span><span class="hud-c hud-c--tr"></span>
-      <span class="hud-c hud-c--bl"></span><span class="hud-c hud-c--br"></span>
-      <p class="hud-top"><span class="rec"></span>THERMAL · ε 0.98 · <span id="hudClock">00:00:00</span></p>
-      <div class="hud-scale">
-        <span>45°</span><i></i><span>25°</span>
+  <!-- ─────────── Hero: homepage layout, with a heat-vision lens ─────────── -->
+  <section class="hero r-hero" id="hero" data-phase="heat" aria-labelledby="hero-h">
+    <div class="hero-stage">
+      <img class="hero-photo" id="heroPhoto" src="/images/v3-sauna.jpg" width="864" height="1152" alt="Close-up of a person in a cedar sauna, sweat on the skin, Dipsana on the cheekbone in front of the ear" fetchpriority="high" decoding="async">
+      <div class="hero-climate" aria-hidden="true">
+        <div class="cl cl-heat"></div>
+        <div class="cl cl-steam"></div>
+        <div class="cl cl-plunge"></div>
+        <div class="cl cl-ice"></div>
       </div>
-      <div class="reticle" id="reticle">
-        <span class="ret-x"></span><span class="ret-y"></span>
-        <p class="ret-read"><b id="spot">—</b><span>Spot temp</span></p>
+      <div class="hero-shade"></div>
+      <canvas class="r-lens" id="lens" aria-hidden="true"></canvas>
+      <div class="r-reticle" id="reticle" aria-hidden="true">
+        <span class="r-ret-x"></span><span class="r-ret-y"></span>
+        <p class="r-read"><b id="spot">—</b><span>Heat vision · skin</span></p>
       </div>
     </div>
 
-    <div class="hero-copy">
-      <p class="mono kicker" data-load="1">Bone conduction · rated 0–110°C · IP68</p>
-      <h1 class="hero-h" id="hero-h">
-        <span class="line" data-load="2">Sauna to ice bath.</span>
-        <span class="line line--out" data-load="3">One pair.</span>
-      </h1>
-      <div class="hero-actions" data-load="4">
+    <div class="climate-hud" aria-hidden="true">
+      <span class="deg" id="climDeg">110°</span>
+      <span class="hud-name" id="climName">Sauna</span>
+      <div class="cycle" id="climCycle">
+        <span data-p="heat" aria-current="true">sauna</span>
+        <span>·</span>
+        <span data-p="steam">steam</span>
+        <span>·</span>
+        <span data-p="plunge">plunge</span>
+        <span>·</span>
+        <span data-p="ice">ice</span>
+      </div>
+    </div>
+
+    <div class="hero-copy" data-reveal>
+      <p class="mono hero-kicker rv">One pair for<br class="br-m"> every room</p>
+      <h1 class="display rv" id="hero-h">Sauna to ice bath.</h1>
+      <p class="hero-sub rv">Bone conduction, rated 0–110°C.</p>
+      <div class="hero-actions rv">
         <a class="btn" href="#waitlist">Join the waitlist</a>
-        <a class="btn btn--ghost" href="#descent">Cool down ↓</a>
+      </div>
+      <ul class="facts rv">
+        <li><b>0–110°C</b><span>Sauna to ice</span></li>
+        <li><b>IP68</b><span>2 m under</span></li>
+        <li><b>32 GB</b><span>No phone</span></li>
+        <li><b>10 hrs</b><span>Per charge</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ─────────── Studio: the headset, in every colourway ─────────── -->
+  <section class="studio" id="studio" data-reveal aria-labelledby="studio-h">
+    <p class="studio-line rv" id="studio-h">Every room. One pair.</p>
+    <div class="viewer" id="viewer">
+      <span class="viewer-glow" aria-hidden="true"></span>
+      <div class="hud" aria-hidden="true">
+        <span class="hud-c hud-c--tl"></span><span class="hud-c hud-c--tr"></span>
+        <span class="hud-c hud-c--bl"></span><span class="hud-c hud-c--br"></span>
+      </div>
+      <div class="stage-slot" id="slot" role="img" aria-label="The Dipsana headset in Obsidian, slowly rotating. Drag to turn it.">
+        <picture>
+          <source srcset="/images/product.webp" type="image/webp">
+          <img class="kit-poster" src="/images/product.png" alt="" width="1200" height="760" decoding="async">
+        </picture>
+        <canvas id="kit" aria-hidden="true"></canvas>
       </div>
     </div>
+    <div class="cw-readout rv"><p class="cw-name cw-fade" id="cwName">Obsidian</p></div>
+    <ul class="swatches rv" id="swatches" role="radiogroup" aria-label="Choose a colourway"></ul>
   </section>
 
   <!-- ─────────── Descent: 110° to 0°, the headset turning through four rooms ─────────── -->
@@ -91,24 +141,24 @@
 
       <ol class="d-rooms">
         <li data-room="0">
-          <p class="mono">Room 1 of 4 · 80–100°C · 15–20 min</p>
-          <h2>Sauna</h2>
-          <p>The podcast that makes twenty minutes feel like eight.</p>
+          <p class="mono">Sauna · 80–100°C · 15–20 min</p>
+          <h2 class="display display--mid">Sauna</h2>
+          <p class="lede">The podcast that makes twenty minutes feel like eight.</p>
         </li>
         <li data-room="1">
-          <p class="mono">Room 2 of 4 · 40–45°C · 100% humidity</p>
-          <h2>Steam room</h2>
-          <p>Where every other pair of headphones has already quit.</p>
+          <p class="mono">Steam room · 40–45°C · 100% humidity</p>
+          <h2 class="display display--mid">Steam room</h2>
+          <p class="lede">Where every other pair of headphones has already quit.</p>
         </li>
         <li data-room="2">
-          <p class="mono">Room 3 of 4 · 3–10°C · 2–3 min</p>
-          <h2>Cold plunge</h2>
-          <p>One song. Get in, finish the song, get out.</p>
+          <p class="mono">Cold plunge · 3–10°C · 2–3 min</p>
+          <h2 class="display display--mid">Cold plunge</h2>
+          <p class="lede">One song. Get in, finish the song, get out.</p>
         </li>
         <li data-room="3">
-          <p class="mono">Room 4 of 4 · 0–5°C · 3–5 min</p>
-          <h2>Ice bath</h2>
-          <p>32GB onboard, because your phone is in a locker and your hands don’t work anyway.</p>
+          <p class="mono">Ice bath · 0–5°C · 3–5 min</p>
+          <h2 class="display display--mid">Ice bath</h2>
+          <p class="lede">Offline mode, because your phone is in a locker and your hands don’t work anyway.</p>
         </li>
       </ol>
 
@@ -124,10 +174,11 @@
   </section>
 
   <!-- ─────────── Where earbuds give up ─────────── -->
-  <section class="range" data-reveal aria-labelledby="range-h">
-    <div class="range-head">
-      <p class="mono rv">The problem, on one axis</p>
-      <h2 class="big rv" id="range-h">Earbuds give up at <span class="hot">35°.</span><br>Saunas start at 80.</h2>
+  <section class="r-range" data-reveal aria-labelledby="range-h">
+    <div class="r-head">
+      <p class="mono rv" style="color:var(--ice); margin:0">Why audio fails in there</p>
+      <h2 class="display display--mid rv" id="range-h">35° vs 110°</h2>
+      <p class="lede rv">Everyday earbuds are rated to about 35°C. A sauna starts around 80.</p>
     </div>
 
     <figure class="chart rv" aria-labelledby="chart-cap">
@@ -155,67 +206,81 @@
   </section>
 
   <!-- ─────────── Contrast slider ─────────── -->
-  <section class="contrast" data-reveal aria-labelledby="ct-h">
-    <div class="ct-head">
-      <p class="mono rv"><span class="hot">Hot</span> · <span class="cold">cold</span> · repeat</p>
-      <h2 class="big rv" id="ct-h">One playlist,<br>the whole cycle.</h2>
-      <p class="lede rv">No resetting a timer with wet hands between rounds. Press play in the sauna and it is still going when you climb out of the ice.</p>
+  <section class="r-contrast" data-reveal aria-labelledby="ct-h">
+    <div class="r-head">
+      <p class="mono rv" style="margin:0"><span class="hot-word">Hot</span> · <span class="cold-word">cold</span> · repeat</p>
+      <h2 class="display display--mid rv" id="ct-h">Contrast</h2>
+      <p class="lede rv">A playlist that runs the whole cycle, so you are not resetting a timer with wet hands. Drag across.</p>
     </div>
     <div class="ct-split rv" id="ctSplit" tabindex="0" role="slider" aria-label="Move between sauna and ice bath" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
       <img src="/images/v3-sauna.jpg" alt="Close-up of a person in a cedar sauna, Dipsana on the cheek" width="864" height="1152" loading="lazy">
       <img class="ct-cold" src="/images/v3-ice.jpg" alt="Face at the surface of an ice bath, Dipsana on the cheek" width="864" height="1152" loading="lazy">
-      <span class="ct-line" aria-hidden="true"><span class="ct-knob" id="ctKnob">←→</span></span>
+      <span class="ct-line" aria-hidden="true"><span class="ct-knob">←→</span></span>
       <span class="ct-tag ct-tag--hot" aria-hidden="true">Sauna · 100°C</span>
       <span class="ct-tag ct-tag--cold" aria-hidden="true">Ice · 2°C</span>
     </div>
   </section>
 
-  <!-- ─────────── Readouts ─────────── -->
-  <section class="reads" data-reveal aria-label="Specifications">
-    <ul class="read-grid">
-      <li class="rv"><p class="mono">Operating range</p><b><span data-count="110">0</span>°C</b><span>From an ice bath at 0 up to a 110° sauna.</span></li>
-      <li class="rv"><p class="mono">Waterproof</p><b>IP<span data-count="68">0</span></b><span>Submersible to 2 metres. Sealed, no ports.</span></li>
-      <li class="rv"><p class="mono">Onboard</p><b><span data-count="32">0</span>GB</b><span>Load it once. The phone stays in the locker.</span></li>
-      <li class="rv"><p class="mono">Battery</p><b><span data-count="10">0</span>h</b><span>Ten minutes of charge gives three hours.</span></li>
-    </ul>
+  <!-- ─────────── What's in it (homepage anatomy) ─────────── -->
+  <section class="studio studio--proof" data-reveal aria-label="What’s in it">
+    <ol class="anatomy rv">
+      <li><span class="a-num">01</span><h3>Bone conduction</h3><p>Sits just in front of the ear. Nothing goes in the canal. <a href="/how-it-works/">The science</a></p></li>
+      <li><span class="a-num">02</span><h3>Heat-stable pads</h3><p>A heat-stable compound, not standard silicone.</p></li>
+      <li><span class="a-num">03</span><h3>Sealed housing</h3><p>IP68 to 2m. 32GB onboard, Bluetooth 5.4.</p></li>
+      <li><span class="a-num">04</span><h3>Physical buttons</h3><p>Sized for numb fingers and wet hands. No touch surfaces.</p></li>
+      <li><span class="a-num">05</span><h3>Magnetic charge</h3><p>No port to corrode. Ten minutes gives three hours.</p></li>
+    </ol>
   </section>
 
   <section class="wait" id="waitlist" data-reveal aria-labelledby="wl-h">
-    <canvas class="wait-gl" id="waitGl" aria-hidden="true"></canvas>
-    <div class="wait-in">
-      <p class="mono rv">Founding list</p>
-      <h2 class="wait-h rv" id="wl-h">First in.</h2>
-      <p class="lede rv">We’ll email you once, when it’s ready, and not before.</p>
-      <div class="form-wrap rv">
-        <form id="waitlist-form" action="https://app.kit.com/forms/9811187/subscriptions" method="post" novalidate>
-          <label class="sr" for="email">Email address</label>
-          <input type="email" id="email" name="email_address" placeholder="you@example.com" required autocomplete="email" inputmode="email">
-          <div class="sr" aria-hidden="true">
-            <label for="company">Company</label>
-            <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
-          </div>
-          <button class="btn" type="submit">Join the waitlist</button>
-        </form>
-        <p class="err" id="formErr" role="alert"></p>
-        <p class="done" id="formDone">You’re on the list. <span class="cold">Go and sit down somewhere hot.</span></p>
-        <p class="fine" style="margin-top:22px">No drip sequence. No launch spam. One note, when it ships.</p>
-      </div>
+    <div class="wait-bg" aria-hidden="true">
+      <img src="/images/v3-sauna.jpg" alt="" width="864" height="1152" decoding="async" loading="lazy">
+    </div>
+    <p class="mono rv" style="color:var(--ice); margin:0 0 18px">Founding list</p>
+    <h2 class="display rv" id="wl-h">First in.</h2>
+    <p class="lede rv">We’ll email you once, when it’s ready, and not before.</p>
+    <div class="form-wrap">
+      <form id="waitlist-form" action="https://app.kit.com/forms/9811187/subscriptions" method="post" novalidate>
+        <label class="sr" for="email">Email address</label>
+        <input type="email" id="email" name="email_address" placeholder="you@example.com" required autocomplete="email" inputmode="email">
+        <div class="sr" aria-hidden="true">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+        </div>
+        <button class="btn" type="submit">Join the waitlist</button>
+      </form>
+      <p class="err" id="formErr" role="alert"></p>
+      <p class="done" id="formDone">You’re on the list. <span class="glc">Go and sit down somewhere hot.</span></p>
+      <p class="fine" style="margin-top:22px">No drip sequence. No launch spam. One note, when it ships.</p>
     </div>
   </section>
 
+  <footer class="s-foot" data-reveal>
+    <div class="foot-row">
+      <a class="mark mark--lg rv" href="/" aria-label="Dipsana, home"><img src="/images/logo-footer.svg" alt="" width="300" height="177"></a>
+      <p class="mono rv" style="margin:0">© 2026 Dipsana</p>
+    </div>
+    <ul class="foot-nav rv">
+      <li><a href="/">Home</a></li>
+      <li><a href="/product/">Product</a></li>
+      <li><a href="/how-it-works/">How it works</a></li>
+      <li class="foot-learn">
+        <a href="/learn/">Learn</a>
+        <ul class="foot-sub">
+          <li><a href="/learn/sauna/">Sauna</a></li>
+          <li><a href="/learn/ice/">Ice</a></li>
+          <li><a href="/learn/swim/">Swim</a></li>
+          <li><a href="/learn/headphones-in-sauna/">Headphones in a sauna</a></li>
+        </ul>
+      </li>
+    </ul>
+    <ul class="foot-legal rv">
+      <li><a href="/terms/">Terms of Service</a></li>
+      <li><a href="/privacy/">Privacy Policy</a></li>
+    </ul>
+    <p class="fine safety rv">Listen to your body, not just your playlist — follow the sauna and cold exposure guidance that applies to you.</p>
+  </footer>
+
 </main>
-
-<footer class="lp-foot">
-  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
-  <ul>
-    <li><a href="/product/">Product</a></li>
-    <li><a href="/how-it-works/">How it works</a></li>
-    <li><a href="/learn/">Learn</a></li>
-    <li><a href="/terms/">Terms</a></li>
-    <li><a href="/privacy/">Privacy</a></li>
-  </ul>
-  <p class="fine">Listen to your body, not just your playlist — follow the sauna and cold exposure guidance that applies to you.</p>
-</footer>
-
 </body>
 </html>

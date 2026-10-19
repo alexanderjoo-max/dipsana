@@ -191,10 +191,12 @@ if (!silk) document.documentElement.classList.add('no-gl');
 else reduced ? silk.still(6) : silk.start();
 
 /* ═════════ where are we on the page ═════════ */
+const plateHs = document.getElementById('plateHs');
+let hsW = 0, hsH = 0, hsShow = 0;
 const moments = [...document.querySelectorAll('.moment')];
 const day = document.getElementById('day');
 const breath = document.getElementById('breath');
-const feel = document.querySelector('.feel');
+const wear = document.getElementById('wear');
 const dayClock = document.getElementById('dayClock');
 const dcArc = document.getElementById('dcArc');
 const dcTime = document.getElementById('dcTime');
@@ -214,10 +216,10 @@ function onScroll() {
   const mid = innerHeight / 2;
   const inRect = el => { const r = el.getBoundingClientRect(); return r.top < mid && r.bottom > mid; };
   const dr = day.getBoundingClientRect();
-  zone = inRect(breath) ? 'breath' : inRect(day) ? 'day' : inRect(feel) ? 'feel' : dr.bottom <= mid ? 'after' : 'hero';
+  zone = inRect(breath) ? 'breath' : inRect(day) ? 'day' : inRect(wear) ? 'wear' : dr.bottom <= mid ? 'after' : 'hero';
   dayClock.classList.toggle('is-on', zone === 'day');
 
-  if (zone === 'hero' || zone === 'feel' || zone === 'breath') {
+  if (zone === 'hero' || zone === 'wear' || zone === 'breath') {
     setMode(HERO);
     sky = zone === 'breath' ? 'dusk' : 'hero';
     moments.forEach(m => m.classList.remove('is-on'));
@@ -266,7 +268,7 @@ const field = (x, y, n, m) => {
   return Math.cos(n * PI * u) * Math.cos(m * PI * v) - Math.cos(m * PI * u) * Math.cos(n * PI * v);
 };
 
-let cx = 0.5, cy = 0.52, R = 300, alpha = 0, rot = 0;
+let cx = innerWidth > 900 ? 0.68 : 0.5, cy = innerWidth > 900 ? 0.5 : 0.31, R = 300, alpha = 0, rot = 0;
 function stepPlate() {
   level += (Math.min(1, audio.read() * 6) - level) * 0.2;
   kick *= 0.985;
@@ -290,14 +292,13 @@ function stepPlate() {
 }
 function drawPlate() {
   const wide = innerWidth > 900;
-  let tx = 0.5, ty = 0.52, tr = Math.min(W, H) * 0.42, ta = 0.42;
-  if (zone === 'day' && wide) { tx = 0.68; ty = 0.5; tr = Math.min(W * 0.28, H * 0.42); ta = 1; }
-  else if (zone === 'day') { tx = 0.5; ty = 0.34; tr = Math.min(W, H) * 0.44; ta = 0.7; }
-  else if (zone === 'feel') { ta = 0.12; }
-  else if (zone === 'breath') { ta = 0; }
-  else if (zone === 'after') { ta = 0; }
+  // same spot in the hero and through the day (the CSS halo uses the same numbers)
+  const tx = wide ? 0.68 : 0.5, ty = wide ? 0.5 : 0.31;
+  const tr = wide ? Math.min(W * 0.28, H * 0.42) : Math.min(W * 0.40, H * 0.30);
+  const ta = zone === 'hero' ? 0.6 : zone === 'day' ? (wide ? 1 : 0.75) : 0;
   const k = reduced ? 1 : 0.05;
   cx += (tx - cx) * k; cy += (ty - cy) * k; R += (tr - R) * k; alpha += (ta - alpha) * k;
+  placeHeadset();
 
   ctx.clearRect(0, 0, W, H);
   if (alpha < 0.01) return;
@@ -340,26 +341,6 @@ if (reduced) {
 }
 onScroll();
 
-/* ═════════ feel: a slow waveform under the words ═════════ */
-const wavePaths = [...document.querySelectorAll('#wave path')];
-let waveOn = false;
-new IntersectionObserver(es => { waveOn = es[0].isIntersecting; }).observe(feel);
-function drawWave(now) {
-  const t = now / 1000;
-  wavePaths.forEach((p, j) => {
-    let d = '';
-    const amp = 34 + j * 9 + level * 60;
-    for (let x = 0; x <= 1200; x += 12) {
-      const env = Math.sin((x / 1200) * PI);
-      const y = 100 + Math.sin(x * 0.012 + t * (0.6 + j * 0.13) + j * 1.3) * amp * env * Math.sin(t * 0.3 + j);
-      d += (x ? 'L' : 'M') + x + ' ' + y.toFixed(1);
-    }
-    p.setAttribute('d', d);
-  });
-}
-if (reduced) drawWave(4000);
-else (function loop(now) { requestAnimationFrame(loop); if (waveOn) drawWave(now); })(0);
-
 /* ═════════ breath: four in, hold two, six out ═════════ */
 const orb = document.getElementById('brOrb');
 const word = document.getElementById('brWord');
@@ -401,30 +382,111 @@ if (!reduced) {
   count.textContent = '';
 }
 
-/* ═════════ the object: the real headset in Chalk ═════════ */
-const chalk = document.getElementById('chalk');
-const media = chalk.parentElement;
-import('/js/lp-headset.js').then(({ headset }) => headset(chalk, {
-  color: '#EDE8E0', key: 0xffe2d6, rim: 0xc9b6ee, fill: 0xf4c2ae, exposure: 1.0,
-  material: { roughness: 0.42, clearcoat: 0.6, clearcoatRoughness: 0.3, iridescence: 0.55, iridescenceIOR: 1.35, sheen: 0.6, sheenColor: 0xe9a2b8, envMapIntensity: 0.6 }
-})).then(hs => {
-  media.classList.add('is-live');
-  hs.state.fill = 0.86;
-  let spin = 0, vel = 0, drag = false, lastX = 0, visible = false;
-  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(chalk);
-  chalk.addEventListener('pointerdown', e => { drag = true; lastX = e.clientX; chalk.setPointerCapture(e.pointerId); });
-  chalk.addEventListener('pointermove', e => { if (drag) { vel += (e.clientX - lastX) * 0.0006; lastX = e.clientX; } });
-  chalk.addEventListener('pointerup', () => { drag = false; });
-  let t0 = performance.now();
+/* ═════════ the headset at the centre of the plate ═════════ */
+function placeHeadset() {
+  const cssR = R / dpr;
+  const w = Math.round(cssR * 1.6), h = Math.round(w * 0.78);
+  if (Math.abs(w - hsW) > 1 || Math.abs(h - hsH) > 1) {
+    hsW = w; hsH = h;
+    plateHs.style.setProperty('--hs-w', w + 'px');
+    plateHs.style.setProperty('--hs-h', h + 'px');
+  }
+  plateHs.style.setProperty('--hs-x', (cx * innerWidth - w / 2).toFixed(1) + 'px');
+  plateHs.style.setProperty('--hs-y', (cy * innerHeight - h / 2).toFixed(1) + 'px');
+  hsShow = clamp(alpha / 0.55);
+  plateHs.style.setProperty('--hs-o', hsShow.toFixed(3));
+}
+placeHeadset();
+
+const CHALK = { color: '#EDE8E0', key: 0xffe2d6, rim: 0xc9b6ee, fill: 0xf4c2ae, exposure: 1.0,
+  material: { roughness: 0.42, clearcoat: 0.6, clearcoatRoughness: 0.3, iridescence: 0.55, iridescenceIOR: 1.35, sheen: 0.6, sheenColor: 0xe9a2b8, envMapIntensity: 0.6 } };
+
+import('/js/lp-headset.js').then(({ headset }) => headset(document.getElementById('plateHsCanvas'), CHALK))
+  .then(hs => {
+    plateHs.classList.add('is-live');
+    hs.state.fill = 1.0;
+    function frame(now) {
+      // a slow turn, and a faint shiver when the bowl is sounding
+      hs.state.az = -75 * PI / 180 + (reduced ? 0 : now * 0.00012);
+      hs.state.el = (18 + (reduced ? 0 : Math.sin(now / 2600) * 6)) * PI / 180;
+      hs.state.y = reduced ? 0 : Math.sin(now / 1900) * 0.02 + (Math.random() - 0.5) * level * 0.01;
+      hs.state.x = reduced ? 0 : (Math.random() - 0.5) * level * 0.01;
+      hs.rig.scale.setScalar(1 + level * 0.06);
+      hs.render();
+    }
+    if (reduced) { frame(0); addEventListener('scroll', () => frame(0), { passive: true }); }
+    else (function loop(now) { requestAnimationFrame(loop); if (hsShow > 0.01) frame(now); })(performance.now());
+  })
+  .catch(() => { /* the poster stays */ });
+
+/* ═════════ four finishes ═════════ */
+const FINISHES = [
+  { name: 'Chalk',    hex: '#EDE8E0', note: 'Soft off-white. Our pick for the bath.', rough: 0.42, irid: 0.55 },
+  { name: 'Glacier',  hex: '#A8D5E2', note: 'Pale ice blue, like early-morning water.', rough: 0.45, irid: 0.4 },
+  { name: 'Obsidian', hex: '#35383C', note: 'Matte charcoal. The quiet one.', rough: 0.58, irid: 0.15 },
+  { name: 'Ember',    hex: '#E2542C', note: 'Warm and loud. Made for the sauna.', rough: 0.42, irid: 0.25 }
+];
+const finStage = document.getElementById('finStage');
+const finCanvas = document.getElementById('chalk');
+const finNameWrap = document.querySelector('.fin-name');
+const finName = document.getElementById('finName');
+const finNote = document.getElementById('finNote');
+const finList = document.getElementById('finSwatches');
+let finPaint = () => {}, finActive = 0;
+function pickFinish(i) {
+  finActive = i;
+  [...finList.children].forEach((li, k) => li.firstChild.setAttribute('aria-checked', String(k === i)));
+  finStage.style.setProperty('--fin', FINISHES[i].hex);
+  finNameWrap.classList.add('out');
+  setTimeout(() => { finName.textContent = FINISHES[i].name; finNote.textContent = FINISHES[i].note; finNameWrap.classList.remove('out'); }, 200);
+  finPaint(i);
+}
+FINISHES.forEach((f, i) => {
+  const li = document.createElement('li');
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'fin-sw'; b.setAttribute('role', 'radio');
+  b.setAttribute('aria-checked', String(i === 0)); b.setAttribute('aria-label', f.name);
+  b.style.setProperty('--sw', f.hex);
+  b.addEventListener('click', () => pickFinish(i));
+  b.addEventListener('keydown', e => {
+    const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    const k = (finActive + d + FINISHES.length) % FINISHES.length;
+    pickFinish(k); finList.children[k].firstChild.focus();
+  });
+  li.appendChild(b); finList.appendChild(li);
+});
+finStage.style.setProperty('--fin', FINISHES[0].hex);
+
+import('/js/lp-headset.js').then(({ headset }) => headset(finCanvas, CHALK)).then(hs => {
+  finStage.classList.add('is-live');
+  const { THREE, mat } = hs;
+  const from = new THREE.Color(), to = new THREE.Color(FINISHES[0].hex);
+  let ct = 1, r0 = mat.roughness, r1 = r0, i0 = mat.iridescence, i1 = i0;
+  finPaint = i => { from.copy(mat.color); to.set(FINISHES[i].hex); r0 = mat.roughness; r1 = FINISHES[i].rough; i0 = mat.iridescence; i1 = FINISHES[i].irid; ct = 0; };
+  hs.state.fill = 1.12;
+  let spin = 0, vel = 0, drag = false, lastX = 0, visible = false, t0 = performance.now();
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(finCanvas);
+  finCanvas.addEventListener('pointerdown', e => { drag = true; lastX = e.clientX; finCanvas.setPointerCapture(e.pointerId); });
+  finCanvas.addEventListener('pointermove', e => { if (drag) { vel += (e.clientX - lastX) * 0.0006; lastX = e.clientX; } });
+  finCanvas.addEventListener('pointerup', () => { drag = false; });
+  finCanvas.addEventListener('pointercancel', () => { drag = false; });
   function frame(now) {
     const dt = Math.min(64, now - t0); t0 = now;
     spin += (reduced ? 0 : dt * 0.00012) + vel;
     vel *= 0.94;
+    if (ct < 1) {
+      ct = Math.min(1, ct + dt / 500);
+      const e = ct * ct * (3 - 2 * ct);
+      mat.color.copy(from).lerp(to, e);
+      mat.roughness = lerp(r0, r1, e); mat.iridescence = lerp(i0, i1, e);
+    }
     hs.state.az = -75 * PI / 180 + spin;
-    hs.state.el = (16 + Math.sin(now / 2600) * (reduced ? 0 : 5)) * PI / 180;
+    hs.state.el = (16 + (reduced ? 0 : Math.sin(now / 2600) * 5)) * PI / 180;
     hs.state.y = reduced ? 0 : Math.sin(now / 1900) * 0.015;
     hs.render();
   }
-  if (reduced) frame(performance.now());
-  else (function loop(now) { requestAnimationFrame(loop); if (visible) frame(now); })(performance.now());
+  if (reduced) { frame(performance.now()); finPaint = i => { mat.color.set(FINISHES[i].hex); frame(performance.now()); }; }
+  else (function loop(now) { requestAnimationFrame(loop); if (visible || ct < 1) frame(now); })(performance.now());
 }).catch(() => { /* the poster stays */ });

@@ -1,7 +1,7 @@
 import { shader, GLSL } from '/js/lp-gl.js';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const coarse = matchMedia('(hover: none)').matches;
+const coarse = matchMedia('(hover: none), (pointer: coarse)').matches;
 const lerp = (a, b, t) => a + (b - a) * t;
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
@@ -25,78 +25,60 @@ vec3 arctic(float t){
   return mix(c3,c4,(t-.85)/.15);
 }`;
 
-/* ═════════ Hero: thermal camera with a visible-light lens ═════════ */
-const THERMAL = GLSL.noise + PALETTES + `
+/* ═════════ Hero: the homepage climate cycle, plus a heat-vision lens ═════════ */
+const LENS = GLSL.noise + PALETTES + `
 uniform vec2 uRes; uniform float uTime; uniform float uDpr;
-uniform sampler2D uImg; uniform vec2 uImgSize;
-uniform vec2 uLensPos; uniform float uLens; uniform float uBoot; uniform float uFocusY;
+uniform sampler2D uImg; uniform vec2 uImgSize; uniform vec2 uPos;
+uniform vec2 uLensPos; uniform float uLens; uniform float uShow;
 
+// object-fit: cover with object-position, matching the <img> underneath
 vec2 imgUV(vec2 uv){
   float rs = uRes.x/uRes.y, ri = uImgSize.x/uImgSize.y;
   vec2 s = rs > ri ? vec2(1., ri/rs) : vec2(rs/ri, 1.);
-  vec2 c = vec2(.5, clamp(uFocusY, s.y*.5, 1.-s.y*.5));
-  if(rs <= ri) c = vec2(.5, .5);
-  return (uv - .5)*s + c;
+  vec2 o = vec2((1. - s.x)*uPos.x, 1. - s.y - (1. - s.y)*uPos.y);
+  return uv*s + o;
 }
 void main(){
-  vec2 uv = gl_FragCoord.xy / uRes;
-  vec2 iuv = imgUV(uv);
-
-  // rising air over the stove
-  float sh = fbm(vec2(uv.x*5., uv.y*12. - uTime*1.4));
-  vec2 suv = iuv + vec2((sh - .5)*.007, (sh - .5)*.004);
-
-  // thermal sensors are soft: blurred luminance
-  float l = 0.;
-  for(int x=-1;x<=1;x++) for(int y=-1;y<=1;y++){
-    vec3 c = texture2D(uImg, suv + vec2(float(x), float(y))*.0045).rgb;
-    l += dot(c, vec3(.35,.5,.15));
-  }
-  l /= 9.;
-  float heat = smoothstep(.03, .62, l);
-  heat = heat*.86 + .14*heat*fbm(iuv*7. + vec2(0., -uTime*.25));
-  heat += uv.y*.07;                       // hot air pools at the ceiling
-  vec3 th = iron(heat);
-  th *= .93 + .07*sin(gl_FragCoord.y/uDpr*1.6);   // sensor lines
-
-  vec3 vis = texture2D(uImg, iuv).rgb;
-  vis = pow(vis, vec3(.95))*vec3(1.06, 1., .95);
-
+  vec2 uv = gl_FragCoord.xy/uRes;
   vec2 d = (uv - uLensPos)*uRes;
   float r = length(d);
   float aa = 1.5*uDpr;
   float inL = 1. - smoothstep(uLens - aa, uLens, r);
-  float ring = smoothstep(uLens - 2.5*uDpr, uLens - .5*uDpr, r) * (1. - smoothstep(uLens + .5*uDpr, uLens + 2.5*uDpr, r));
-  // slight magnification inside the lens
-  vec3 visMag = texture2D(uImg, imgUV(uLensPos + (uv - uLensPos)*.82)).rgb*vec3(1.06,1.,.95);
-  vec3 col = mix(th, visMag, inL);
-  col += ring*vec3(1., .93, .8);
+  float ring = smoothstep(uLens - 2.5*uDpr, uLens - .5*uDpr, r)*(1. - smoothstep(uLens + .5*uDpr, uLens + 2.5*uDpr, r));
+  if(inL + ring < .001){ gl_FragColor = vec4(0.); return; }
 
-  // boot sequence: a scan bar wipes the image on
-  float scanY = 1. - uBoot*1.12;
-  float shown = smoothstep(scanY - .002, scanY + .002, uv.y);
-  float bar = exp(-abs(uv.y - scanY)*90.)*(1. - step(1., uBoot));
-  col = col*shown + bar*vec3(1., .72, .32);
-
-  col += (hash(gl_FragCoord.xy + fract(uTime*7.)*91.) - .5)*.045;
-  float v = smoothstep(1.25, .35, length((uv - .5)*vec2(uRes.x/uRes.y, 1.)));
-  col *= mix(.55, 1., v);
-  gl_FragColor = vec4(col, 1.);
+  vec2 iuv = imgUV(uv);
+  float sh = fbm(vec2(uv.x*5., uv.y*12. - uTime*1.4));
+  vec2 suv = iuv + vec2((sh - .5)*.006, (sh - .5)*.003);
+  float l = 0.;
+  for(int x=-1;x<=1;x++) for(int y=-1;y<=1;y++){
+    vec3 c = texture2D(uImg, suv + vec2(float(x), float(y))*.004).rgb;
+    l += dot(c, vec3(.35,.5,.15));
+  }
+  l /= 9.;
+  float heat = smoothstep(.03, .62, l);
+  heat = heat*.86 + .14*heat*fbm(iuv*7. + vec2(0., -uTime*.25)) + uv.y*.06;
+  vec3 col = iron(heat);
+  col *= .92 + .08*sin(gl_FragCoord.y/uDpr*1.6);
+  col += (hash(gl_FragCoord.xy + fract(uTime*7.)*91.) - .5)*.04;
+  vec4 lens = vec4(col, inL);
+  lens = mix(lens, vec4(1., .95, .85, 1.), ring);
+  gl_FragColor = vec4(lens.rgb, lens.a*uShow);
 }`;
 
 const hero = document.getElementById('hero');
-const thermalCv = document.getElementById('thermal');
+const heroImg = document.getElementById('heroPhoto');
+const lensCv = document.getElementById('lens');
 const reticle = document.getElementById('reticle');
 const spotEl = document.getElementById('spot');
-const heroImg = hero.querySelector('.hero-fallback');
+const IMG_POS = [0.5, 0.26];          // keep in step with .r-hero .hero-photo object-position
 
-const th = shader(thermalCv, THERMAL, {
+const lens = shader(lensCv, LENS, {
   textures: { uImg: heroImg },
-  uniforms: { uLensPos: [0.62, 0.55], uLens: 140, uBoot: reduced ? 1 : 0, uFocusY: 0.6 }
+  uniforms: { uPos: IMG_POS, uLensPos: [0.68, 0.55], uLens: 120, uShow: 0 }
 });
-if (!th) document.documentElement.classList.add('no-gl');
 
-// a small copy of the photo to read "temperature" under the crosshair
+// a small copy of the photo to read a believable skin temperature under the crosshair
 const probe = document.createElement('canvas');
 const pctx = probe.getContext('2d', { willReadFrequently: true });
 let probeData = null;
@@ -106,29 +88,26 @@ function buildProbe() {
   probeData = pctx.getImageData(0, 0, probe.width, probe.height).data;
 }
 if (heroImg.complete && heroImg.naturalWidth) buildProbe(); else heroImg.addEventListener('load', buildProbe, { once: true });
-
 function spotTemp(u, v) {
-  // u, v: 0..1 in canvas space, v up. Mirror the shader's imgUV.
   if (!probeData) return null;
   const W = hero.clientWidth, H = hero.clientHeight;
   const rs = W / H, ri = heroImg.naturalWidth / heroImg.naturalHeight;
-  let sx = 1, sy = 1, cy = 0.5;
-  if (rs > ri) { sy = ri / rs; cy = clamp(0.6, sy / 2, 1 - sy / 2); } else { sx = rs / ri; }
-  const iu = (u - 0.5) * sx + 0.5, iv = (v - 0.5) * sy + cy;
+  const sx = rs > ri ? 1 : rs / ri, sy = rs > ri ? ri / rs : 1;
+  const iu = u * sx + (1 - sx) * IMG_POS[0];
+  const ivTop = (1 - v) * sy + (1 - sy) * IMG_POS[1];   // from the top of the image
   let l = 0, n = 0;
   for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
     const x = clamp(Math.round(iu * probe.width) + dx, 0, probe.width - 1);
-    const y = clamp(Math.round((1 - iv) * probe.height) + dy, 0, probe.height - 1);
+    const y = clamp(Math.round(ivTop * probe.height) + dy, 0, probe.height - 1);
     const i = (y * probe.width + x) * 4;
     l += (probeData[i] * 0.35 + probeData[i + 1] * 0.5 + probeData[i + 2] * 0.15) / 255; n++;
   }
-  const heat = smooth(0.03, 0.62, l / n) * 0.9 + v * 0.07;
   // skin in a hot room reads high-30s to mid-40s on a thermal camera
-  return 26 + heat * 19;
+  return 26 + (smooth(0.03, 0.62, l / n) * 0.9 + v * 0.06) * 19;
 }
 
-if (th) {
-  let mx = 0.62, my = 0.55, tx = mx, ty = my, live = false, bootT = null;
+if (lens) {
+  let mx = 0.78, my = 0.56, tx = mx, ty = my, live = false, show = 0;
   hero.addEventListener('pointermove', e => {
     if (e.pointerType !== 'mouse') return;
     const r = hero.getBoundingClientRect();
@@ -137,49 +116,146 @@ if (th) {
   });
   hero.addEventListener('pointerleave', () => { live = false; });
 
-  let shown = 0;
   function place() {
     const W = hero.clientWidth, H = hero.clientHeight;
-    const lensCss = Math.min(W, H) * (W < 700 ? 0.2 : 0.16);
-    th.set('uLens', lensCss * Math.min(1.5, devicePixelRatio || 1));
-    th.set('uLensPos', [mx, my]);
+    const lensCss = Math.min(W, H) * (W < 700 ? 0.15 : 0.13);
+    lens.set('uLens', lensCss * Math.min(1.5, devicePixelRatio || 1));
+    lens.set('uLensPos', [mx, my]);
+    lens.set('uShow', show);
     reticle.style.setProperty('--rx', `${mx * W}px`);
     reticle.style.setProperty('--ry', `${(1 - my) * H}px`);
     reticle.style.setProperty('--lens', `${lensCss}px`);
+    reticle.classList.toggle('is-flip', mx > 0.62);
     const t = spotTemp(mx, my);
     if (t != null) spotEl.textContent = t.toFixed(1) + '°C';
-    reticle.classList.toggle('is-flip', mx > 0.62 || W < 700);
   }
+  const t0 = performance.now();
   function tick(now) {
     requestAnimationFrame(tick);
-    if (bootT == null) bootT = now;
-    const b = clamp((now - bootT) / 1500);
-    th.set('uBoot', 1 - Math.pow(1 - b, 2));
-    if (b >= 1 && !shown) { shown = 1; reticle.classList.add('is-on'); }
+    show = clamp((now - t0 - 1400) / 700);
+    if (show > 0.5) reticle.classList.add('is-on');
     if (!live || coarse) {
-      // wander slowly over the face when nobody is steering
+      // drift over the face when nobody is steering
       const s = now / 1000;
-      tx = 0.55 + Math.sin(s * 0.37) * 0.16 + Math.sin(s * 0.11) * 0.06;
-      ty = 0.56 + Math.sin(s * 0.53 + 1) * 0.12;
+      const wide = innerWidth > 900;
+      // on phones, stay on the cheek between the HUD and the headline
+      tx = (wide ? 0.78 : 0.76) + Math.sin(s * 0.37) * (wide ? 0.05 : 0.03) + Math.sin(s * 0.11) * 0.02;
+      ty = (wide ? 0.56 : 0.71) + Math.sin(s * 0.53 + 1) * (wide ? 0.07 : 0.025);
     }
     mx += (tx - mx) * 0.12; my += (ty - my) * 0.12;
     place();
   }
-  th.ready.then(() => {
-    if (reduced) { place(); th.still(1); reticle.classList.add('is-on'); return; }
-    th.start();
+  lens.ready.then(() => {
+    if (reduced) { show = 1; place(); lens.still(1); reticle.classList.add('is-on'); return; }
+    lens.start();
     requestAnimationFrame(tick);
   });
 }
 
-// camera clock
-const clock = document.getElementById('hudClock');
-const tStart = performance.now();
-setInterval(() => {
-  const s = Math.floor((performance.now() - tStart) / 1000);
-  const p = n => String(n).padStart(2, '0');
-  clock.textContent = `${p(Math.floor(s / 3600))}:${p(Math.floor(s / 60) % 60)}:${p(s % 60)}`;
-}, 1000);
+// the homepage's climate cycle: sauna → steam → plunge → ice
+const PHASES = [
+  { id: 'heat', temp: 110, name: 'Sauna' },
+  { id: 'steam', temp: 45, name: 'Steam' },
+  { id: 'plunge', temp: 4, name: 'Plunge' },
+  { id: 'ice', temp: 0, name: 'Ice' }
+];
+const degEl = document.getElementById('climDeg');
+const nameEl = document.getElementById('climName');
+const cycleEl = document.getElementById('climCycle');
+let shown = 110;
+function setPhase(i) {
+  const p = PHASES[i];
+  hero.dataset.phase = p.id;
+  nameEl.textContent = p.name;
+  cycleEl.querySelectorAll('[data-p]').forEach(s => s.toggleAttribute('aria-current', s.dataset.p === p.id));
+  const from = shown, start = performance.now();
+  (function count(now) {
+    const k = clamp((now - start) / 700);
+    shown = Math.round(lerp(from, p.temp, 1 - Math.pow(1 - k, 3)));
+    degEl.textContent = shown + '°';
+    if (k < 1) requestAnimationFrame(count);
+  })(start);
+}
+if (!reduced) {
+  let ph = 0, heroOn = true;
+  new IntersectionObserver(es => { heroOn = es[0].isIntersecting; }).observe(hero);
+  setInterval(() => { if (heroOn) setPhase(ph = (ph + 1) % PHASES.length); }, 2400);
+}
+
+/* ═════════ Studio: the headset in every colourway ═════════ */
+const COLORWAYS = [
+  { name: 'Obsidian', hex: '#35383C', rough: .58, cc: .34 },
+  { name: 'Glacier',  hex: '#A8D5E2', rough: .50, cc: .42 },
+  { name: 'Ember',    hex: '#E2542C', rough: .42, cc: .55 },
+  { name: 'Chalk',    hex: '#EDE8E0', rough: .62, cc: .28 }
+];
+const viewer = document.getElementById('viewer');
+const slot = document.getElementById('slot');
+const cwName = document.getElementById('cwName');
+const swatchList = document.getElementById('swatches');
+let paint = () => {};
+let active = 0;
+function select(i) {
+  active = i;
+  [...swatchList.children].forEach((li, k) => li.firstChild.setAttribute('aria-checked', String(k === i)));
+  cwName.classList.add('out');
+  setTimeout(() => { cwName.textContent = COLORWAYS[i].name; cwName.classList.remove('out'); }, 180);
+  slot.setAttribute('aria-label', `The Dipsana headset in ${COLORWAYS[i].name}, slowly rotating. Drag to turn it.`);
+  paint(i);
+}
+COLORWAYS.forEach((cw, i) => {
+  const li = document.createElement('li');
+  const b = document.createElement('button');
+  b.type = 'button'; b.className = 'swatch'; b.setAttribute('role', 'radio');
+  b.setAttribute('aria-checked', String(i === 0));
+  b.setAttribute('aria-label', cw.name);
+  b.style.setProperty('--sw', cw.hex);
+  b.addEventListener('click', () => select(i));
+  b.addEventListener('keydown', e => {
+    const d = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    const k = (active + d + COLORWAYS.length) % COLORWAYS.length;
+    select(k); swatchList.children[k].firstChild.focus();
+  });
+  li.appendChild(b); swatchList.appendChild(li);
+});
+
+import('/js/lp-headset.js').then(({ headset }) => headset(document.getElementById('kit'), { color: COLORWAYS[0].hex }))
+  .then(kit => {
+    viewer.classList.add('is-live');
+    const { THREE, mat } = kit;
+    const from = new THREE.Color(), to = new THREE.Color(COLORWAYS[0].hex);
+    let ct = 1, r0 = mat.roughness, r1 = r0, c0 = mat.clearcoat, c1 = c0;
+    paint = i => {
+      from.copy(mat.color); to.set(COLORWAYS[i].hex);
+      r0 = mat.roughness; r1 = COLORWAYS[i].rough; c0 = mat.clearcoat; c1 = COLORWAYS[i].cc;
+      ct = 0;
+    };
+    let spin = 0, vel = 0, drag = false, lastX = 0, visible = false, t0 = performance.now();
+    new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(viewer);
+    slot.addEventListener('pointerdown', e => { drag = true; lastX = e.clientX; slot.setPointerCapture?.(e.pointerId); });
+    slot.addEventListener('pointermove', e => { if (drag) { vel += (e.clientX - lastX) * 0.0005; lastX = e.clientX; } });
+    slot.addEventListener('pointerup', () => { drag = false; });
+    slot.addEventListener('pointercancel', () => { drag = false; });
+    function frame(now) {
+      const dt = Math.min(64, now - t0); t0 = now;
+      spin += (reduced ? 0 : dt * 0.00016) + vel;
+      vel *= Math.pow(0.0025, dt / 1000);
+      if (ct < 1) {
+        ct = Math.min(1, ct + dt / 460);
+        const e = ct * ct * (3 - 2 * ct);
+        mat.color.copy(from).lerp(to, e);
+        mat.roughness = lerp(r0, r1, e); mat.clearcoat = lerp(c0, c1, e);
+      }
+      kit.state.az = -75 * Math.PI / 180 + spin;
+      kit.state.fill = 1.2;
+      kit.render();
+    }
+    if (reduced) { frame(performance.now()); paint = i => { mat.color.set(COLORWAYS[i].hex); frame(performance.now()); }; }
+    else (function loop(now) { requestAnimationFrame(loop); if (visible || ct < 1) frame(now); })(performance.now());
+  })
+  .catch(() => { /* the poster stays */ });
 
 /* ═════════ Descent: fire → steam → water → frost ═════════ */
 const ROOMS = GLSL.noise + PALETTES + `
@@ -361,46 +437,3 @@ if (split) {
   })();
 }
 
-/* ═════════ Readouts count up ═════════ */
-const counters = document.querySelectorAll('[data-count]');
-const cio = new IntersectionObserver(es => {
-  es.forEach(e => {
-    if (!e.isIntersecting) return;
-    cio.unobserve(e.target);
-    const end = +e.target.dataset.count;
-    if (reduced) { e.target.textContent = end; return; }
-    const t0 = performance.now();
-    (function step(now) {
-      const k = clamp((now - t0) / 1600);
-      e.target.textContent = Math.round(end * (1 - Math.pow(1 - k, 4)));
-      if (k < 1) requestAnimationFrame(step);
-    })(t0);
-  });
-}, { threshold: 0.6 });
-counters.forEach(c => cio.observe(c));
-
-/* ═════════ Waitlist: a slow thermal field ═════════ */
-const WAIT = GLSL.noise + PALETTES + `
-uniform vec2 uRes; uniform float uTime; uniform vec2 uMouse;
-void main(){
-  vec2 uv = gl_FragCoord.xy/uRes;
-  vec2 q = (gl_FragCoord.xy - .5*uRes)/uRes.y;
-  float n = fbm(q*1.6 + vec2(0., -uTime*.12));
-  float m = fbm(q*2.4 + n*1.8 + vec2(uTime*.03, -uTime*.2));
-  float d = length(q - (uMouse - .5)*vec2(uRes.x/uRes.y, 1.));
-  float heat = m*(1.25 - uv.y) + .25*exp(-d*3.);
-  vec3 hot = iron(heat*.9);
-  vec3 cold = arctic(m*.8 + .1);
-  vec3 col = mix(hot, cold, smoothstep(.45, 1.05, uv.y + (n - .5)*.4));
-  gl_FragColor = vec4(col*.8, 1.);
-}`;
-const waitCv = document.getElementById('waitGl');
-const wg = shader(waitCv, WAIT, { maxDpr: 1 });
-if (wg) {
-  waitCv.parentElement.addEventListener('pointermove', e => {
-    const r = waitCv.getBoundingClientRect();
-    wg.mouse[0] = (e.clientX - r.left) / r.width;
-    wg.mouse[1] = 1 - (e.clientY - r.top) / r.height;
-  });
-  reduced ? wg.still(4) : wg.start();
-}

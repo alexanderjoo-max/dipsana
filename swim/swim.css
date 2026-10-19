@@ -217,8 +217,60 @@
 }
 .wait input[type=email]{background:rgba(2,23,34,.55); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px)}
 
+
+/* ───────── the headset hovering over the lane ───────── */
+.hover{
+  position:absolute; z-index:1; pointer-events:none;
+  right:4vw; top:calc(var(--head) + 4vh);
+  width:min(46vw,760px); aspect-ratio:1/.78;
+}
+.hover canvas{position:absolute; inset:0; width:100%; height:100%; display:block}
+.hover-shadow{
+  position:absolute; left:18%; right:14%; top:58%; height:22%;
+  border-radius:50%;
+  background:radial-gradient(closest-side, rgba(1,24,36,.55), transparent);
+  filter:blur(14px);
+  transform:translate(4%,10%) scale(var(--sh,1));
+}
+
+/* ───────── the kit ───────── */
+.kit{
+  display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:clamp(32px,5vw,80px); align-items:center;
+  max-width:calc(var(--max) + var(--pad)*2); margin:0 auto;
+  padding:clamp(100px,16vh,180px) var(--pad);
+}
+.kit-stage{position:relative; aspect-ratio:1/.9; border-radius:8px; overflow:hidden; background:#04384c; touch-action:pan-y}
+.kit-water{position:absolute; inset:0; width:100%; height:100%; display:block}
+.kit-stage::after{content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(70% 60% at 50% 50%, transparent, rgba(2,23,34,.55))}
+.kit-poster{position:absolute; inset:0; display:grid; place-items:center; z-index:1; transition:opacity .8s ease}
+.kit-stage.is-live .kit-poster{opacity:0}
+.kit-hs{position:absolute; inset:0; width:100%; height:100%; display:block; z-index:2; cursor:grab}
+.kit-hs:active{cursor:grabbing}
+.kit-hint{position:absolute; z-index:3; left:50%; bottom:14px; transform:translateX(-50%); margin:0; color:rgba(234,246,246,.75)}
+.kit-copy .mono{margin:0}
+.kit-name{margin:0 0 16px; color:var(--ink-dim)}
+.kit-name b{font-variation-settings:'opsz' 96,'wdth' 76,'wght' 780; font-style:italic; text-transform:uppercase; font-size:28px; color:var(--ink); margin-right:8px; transition:opacity .2s ease}
+.kit-name span{transition:opacity .2s ease}
+.kit-name.out b,.kit-name.out span{opacity:0}
+.kit-sw{display:flex; gap:14px; list-style:none; margin:0 0 30px; padding:0}
+.kit-sw button{
+  width:38px; height:38px; border-radius:50%; border:0; padding:0; cursor:pointer;
+  background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.5), transparent 45%), var(--sw);
+  box-shadow:0 0 0 1px rgba(255,255,255,.22);
+  transition:transform .3s var(--ease), box-shadow .3s ease;
+}
+.kit-sw button:hover{transform:translateY(-3px)}
+.kit-sw button[aria-checked="true"]{box-shadow:0 0 0 1px rgba(255,255,255,.4), 0 0 0 6px rgba(111,224,227,.3); transform:translateY(-3px) scale(1.06)}
+.kit-specs{margin:0; display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line)}
+.kit-specs div{padding:14px 12px 14px 0; border-bottom:1px solid var(--line)}
+.kit-specs div:nth-child(even){padding-left:14px; border-left:1px solid var(--line)}
+.kit-specs dt{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--mute)}
+.kit-specs dd{margin:4px 0 0; color:var(--ink)}
+
 @media (max-width:900px){
   .hero-hint{display:none}
+  .hover{left:50%; right:auto; top:calc(var(--head) + 2vh); width:min(92vw,520px); transform:translateX(-50%)}
+  .kit{grid-template-columns:1fr}
   .below{grid-template-columns:1fr}
   .signal{max-width:520px}
   .list li{grid-template-columns:1fr; gap:2px}
