@@ -1,0 +1,225 @@
+/* Sound bath — dusk silk, a cymatic plate, Italiana for the voice. */
+:root{
+  --bg:#1b1120;
+  --ink:#f7ede9;
+  --ink-dim:#dccad2;
+  --mute:#a8929f;
+  --line:rgba(247,237,233,.14);
+  --line-strong:rgba(247,237,233,.3);
+  --accent:#f4c2ae;
+  --accent-soft:#f9d6c8;
+  --accent-ink:#2a1424;
+  --rose:#e9a2b8;
+  --lilac:#c9b6ee;
+  --apricot:#f4c2ae;
+  --focus:#c9b6ee;
+  --serif:"Italiana","Didot","Bodoni 72",serif;
+}
+
+body{font-variation-settings:'opsz' 14,'wdth' 100,'wght' 330; background:#1b1120}
+.silk{position:fixed; inset:0; width:100%; height:100%; z-index:0; display:block; pointer-events:none}
+.plate{position:fixed; inset:0; width:100%; height:100%; z-index:1; display:block; pointer-events:none}
+main,.lp-foot{position:relative; z-index:2}
+.lp-foot{background:rgba(12,6,14,.55); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px)}
+.no-gl body{background:linear-gradient(180deg,#3a2136,#1b1120 60%,#120a16)}
+
+em{font-style:normal; background:linear-gradient(100deg, var(--apricot), var(--rose) 50%, var(--lilac)); -webkit-background-clip:text; background-clip:text; color:transparent}
+.lede{color:var(--ink-dim); font-size:clamp(16px,1.5vw,19px); max-width:42ch; margin:0}
+.h2{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(48px,7.4vw,112px); line-height:.96; letter-spacing:-.01em;
+  margin:14px 0 30px;
+}
+.mono{color:var(--mute)}
+
+[data-load]{opacity:0; transform:translateY(22px); filter:blur(12px); animation:arrive 1.8s var(--ease) forwards}
+[data-load="1"]{animation-delay:.3s}
+[data-load="2"]{animation-delay:.5s}
+[data-load="3"]{animation-delay:.8s}
+[data-load="4"]{animation-delay:1.15s}
+[data-load="5"]{animation-delay:1.4s}
+@keyframes arrive{to{opacity:1; transform:none; filter:none}}
+
+/* ───────── hero ───────── */
+.hero{
+  position:relative; overflow:hidden;
+  min-height:100svh;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center;
+  padding:calc(var(--head) + 30px) var(--pad) 60px;
+}
+.halo{
+  position:absolute; left:50%; top:52%;
+  width:min(96vw,96svh); height:min(96vw,96svh);
+  transform:translate(-50%,-50%);
+  pointer-events:none; overflow:visible;
+  opacity:0; animation:haloIn 3s ease 1.6s forwards, spin 90s linear infinite;
+}
+.halo text{
+  font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.42em; text-transform:uppercase;
+  fill:rgba(247,237,233,.55);
+}
+@keyframes haloIn{to{opacity:1}}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+.kicker{color:var(--apricot); margin:0 0 22px}
+.hero-h{
+  margin:0;
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(58px,10.6vw,176px); line-height:.9; letter-spacing:-.015em;
+  text-shadow:0 2px 50px rgba(30,10,30,.6);
+}
+.hero-h span{display:block}
+.hero-sub{max-width:34ch; margin:28px auto 0; font-size:clamp(17px,1.6vw,20px); color:var(--ink-dim)}
+.hero-actions{display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:14px; margin-top:38px}
+.hint{margin:22px 0 0; font-size:10px}
+
+.play{
+  position:relative;
+  display:inline-flex; align-items:center; gap:14px;
+  padding:8px 24px 8px 8px;
+  background:rgba(247,237,233,.1); color:var(--ink);
+  border:1px solid var(--line-strong); border-radius:999px;
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  cursor:pointer; font-size:15px;
+  transition:background .3s ease, border-color .3s ease;
+}
+.play:hover{background:rgba(247,237,233,.18)}
+.play-ring{
+  position:relative; width:42px; height:42px; border-radius:50%;
+  background:radial-gradient(circle at 35% 30%, #fff5ef, var(--apricot) 45%, var(--rose));
+  box-shadow:0 0 30px rgba(244,194,174,.55);
+}
+.play-ring::before{
+  content:""; position:absolute; left:16px; top:13px;
+  border-left:13px solid var(--accent-ink); border-top:8px solid transparent; border-bottom:8px solid transparent;
+}
+.play-ring::after{
+  content:""; position:absolute; inset:-6px; border-radius:50%;
+  border:1px solid var(--apricot); opacity:0;
+  animation:ping 2.6s ease-out infinite;
+}
+@keyframes ping{0%{transform:scale(.8); opacity:.8} 100%{transform:scale(1.9); opacity:0}}
+.play[aria-pressed="true"] .play-ring::before{
+  left:14px; top:14px; width:4px; height:14px; border:0;
+  background:var(--accent-ink); box-shadow:9px 0 0 var(--accent-ink);
+}
+.play[aria-pressed="true"] .play-ring::after{animation-duration:1.4s}
+
+/* ───────── feel ───────── */
+.feel{position:relative; padding:clamp(120px,20vh,220px) 0}
+.feel-in{position:relative; max-width:calc(var(--max) + var(--pad)*2); margin:0 auto; padding:0 var(--pad)}
+.feel .mono{margin:0}
+.feel-grid{display:grid; grid-template-columns:1fr 1fr; gap:clamp(24px,4vw,64px); max-width:920px}
+.feel-grid p{margin:0; font-size:clamp(16px,1.4vw,18.5px); color:var(--ink-dim)}
+.wave{position:absolute; left:0; right:0; top:50%; width:100%; height:clamp(160px,30vh,320px); transform:translateY(-50%); opacity:.55}
+.wave path{fill:none; stroke-width:1.1; vector-effect:non-scaling-stroke}
+.wave path:nth-child(1){stroke:var(--apricot)}
+.wave path:nth-child(2){stroke:var(--rose); opacity:.8}
+.wave path:nth-child(3){stroke:var(--lilac); opacity:.7}
+.wave path:nth-child(4){stroke:var(--rose); opacity:.4}
+.wave path:nth-child(5){stroke:var(--apricot); opacity:.3}
+
+/* ───────── breath ───────── */
+.breath{
+  position:relative; min-height:100svh;
+  display:grid; place-items:center;
+  padding:80px var(--pad);
+}
+.br-orb{position:absolute; left:50%; top:50%; width:min(78vw,70svh); aspect-ratio:1; transform:translate(-50%,-50%)}
+.br-core,.br-ring{position:absolute; inset:0; border-radius:50%; transform:scale(var(--s,.45)); transition:transform .1s linear}
+.br-core{
+  background:radial-gradient(circle at 40% 35%, rgba(255,240,232,.55), rgba(244,194,174,.32) 35%, rgba(233,162,184,.16) 60%, rgba(201,182,238,0) 72%);
+  filter:blur(4px);
+}
+.br-ring{border:1px solid rgba(247,237,233,.35)}
+.br-ring:nth-child(2){transform:scale(calc(var(--s,.45) * 1.12)); opacity:.5}
+.br-ring:nth-child(3){transform:scale(calc(var(--s,.45) * 1.26)); opacity:.25}
+.br-copy{position:relative; text-align:center}
+.br-copy .mono{margin:0 0 18px; color:var(--apricot)}
+.br-word{
+  margin:0;
+  font-family:var(--serif); font-size:clamp(56px,9vw,140px); line-height:1;
+  transition:opacity .6s ease, filter .6s ease;
+}
+.br-word.swap{opacity:0; filter:blur(8px)}
+.br-count{margin:18px 0 0; font-size:13px; color:var(--ink)}
+.br-note{margin:28px 0 0; color:var(--ink-dim); font-size:15px}
+
+/* ───────── day ───────── */
+.day{position:relative}
+.moment{
+  min-height:100svh;
+  display:flex; flex-direction:column; justify-content:center;
+  padding:0 var(--pad);
+  max-width:calc(var(--pad) + 470px);
+  opacity:.14; transform:translateX(-16px); filter:blur(3px);
+  transition:opacity 1s var(--ease), transform 1s var(--ease), filter 1s ease;
+}
+.moment.is-on{opacity:1; transform:none; filter:none}
+.moment .mono{margin:0; color:var(--apricot)}
+.moment time{font-size:13px; letter-spacing:.08em; color:var(--ink)}
+.moment h3{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(68px,9.6vw,150px); line-height:.9; margin:14px 0 18px;
+}
+.moment p:last-child{margin:0; font-size:clamp(16px,1.5vw,19px); color:var(--ink-dim); max-width:36ch}
+.day-clock{
+  position:fixed; right:var(--pad); bottom:clamp(24px,5vh,48px); z-index:3;
+  width:76px; height:76px; display:grid; place-items:center;
+  opacity:0; transform:translateY(10px); transition:opacity .6s ease, transform .6s var(--ease);
+  pointer-events:none;
+}
+.day-clock.is-on{opacity:1; transform:none}
+.day-clock svg{position:absolute; inset:0; transform:rotate(-90deg)}
+.day-clock circle{fill:none; stroke:var(--line-strong); stroke-width:1.2}
+.day-clock .dc-arc{stroke:var(--apricot); stroke-width:2; stroke-dasharray:289; stroke-dashoffset:var(--o,289); stroke-linecap:round; transition:stroke-dashoffset .3s linear}
+.day-clock span{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink)}
+
+/* ───────── object ───────── */
+.object{
+  display:grid; grid-template-columns:1.15fr 1fr; align-items:center; gap:clamp(32px,5vw,80px);
+  max-width:calc(var(--max) + var(--pad)*2); margin:0 auto;
+  padding:clamp(100px,16vh,180px) var(--pad);
+}
+.obj-media{position:relative; aspect-ratio:1/.8}
+.obj-media::before{
+  content:""; position:absolute; inset:2% 6%; border-radius:50%;
+  background:radial-gradient(closest-side, rgba(244,194,174,.4), rgba(201,182,238,.14) 60%, transparent);
+  filter:blur(30px);
+}
+.obj-poster{position:absolute; inset:0; display:grid; place-items:center; transition:opacity .8s ease}
+.obj-poster img{filter:invert(1) sepia(.28) saturate(1.2) brightness(.98) drop-shadow(0 30px 40px rgba(10,4,12,.55))}
+.obj-media.is-live .obj-poster{opacity:0}
+#chalk{position:absolute; inset:0; width:100%; height:100%; display:block; cursor:grab}
+#chalk:active{cursor:grabbing}
+.obj-tag{position:absolute; left:6%; bottom:2%; color:var(--ink-dim)}
+.obj-copy .mono{margin:0}
+.obj-list{list-style:none; margin:0; padding:0; border-top:1px solid var(--line)}
+.obj-list li{display:grid; grid-template-columns:150px 1fr; gap:16px; padding:16px 0; border-bottom:1px solid var(--line)}
+.obj-list b{font-weight:500; color:var(--ink)}
+.obj-list span{color:var(--ink-dim); font-size:15px}
+
+/* ───────── waitlist ───────── */
+.wait{text-align:center; padding:clamp(120px,20vh,220px) var(--pad)}
+.wait .mono{margin:0}
+.wait-h{
+  font-family:var(--serif); font-weight:400;
+  font-size:clamp(72px,13vw,210px); line-height:.92; margin:18px 0 22px;
+}
+.wait .lede{margin:0 auto}
+.btn{font-weight:600}
+input[type=email]{background:rgba(20,10,22,.45); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px)}
+.done{font-family:var(--serif); font-size:clamp(28px,4vw,44px)}
+
+@media (max-width:900px){
+  .feel-grid{grid-template-columns:1fr}
+  .moment{max-width:none; justify-content:flex-end; padding-bottom:14vh; text-shadow:0 2px 24px rgba(15,6,16,.9)}
+  .day-clock{width:60px; height:60px; top:calc(var(--head) + 14px); bottom:auto}
+  .object{grid-template-columns:1fr}
+  .obj-list li{grid-template-columns:1fr; gap:4px}
+}
+@media (prefers-reduced-motion: reduce){
+  [data-load]{opacity:1; transform:none; filter:none; animation:none}
+  .halo{opacity:1; animation:none}
+  .moment{opacity:1; transform:none; filter:none}
+}

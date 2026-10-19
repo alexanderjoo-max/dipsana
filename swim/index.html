@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dipsana — Swim headphones that follow you into the sauna</title>
+<meta name="description" content="Open-ear bone conduction for swimmers. IP68 to 2m, 32GB onboard so music plays underwater without Bluetooth, physical buttons for wet hands, and rated to 110°C for the sauna after your set.">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F26GGJJMGX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-F26GGJJMGX');
+</script>
+<meta name="theme-color" content="#021722">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://dipsana.com/swim/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dipsana.com/swim/">
+<meta property="og:title" content="Dipsana — Swim. Then sauna. Same pair.">
+<meta property="og:description" content="Bone conduction for swimmers. 32GB onboard, IP68, and rated to 110°C for the sauna after.">
+<meta property="og:image" content="https://dipsana.com/images/v3-plunge.jpg">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/lp.css">
+<link rel="stylesheet" href="/swim/swim.css">
+<script src="/js/site.js" defer></script>
+<script type="module" src="/swim/swim.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar" id="topbar">
+  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+  <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Join the waitlist</span><span class="btn-short">Waitlist</span></a>
+</header>
+
+<main id="main">
+
+  <!-- ─────────── Hero: looking down a lane, swimming as you scroll ─────────── -->
+  <section class="hero" id="hero" aria-labelledby="hero-h">
+    <canvas class="pool" id="pool" aria-hidden="true"></canvas>
+    <div class="hero-copy">
+      <p class="mono kicker" data-load="1">Bone conduction for swimmers · IP68 · 32GB onboard</p>
+      <h1 class="hero-h" id="hero-h">
+        <span class="hl" data-load="2">Swim.</span>
+        <span class="hl" data-load="3">Then sauna.</span>
+        <span class="hl hl--rope" data-load="4">Same pair.</span>
+      </h1>
+      <div class="hero-actions" data-load="5">
+        <a class="btn" href="#waitlist">Join the waitlist</a>
+        <a class="btn btn--ghost" href="#below">Dive in ↓</a>
+      </div>
+    </div>
+    <p class="mono hero-hint" data-load="5" aria-hidden="true">Move across the water</p>
+  </section>
+
+  <!-- ─────────── Below the surface ─────────── -->
+  <section class="below" id="below" data-reveal aria-labelledby="below-h">
+    <div class="below-copy">
+      <p class="mono rv">The problem with streaming</p>
+      <h2 class="big rv" id="below-h">Bluetooth stops at&nbsp;the&nbsp;surface.</h2>
+      <p class="lede rv">Radio signals barely travel through water, so a phone on the pool deck goes silent the moment your head goes under. Dipsana keeps the music on the headset instead: 32GB onboard, loaded once, played offline for the whole set.</p>
+      <ol class="list rv">
+        <li><b>Above water</b><span>Bluetooth 5.4 to your phone or watch.</span></li>
+        <li><b>Under water</b><span>Plays straight from onboard storage. No signal needed.</span></li>
+      </ol>
+    </div>
+    <figure class="signal rv" aria-label="Illustration: Bluetooth rings from a phone on the deck fade out at the waterline, while the swimmer below keeps listening from onboard storage.">
+      <img src="/images/v3-plunge.jpg" alt="" width="864" height="1152" loading="lazy">
+      <svg viewBox="0 0 864 1152" aria-hidden="true">
+        <defs>
+          <clipPath id="air"><rect x="0" y="0" width="864" height="186"/></clipPath>
+          <clipPath id="water"><rect x="0" y="186" width="864" height="966"/></clipPath>
+        </defs>
+        <g class="rings" clip-path="url(#air)">
+          <circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/>
+        </g>
+        <g class="rings rings--lost" clip-path="url(#water)">
+          <circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/>
+        </g>
+        <g class="phone"><rect x="716" y="40" width="40" height="64" rx="7"/><rect x="721" y="47" width="30" height="46" rx="2"/></g>
+        <line class="wl" x1="0" y1="186" x2="864" y2="186"/>
+        <text class="wl-t" x="24" y="172">BLUETOOTH ↑</text>
+        <text class="wl-t wl-t--b" x="24" y="222">ONBOARD 32GB ↓</text>
+        <g class="notes">
+          <circle cx="252" cy="612" r="10"/><circle cx="252" cy="612" r="10"/><circle cx="252" cy="612" r="10"/>
+        </g>
+      </svg>
+    </figure>
+  </section>
+
+  <!-- ─────────── The set: five laps ─────────── -->
+  <section class="set" id="set" aria-label="Five laps, five features">
+    <div class="set-stage">
+      <div class="set-top">
+        <p class="lap-num" aria-hidden="true">Lap <span id="lapNum">1</span><small>/5</small></p>
+        <div class="pace" aria-hidden="true">
+          <svg viewBox="0 0 120 120">
+            <circle class="pc-face" cx="60" cy="60" r="56"/>
+            <g id="pcTicks"></g>
+            <line class="pc-hand pc-hand--min" id="pcMin" x1="60" y1="60" x2="60" y2="26"/>
+            <line class="pc-hand" id="pcSec" x1="60" y1="68" x2="60" y2="10"/>
+            <circle cx="60" cy="60" r="3.5" class="pc-pin"/>
+          </svg>
+          <p class="mono"><span id="split">0:00.0</span></p>
+        </div>
+      </div>
+
+      <div class="lane" aria-hidden="true">
+        <i class="rope rope--a"></i>
+        <div class="lane-water">
+          <span class="lane-t lane-t--l"></span><span class="lane-line"></span><span class="lane-t lane-t--r"></span>
+          <div class="marks"><span>0m</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25m</span></div>
+          <div class="swimmer" id="swimmer"><i class="wake"></i><b></b></div>
+        </div>
+        <i class="rope rope--b"></i>
+      </div>
+
+      <ol class="laps">
+        <li data-lap="0"><p class="mono">Lap 1 · Open-ear</p><h3>Hear the whistle.</h3><p>Pads sit on your cheekbones, not in your ears, so the coach, the clock and the next lane still get through.</p></li>
+        <li data-lap="1"><p class="mono">Lap 2 · 32GB onboard</p><h3>Thousands of tracks.</h3><p>Albums, podcasts, a whole audiobook. Loaded once. No phone in a bag on the deck.</p></li>
+        <li data-lap="2"><p class="mono">Lap 3 · Physical buttons</p><h3>Skip mid-length.</h3><p>Three real buttons you can find by feel, with goggles on and wet, cold fingers. No touch surfaces to misfire.</p></li>
+        <li data-lap="3"><p class="mono">Lap 4 · Open band</p><h3>Clear of the strap.</h3><p>The band wraps behind your head and leaves room for goggle straps and a cap.</p></li>
+        <li data-lap="4"><p class="mono">Lap 5 · Magnetic charge</p><h3>No port for chlorine.</h3><p>Magnetic contacts instead of a socket. Ten minutes on the charger gives three hours of laps.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ─────────── After the swim ─────────── -->
+  <section class="after" data-reveal aria-labelledby="after-h">
+    <div class="after-head">
+      <p class="mono rv">Cool-down</p>
+      <h2 class="big rv" id="after-h">Then the sauna.</h2>
+      <p class="lede rv">Swim headphones usually go back in the bag after the pool. Dipsana is rated to 110°C, so the same pair comes with you into the sauna and the steam room, and the episode keeps going.</p>
+    </div>
+    <div class="duo rv">
+      <figure class="duo-a">
+        <img src="/images/v3-plunge.jpg" alt="Swimmer at the surface of a pool, Dipsana on the cheekbone" width="864" height="1152" loading="lazy">
+        <figcaption><b><span data-count="27">0</span>°</b><span class="mono">Pool</span></figcaption>
+      </figure>
+      <figure class="duo-b">
+        <img src="/images/v3-sauna.jpg" alt="The same headset worn in a cedar sauna" width="864" height="1152" loading="lazy">
+        <figcaption><b><span data-count="90">0</span>°</b><span class="mono">Sauna</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="specs" data-reveal aria-label="Specifications">
+    <ul>
+      <li class="rv"><b>IP68</b><span>Submersible to 2m</span></li>
+      <li class="rv"><b>32GB</b><span>Offline playback</span></li>
+      <li class="rv"><b>0–110°C</b><span>Pool to sauna</span></li>
+      <li class="rv"><b>10h</b><span>Per charge</span></li>
+      <li class="rv"><b>BT 5.4</b><span>Above water</span></li>
+    </ul>
+  </section>
+
+  <section class="wait" id="waitlist" data-reveal aria-labelledby="wl-h">
+    <canvas class="pool pool--wait" id="poolWait" aria-hidden="true"></canvas>
+    <div class="wait-in">
+      <p class="mono rv">Founding list</p>
+      <h2 class="wait-h rv" id="wl-h">Lane’s open.</h2>
+      <p class="lede rv">One email when it ships. That’s it.</p>
+      <div class="form-wrap rv">
+        <form id="waitlist-form" action="https://app.kit.com/forms/9811187/subscriptions" method="post" novalidate>
+          <label class="sr" for="email">Email address</label>
+          <input type="email" id="email" name="email_address" placeholder="you@example.com" required autocomplete="email" inputmode="email">
+          <div class="sr" aria-hidden="true">
+            <label for="company">Company</label>
+            <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+          </div>
+          <button class="btn" type="submit">Join the waitlist</button>
+        </form>
+        <p class="err" id="formErr" role="alert"></p>
+        <p class="done" id="formDone">You’re on the list. <span class="aqua">See you in the water.</span></p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="lp-foot">
+  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+  <ul>
+    <li><a href="/product/">Product</a></li>
+    <li><a href="/how-it-works/">How it works</a></li>
+    <li><a href="/learn/swim/">Listening while you swim</a></li>
+    <li><a href="/terms/">Terms</a></li>
+    <li><a href="/privacy/">Privacy</a></li>
+  </ul>
+  <p class="fine">Swim where it’s safe and supervised, and keep the volume low enough to hear what’s going on around you.</p>
+</footer>
+
+</body>
+</html>
