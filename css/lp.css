@@ -1,0 +1,163 @@
+/* Shared base for campaign landing pages (/recovery/, /sound-bath/, /swim/).
+   Each page sets its own tokens on :root and layers page CSS on top. */
+:root{
+  --bg:#08090c;
+  --ink:#f0ebe3;
+  --ink-dim:#b7b2a8;
+  --mute:#7d7972;
+  --line:rgba(240,235,227,.12);
+  --line-strong:rgba(240,235,227,.22);
+  --accent:#E86A2A;
+  --accent-soft:#e08a5c;
+  --accent-ink:#fff;
+  --focus:#8ec4d4;
+  --pad:clamp(20px,4.6vw,80px);
+  --max:1180px;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --head:64px;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; overflow-x:clip}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  font-variation-settings:'opsz' 14,'wdth' 90,'wght' 400;
+  font-size:16px;
+  line-height:1.55;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+img{display:block; max-width:100%}
+a{color:inherit}
+button,input{font:inherit}
+:focus-visible{outline:2px solid var(--focus); outline-offset:3px; border-radius:4px}
+
+.sr{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0;
+}
+.skip{
+  position:absolute; left:var(--pad); top:-48px; z-index:80;
+  background:var(--accent); color:var(--accent-ink);
+  padding:8px 14px; text-decoration:none; font-size:13px; font-weight:500;
+}
+.skip:focus{top:12px}
+
+.mono{
+  font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-weight:500;
+  color:var(--mute);
+}
+.fine{font-size:13px; line-height:1.55; color:var(--mute); margin:0}
+
+/* ── top bar ── */
+.topbar{
+  position:fixed; top:0; left:0; right:0; z-index:50;
+  display:flex; align-items:center; justify-content:space-between; gap:24px;
+  padding:16px var(--pad);
+  padding-top:max(16px,env(safe-area-inset-top));
+  border-bottom:1px solid transparent;
+  transition:background .4s ease, border-color .4s ease, padding .4s var(--ease);
+}
+.topbar.is-scrolled{
+  padding-top:max(11px,env(safe-area-inset-top));
+  padding-bottom:11px;
+  background:color-mix(in srgb, var(--bg) 78%, transparent);
+  backdrop-filter:saturate(160%) blur(18px);
+  -webkit-backdrop-filter:saturate(160%) blur(18px);
+  border-bottom-color:var(--line);
+}
+.mark{display:inline-flex; align-items:center; text-decoration:none}
+.mark img{height:26px; width:auto}
+
+/* ── buttons ── */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:10px;
+  background:var(--accent); color:var(--accent-ink);
+  font-family:inherit; font-weight:500; font-size:14px; line-height:1;
+  padding:13px 22px;
+  border:0; border-radius:999px;
+  text-decoration:none; cursor:pointer;
+  transition:background .25s ease, transform .25s var(--ease), color .25s ease, box-shadow .25s ease;
+}
+.btn:hover{background:var(--accent-soft)}
+.btn:active{transform:scale(.98)}
+.btn--sm{font-size:12.5px; padding:9px 16px}
+.btn--ghost{background:transparent; color:var(--ink); border:1px solid var(--line-strong)}
+.btn--ghost:hover{background:color-mix(in srgb, var(--ink) 7%, transparent)}
+button[type=submit][disabled]{opacity:.55; cursor:default; transform:none}
+
+/* ── waitlist form (wired by /js/site.js) ── */
+.form-wrap{width:100%; max-width:540px; margin:36px auto 0}
+form{
+  display:flex; gap:10px; align-items:stretch;
+  transition:opacity .35s ease, transform .45s var(--ease);
+}
+form.gone{opacity:0; transform:translateY(-10px); pointer-events:none; height:0; overflow:hidden; margin:0}
+input[type=email]{
+  flex:1; min-width:0;
+  background:color-mix(in srgb, var(--bg) 60%, transparent);
+  border:1px solid var(--line-strong);
+  border-radius:999px;
+  color:var(--ink);
+  font-family:inherit; font-size:16px; font-weight:300;
+  padding:16px 22px;
+  transition:border-color .25s ease, box-shadow .25s ease;
+}
+input[type=email]::placeholder{color:var(--mute)}
+input[type=email]:focus{
+  border-color:var(--focus);
+  box-shadow:0 0 0 4px color-mix(in srgb, var(--focus) 18%, transparent);
+  outline:none;
+}
+form.invalid input[type=email]{border-color:#e06a5c}
+.err{
+  margin:14px 2px 0; min-height:20px;
+  font-size:13.5px; color:#e06a5c; opacity:0;
+  transition:opacity .25s ease;
+}
+.err.show{opacity:1}
+.done{
+  margin:0; opacity:0; transform:translateY(14px);
+  transition:opacity .5s ease .12s, transform .6s var(--ease) .12s;
+  font-size:clamp(1.15rem,2.4vw,1.55rem);
+  height:0; overflow:hidden;
+}
+.done.show{opacity:1; transform:none; height:auto; overflow:visible}
+
+/* ── reveal (driven by /js/site.js) ── */
+.rv{
+  opacity:0; transform:translateY(24px);
+  transition:opacity .9s var(--ease), transform .9s var(--ease);
+}
+.in .rv{opacity:1; transform:none}
+
+/* ── footer ── */
+.lp-foot{
+  position:relative; z-index:5;
+  padding:56px var(--pad) 40px;
+  padding-bottom:max(40px, env(safe-area-inset-bottom));
+  border-top:1px solid var(--line);
+  display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:18px 32px;
+}
+.lp-foot ul{display:flex; flex-wrap:wrap; gap:8px 22px; list-style:none; margin:0; padding:0}
+.lp-foot a{font-size:12.5px; color:var(--mute); text-decoration:none}
+.lp-foot a:hover{color:var(--ink)}
+.lp-foot .fine{flex-basis:100%}
+
+@media (max-width:560px){
+  form{flex-direction:column}
+  .btn-full{display:none}
+}
+@media (min-width:561px){ .btn-short{display:none} }
+
+@media (prefers-reduced-motion: reduce){
+  .rv{opacity:1 !important; transform:none !important; transition:none !important}
+  *,*::before,*::after{animation-duration:.001ms !important; animation-iteration-count:1 !important}
+}

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dipsana — The portable sound bath</title>
+<meta name="description" content="A sound bath you wear. Dipsana plays through your cheekbones, so the sound arrives as vibration with your ears left open. For winding down, sleep, the commute, the sauna and ten quiet minutes at home.">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F26GGJJMGX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-F26GGJJMGX');
+</script>
+<meta name="theme-color" content="#1b1120">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://dipsana.com/sound-bath/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dipsana.com/sound-bath/">
+<meta property="og:title" content="Dipsana — The portable sound bath">
+<meta property="og:description" content="A sound bath you wear. Through the cheekbones, ears open, anywhere.">
+<meta property="og:image" content="https://dipsana.com/images/product.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/lp.css">
+<link rel="stylesheet" href="/sound-bath/sound-bath.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script src="/js/site.js" defer></script>
+<script type="module" src="/sound-bath/sound-bath.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<canvas class="silk" id="silk" aria-hidden="true"></canvas>
+<canvas class="plate" id="plate" aria-hidden="true"></canvas>
+
+<header class="topbar" id="topbar">
+  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+  <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Hold my place</span><span class="btn-short">Waitlist</span></a>
+</header>
+
+<main id="main">
+
+  <section class="hero" aria-labelledby="hero-h">
+    <svg class="halo" viewBox="0 0 600 600" aria-hidden="true">
+      <defs><path id="rim" d="M300,300 m-282,0 a282,282 0 1,1 564,0 a282,282 0 1,1 -564,0"/></defs>
+      <text><textPath href="#rim">the portable sound bath · open-ear · through the cheekbone · the portable sound bath · open-ear · through the cheekbone ·</textPath></text>
+    </svg>
+
+    <p class="mono kicker" data-load="1">Dipsana · wellness</p>
+    <h1 class="hero-h" id="hero-h">
+      <span data-load="2">A sound bath</span>
+      <span data-load="3"><em>you can wear.</em></span>
+    </h1>
+    <p class="hero-sub" data-load="4">Played through your cheekbones, so it arrives as a soft vibration. Your ears stay open. Your shoulders drop.</p>
+    <div class="hero-actions" data-load="5">
+      <button class="play" id="play" type="button" aria-pressed="false">
+        <span class="play-ring" aria-hidden="true"></span>
+        <span class="play-label" id="playLabel">Listen for a moment</span>
+      </button>
+      <a class="btn btn--ghost" href="#waitlist">Hold my place</a>
+    </div>
+    <p class="mono hint" data-load="5" id="hint">Tones are made live in your browser · sound on</p>
+  </section>
+
+  <section class="feel" data-reveal aria-labelledby="feel-h">
+    <svg class="wave" id="wave" viewBox="0 0 1200 200" preserveAspectRatio="none" aria-hidden="true">
+      <path/><path/><path/><path/><path/>
+    </svg>
+    <div class="feel-in">
+      <p class="mono rv">Why it feels different</p>
+      <h2 class="h2 rv" id="feel-h">Vibration, <em>not volume.</em></h2>
+      <div class="feel-grid">
+        <p class="rv">A singing bowl works because you feel it as much as hear it. Dipsana does the same thing on purpose: two small pads rest on your cheekbones and pass sound through the bone to your inner ear.</p>
+        <p class="rv">Nothing goes in your ear canal, so there is no pressure, no seal and no muffled world. You stay aware of the room around you, and the sound settles underneath it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- One breath, guided -->
+  <section class="breath" id="breath" aria-labelledby="br-h">
+    <div class="br-orb" id="brOrb" aria-hidden="true">
+      <span class="br-ring"></span><span class="br-ring"></span><span class="br-ring"></span>
+      <span class="br-core"></span>
+    </div>
+    <div class="br-copy">
+      <p class="mono" id="br-h">Try one with us</p>
+      <p class="br-word" id="brWord" aria-live="polite">Breathe in</p>
+      <p class="br-count mono" id="brCount" aria-hidden="true">4</p>
+      <p class="br-note">Four in. Hold for two. Six out.</p>
+    </div>
+  </section>
+
+  <!-- A day: the plate re-forms for each moment -->
+  <section class="day" id="day" aria-label="A day with Dipsana">
+    <article class="moment" data-mode="0" data-sky="dawn">
+      <p class="mono"><time>06:40</time> · At home</p>
+      <h3>Meditate</h3>
+      <p>Ten minutes on the floor before anyone else is up. A slow bowl and a low drone, and nothing in your ears to fidget with.</p>
+    </article>
+    <article class="moment" data-mode="1" data-sky="morning">
+      <p class="mono"><time>08:15</time> · Commute</p>
+      <h3>Drive</h3>
+      <p>Calm audio in the car with your ears still open to the road, the indicator and the person in the passenger seat.</p>
+    </article>
+    <article class="moment" data-mode="2" data-sky="noon">
+      <p class="mono"><time>14:30</time> · Between things</p>
+      <h3>Reset</h3>
+      <p>A brighter set for the mid-afternoon slump. Close your eyes for one track and come back with more in the tank.</p>
+    </article>
+    <article class="moment" data-mode="3" data-sky="dusk">
+      <p class="mono"><time>18:45</time> · Sauna or bath</p>
+      <h3>Soak</h3>
+      <p>Rated to 110°C and waterproof to two metres, so the sound bath comes into the sauna, the steam room and the tub.</p>
+    </article>
+    <article class="moment" data-mode="4" data-sky="evening">
+      <p class="mono"><time>21:30</time> · Winding down</p>
+      <h3>Unwind</h3>
+      <p>The part of the evening where the day lets go of you. Long tones, nothing to follow, nothing to skip.</p>
+    </article>
+    <article class="moment" data-mode="5" data-sky="night">
+      <p class="mono"><time>23:00</time> · Lights out</p>
+      <h3>Sleep</h3>
+      <p>A drone to drift off to. Set it to stop on its own, or let it run. 32GB onboard means no phone glowing on the pillow.</p>
+    </article>
+    <div class="day-clock" id="dayClock" aria-hidden="true">
+      <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46"/><circle class="dc-arc" id="dcArc" cx="50" cy="50" r="46"/></svg>
+      <span id="dcTime">06:40</span>
+    </div>
+  </section>
+
+  <section class="object" id="object" data-reveal aria-labelledby="obj-h">
+    <div class="obj-media rv">
+      <picture class="obj-poster">
+        <source srcset="/images/product.webp" type="image/webp">
+        <img src="/images/product.png" alt="The Dipsana headset in a pale chalk finish: an open-ear band with a soft pad at each end" width="1200" height="760" loading="lazy">
+      </picture>
+      <canvas id="chalk" aria-hidden="true"></canvas>
+      <span class="obj-tag mono">Shown in Chalk</span>
+    </div>
+    <div class="obj-copy">
+      <p class="mono rv">The object</p>
+      <h2 class="h2 rv" id="obj-h">Light enough <em>to forget.</em></h2>
+      <ul class="obj-list">
+        <li class="rv"><b>Open-ear</b><span>Pads on the cheekbone. The ear canal stays empty.</span></li>
+        <li class="rv"><b>32 GB onboard</b><span>Load your sound baths once. Leave the phone in another room.</span></li>
+        <li class="rv"><b>10 hours</b><span>A week of evenings on one charge. Ten minutes gives three hours.</span></li>
+        <li class="rv"><b>Waterproof</b><span>IP68 to 2m and rated 0–110°C. Bath, pool and sauna.</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="wait" id="waitlist" data-reveal aria-labelledby="wl-h">
+    <p class="mono rv">Founding list</p>
+    <h2 class="wait-h rv" id="wl-h">Hold <em>a place.</em></h2>
+    <p class="lede rv">One email when it’s ready. Nothing in between.</p>
+    <div class="form-wrap rv">
+      <form id="waitlist-form" action="https://app.kit.com/forms/9811187/subscriptions" method="post" novalidate>
+        <label class="sr" for="email">Email address</label>
+        <input type="email" id="email" name="email_address" placeholder="you@example.com" required autocomplete="email" inputmode="email">
+        <div class="sr" aria-hidden="true">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+        </div>
+        <button class="btn" type="submit">Join the waitlist</button>
+      </form>
+      <p class="err" id="formErr" role="alert"></p>
+      <p class="done" id="formDone">You’re on the list. <em>Breathe out.</em></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="lp-foot">
+  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+  <ul>
+    <li><a href="/product/">Product</a></li>
+    <li><a href="/how-it-works/">How it works</a></li>
+    <li><a href="/terms/">Terms</a></li>
+    <li><a href="/privacy/">Privacy</a></li>
+  </ul>
+  <p class="fine">Dipsana is an audio device, not a medical device. Follow local laws on headphone use while driving, and keep the volume where you can hear what’s around you.</p>
+</footer>
+
+</body>
+</html>
