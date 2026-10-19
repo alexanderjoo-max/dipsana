@@ -26,7 +26,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="/css/lp.css">
 <link rel="stylesheet" href="/sound-bath/sound-bath.css">
@@ -102,6 +102,120 @@
       <p class="rv">A singing bowl works because you feel it as much as hear it. Dipsana does the same thing on purpose: the pads pass sound through your cheekbones to the inner ear.</p>
       <p class="rv">Nothing goes in your ear canal, so there’s no pressure, no seal and no muffled world. You stay aware of the room around you, and the sound settles underneath it.</p>
     </div>
+  </section>
+
+  <!-- How bone conduction works -->
+  <section class="works" id="works" data-reveal aria-labelledby="works-h">
+    <div class="works-head">
+      <p class="mono rv">Bone conduction, simply</p>
+      <h2 class="h2 rv" id="works-h">Your ears are <em>the long way round.</em></h2>
+      <p class="lede rv">Hearing happens in the cochlea, a small spiral in your inner ear that turns vibration into signals for the brain. Normally sound has to get there through the ear canal, the eardrum and three tiny bones. Bone conduction takes the shortcut.</p>
+    </div>
+
+    <figure class="paths rv" aria-labelledby="paths-cap">
+      <svg viewBox="0 0 1000 300" aria-hidden="true">
+        <defs>
+          <path id="pathUs" d="M80,90 C250,90 300,90 500,90 S800,90 920,90"/>
+          <path id="pathBuds" d="M80,220 C200,220 220,220 320,220 S480,220 560,220 S700,220 760,220 S860,220 920,220"/>
+          <radialGradient id="dotGlow"><stop offset="0" stop-color="#fff4ee"/><stop offset="1" stop-color="#f4c2ae" stop-opacity="0"/></radialGradient>
+        </defs>
+        <use href="#pathUs" class="p-line p-line--us"/>
+        <use href="#pathBuds" class="p-line p-line--buds"/>
+        <g class="p-nodes p-nodes--us">
+          <circle cx="80" cy="90" r="9"/><circle cx="500" cy="90" r="9"/><circle cx="920" cy="90" r="12"/>
+        </g>
+        <g class="p-nodes p-nodes--buds">
+          <circle cx="80" cy="220" r="7"/><circle cx="320" cy="220" r="7"/><circle cx="560" cy="220" r="7"/><circle cx="760" cy="220" r="7"/><circle cx="920" cy="220" r="7"/>
+        </g>
+        <g class="p-pulse">
+          <circle r="16" fill="url(#dotGlow)"><animateMotion dur="2.4s" repeatCount="indefinite"><mpath href="#pathUs"/></animateMotion></circle>
+          <circle r="16" fill="url(#dotGlow)"><animateMotion dur="2.4s" begin="1.2s" repeatCount="indefinite"><mpath href="#pathUs"/></animateMotion></circle>
+        </g>
+        <text class="p-t p-t--us" x="80" y="56" text-anchor="middle">Pad</text>
+        <text class="p-t p-t--us" x="500" y="56" text-anchor="middle">Cheekbone</text>
+        <text class="p-t p-t--us" x="920" y="56" text-anchor="middle">Cochlea</text>
+        <text class="p-t" x="80" y="258" text-anchor="middle">Speaker</text>
+        <text class="p-t" x="320" y="258" text-anchor="middle">Ear canal</text>
+        <text class="p-t" x="560" y="258" text-anchor="middle">Eardrum</text>
+        <text class="p-t" x="760" y="258" text-anchor="middle">Middle-ear bones</text>
+        <text class="p-t" x="920" y="258" text-anchor="middle">Cochlea</text>
+        <text class="p-k p-k--us" x="80" y="20">Dipsana · through bone</text>
+        <text class="p-k" x="80" y="160">Earbuds · through the canal</text>
+      </svg>
+      <div class="paths-list" aria-hidden="true">
+        <div class="pl pl--us"><p class="mono">Dipsana · through bone</p><ol><li>Pad</li><li>Cheekbone</li><li>Cochlea</li></ol></div>
+        <div class="pl"><p class="mono">Earbuds · through the canal</p><ol><li>Speaker</li><li>Ear canal</li><li>Eardrum</li><li>Middle-ear bones</li><li>Cochlea</li></ol></div>
+      </div>
+      <figcaption id="paths-cap" class="paths-cap">Top: Dipsana passes vibration through the cheekbone straight to the cochlea. Bottom: earbuds push air down a sealed ear canal first. You already hear this way a little: bone conduction is part of why your own voice sounds deeper to you than it does on a recording.</figcaption>
+    </figure>
+
+    <ul class="works-facts">
+      <li class="rv"><b>Nothing in the canal</b><span>No seal, no pressure, no buds to keep pushing back in.</span></li>
+      <li class="rv"><b>The room stays audible</b><span>Open ears hear voices, doors and traffic over the top.</span></li>
+      <li class="rv"><b>Felt as well as heard</b><span>Low tones arrive as a light vibration on the cheekbones.</span></li>
+    </ul>
+  </section>
+
+  <!-- Hertz, by ear -->
+  <section class="hz" id="hz" data-reveal aria-labelledby="hz-h">
+    <div class="hz-head">
+      <p class="mono rv">Hertz, by ear</p>
+      <h2 class="h2 rv" id="hz-h">Every sound is a <em>vibration per second.</em></h2>
+      <p class="lede rv">Hertz (Hz) counts how many times a sound wave vibrates each second. Low numbers feel slow, deep and physical; high numbers sound bright and light. Drag through the range and listen.</p>
+    </div>
+
+    <div class="hz-lab rv">
+      <div class="hz-read">
+        <p class="hz-num"><span id="hzNum">196</span><small>Hz</small></p>
+        <p class="hz-what" id="hzWhat" aria-live="polite">The singing-bowl sweet spot, and close to where skin is most sensitive to vibration.</p>
+        <button class="play play--sm" id="hzPlay" type="button" aria-pressed="false">
+          <span class="play-ring" aria-hidden="true"></span>
+          <span id="hzPlayLabel">Hear this tone</span>
+        </button>
+      </div>
+      <div class="hz-scope">
+        <svg viewBox="0 0 600 200" preserveAspectRatio="none" aria-hidden="true"><path id="hzWave"/><line x1="0" y1="100" x2="600" y2="100"/></svg>
+        <p class="mono hz-cycles" id="hzCycles" aria-hidden="true">196 vibrations every second</p>
+      </div>
+      <div class="hz-ruler">
+        <input type="range" id="hzRange" min="0" max="1000" value="494" aria-label="Frequency in hertz" aria-valuetext="196 hertz">
+        <div class="hz-bands" aria-hidden="true">
+          <span class="band" style="--a:40;--b:300"><i></i>Felt on the skin · strongest near 250 Hz</span>
+          <span class="band band--2" style="--a:85;--b:255"><i></i>Speaking voice</span>
+          <span class="band band--3" style="--a:100;--b:700"><i></i>Most singing-bowl tones</span>
+          <span class="band band--4" style="--a:65;--b:150"><i></i>Our low drone</span>
+        </div>
+        <div class="hz-axis" aria-hidden="true"><span style="--f:40">40</span><span style="--f:100">100</span><span style="--f:250">250</span><span style="--f:500">500</span><span style="--f:1000">1k Hz</span></div>
+      </div>
+    </div>
+
+    <div class="beat rv">
+      <div class="beat-copy">
+        <p class="mono">Why a bowl shimmers</p>
+        <h3 class="h3">Two tones, <em>three hertz apart.</em></h3>
+        <p>When two notes are only a few hertz apart they drift in and out of step, and you hear a slow pulse at the difference between them. 199 − 196 = three soft swells a second. That gentle wobble is a big part of what makes a singing bowl feel alive, and it’s built into the bowls on this page.</p>
+        <button class="play play--sm" id="beatPlay" type="button" aria-pressed="false">
+          <span class="play-ring" aria-hidden="true"></span>
+          <span id="beatLabel">Hear 196 Hz + 199 Hz</span>
+        </button>
+      </div>
+      <svg class="beat-scope" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true">
+        <path id="beatA"/><path id="beatB"/><path id="beatSum"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- What people come for -->
+  <section class="why" id="why" data-reveal aria-labelledby="why-h">
+    <p class="mono rv">What people come for</p>
+    <h2 class="h2 rv" id="why-h">Why vibration <em>helps you settle.</em></h2>
+    <ol class="why-list">
+      <li class="rv"><b>Something simple to rest on</b><p>A slow, steady tone gives a busy mind one easy thing to follow. That’s the basic idea behind most sound meditation.</p></li>
+      <li class="rv"><b>A slower pace</b><p>Long tones that swell and fade invite slower, longer breaths. Pair it with the breath above and you’ll feel the rhythm.</p></li>
+      <li class="rv"><b>Grounded in the body</b><p>Low frequencies land as a light buzz on the cheekbones, so your attention sits in your body rather than your to-do list.</p></li>
+      <li class="rv"><b>What the research says so far</b><p>In a 2017 observational study of singing-bowl meditation (Goldsmith et al.), participants reported less tension, anger and fatigue afterwards. It’s early, small-scale work and not a treatment, but it matches what many people feel.</p></li>
+    </ol>
+    <p class="fine rv why-note">Dipsana is an audio device, not a medical device. If you’re managing anxiety, sleep or a health condition, speak to a professional.</p>
   </section>
 
   <!-- One breath, guided -->

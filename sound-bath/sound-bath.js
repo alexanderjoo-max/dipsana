@@ -196,7 +196,7 @@ let hsW = 0, hsH = 0, hsShow = 0;
 const moments = [...document.querySelectorAll('.moment')];
 const day = document.getElementById('day');
 const breath = document.getElementById('breath');
-const wear = document.getElementById('wear');
+const heroSec = document.getElementById('hero');
 const dayClock = document.getElementById('dayClock');
 const dcArc = document.getElementById('dcArc');
 const dcTime = document.getElementById('dcTime');
@@ -216,10 +216,11 @@ function onScroll() {
   const mid = innerHeight / 2;
   const inRect = el => { const r = el.getBoundingClientRect(); return r.top < mid && r.bottom > mid; };
   const dr = day.getBoundingClientRect();
-  zone = inRect(breath) ? 'breath' : inRect(day) ? 'day' : inRect(wear) ? 'wear' : dr.bottom <= mid ? 'after' : 'hero';
+  // the plate only shows in the hero and through the day; every other section gets a clear stage
+  zone = inRect(heroSec) ? 'hero' : inRect(day) ? 'day' : inRect(breath) ? 'breath' : dr.bottom <= mid ? 'after' : 'between';
   dayClock.classList.toggle('is-on', zone === 'day');
 
-  if (zone === 'hero' || zone === 'wear' || zone === 'breath') {
+  if (zone === 'hero' || zone === 'between' || zone === 'breath') {
     setMode(HERO);
     sky = zone === 'breath' ? 'dusk' : 'hero';
     moments.forEach(m => m.classList.remove('is-on'));
@@ -490,3 +491,128 @@ import('/js/lp-headset.js').then(({ headset }) => headset(finCanvas, CHALK)).the
   if (reduced) { frame(performance.now()); finPaint = i => { mat.color.set(FINISHES[i].hex); frame(performance.now()); }; }
   else (function loop(now) { requestAnimationFrame(loop); if (visible || ct < 1) frame(now); })(performance.now());
 }).catch(() => { /* the poster stays */ });
+
+/* ═════════ hertz lab: drag a frequency, hear it, see it ═════════ */
+const tones = {
+  ctx: null, out: null, oscs: [],
+  async play(freqs) {
+    if (!this.ctx) {
+      this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      this.out = this.ctx.createGain();
+      this.out.gain.value = 0;
+      this.out.connect(this.ctx.destination);
+    }
+    await this.ctx.resume();
+    this.stop(true);
+    const t = this.ctx.currentTime;
+    this.oscs = freqs.map(f => {
+      const o = this.ctx.createOscillator();
+      o.frequency.value = f;
+      o.connect(this.out); o.start();
+      return o;
+    });
+    this.out.gain.cancelScheduledValues(t);
+    this.out.gain.setTargetAtTime(0.16 / freqs.length, t, 0.08);
+  },
+  set(freqs) { freqs.forEach((f, i) => this.oscs[i] && this.oscs[i].frequency.setTargetAtTime(f, this.ctx.currentTime, 0.03)); },
+  stop(now) {
+    if (!this.ctx) return;
+    const t = this.ctx.currentTime, old = this.oscs;
+    this.out.gain.setTargetAtTime(0, t, now ? 0.01 : 0.12);
+    old.forEach(o => o.stop(t + (now ? 0.05 : 0.6)));
+    this.oscs = [];
+  }
+};
+
+const F_MIN = 40, F_MAX = 1000, LOG = Math.log(F_MAX / F_MIN);
+const toPct = f => Math.log(f / F_MIN) / LOG * 100;
+document.querySelectorAll('.hz-bands .band').forEach(b => {
+  const a = +b.style.getPropertyValue('--a'), z = +b.style.getPropertyValue('--b');
+  b.style.setProperty('--l', toPct(a) + '%');
+  b.style.setProperty('--w', (toPct(z) - toPct(a)) + '%');
+});
+document.querySelectorAll('.hz-axis span').forEach(s => s.style.setProperty('--l', toPct(+s.style.getPropertyValue('--f')) + '%'));
+
+const hzRange = document.getElementById('hzRange');
+const hzNum = document.getElementById('hzNum');
+const hzWhat = document.getElementById('hzWhat');
+const hzCycles = document.getElementById('hzCycles');
+const hzWave = document.getElementById('hzWave');
+const hzPlay = document.getElementById('hzPlay');
+const hzPlayLabel = document.getElementById('hzPlayLabel');
+const beatPlay = document.getElementById('beatPlay');
+const beatLabel = document.getElementById('beatLabel');
+let hz = 196, hzOn = false, beatOn = false;
+
+function describe(f) {
+  if (f < 85) return 'Very low. You feel this on the cheekbones as much as you hear it.';
+  if (f < 150) return 'The low drone under a sound bath. Deep, slow and physical.';
+  if (f < 320) return 'The singing-bowl sweet spot, and close to where skin is most sensitive to vibration.';
+  if (f < 700) return 'Brighter bowl tones. Clearer and more awake.';
+  return 'Bell-like overtones: the shimmer that rings on top of a bowl.';
+}
+function setHz() {
+  hz = Math.round(F_MIN * Math.exp(hzRange.value / 1000 * LOG));
+  hzNum.textContent = hz;
+  hzWhat.textContent = describe(hz);
+  hzCycles.textContent = `${hz} vibrations every second`;
+  hzRange.setAttribute('aria-valuetext', `${hz} hertz`);
+  if (hzOn) tones.set([hz]);
+}
+hzRange.addEventListener('input', setHz);
+setHz();
+
+function setButtons() {
+  hzPlay.setAttribute('aria-pressed', String(hzOn));
+  hzPlayLabel.textContent = hzOn ? 'Stop the tone' : 'Hear this tone';
+  beatPlay.setAttribute('aria-pressed', String(beatOn));
+  beatLabel.textContent = beatOn ? 'Stop' : 'Hear 196 Hz + 199 Hz';
+}
+hzPlay.addEventListener('click', () => {
+  hzOn = !hzOn; beatOn = false;
+  hzOn ? tones.play([hz]) : tones.stop();
+  setButtons();
+});
+beatPlay.addEventListener('click', () => {
+  beatOn = !beatOn; hzOn = false;
+  beatOn ? tones.play([196, 199]) : tones.stop();
+  setButtons();
+});
+// stop test tones once they scroll away
+const hzSec = document.getElementById('hz');
+new IntersectionObserver(es => {
+  if (!es[0].isIntersecting && (hzOn || beatOn)) { hzOn = beatOn = false; tones.stop(); setButtons(); }
+}).observe(hzSec);
+
+// scopes: the wave you are hearing, and two close tones beating
+const beatA = document.getElementById('beatA'), beatB = document.getElementById('beatB'), beatSum = document.getElementById('beatSum');
+let hzVisible = false;
+new IntersectionObserver(es => { hzVisible = es[0].isIntersecting; }).observe(hzSec);
+function drawScopes(now) {
+  const t = now / 1000;
+  // show the cycles as they'd look over a 25 ms window, so 40 Hz = 1 wave and 1 kHz = 25
+  const cycles = hz * 0.025;
+  const amp = 70 + (hzOn ? 10 : 0);
+  let d = '';
+  for (let x = 0; x <= 600; x += 2) {
+    const y = 100 + Math.sin((x / 600) * cycles * Math.PI * 2 - t * 3) * amp;
+    d += (x ? 'L' : 'M') + x + ' ' + y.toFixed(1);
+  }
+  hzWave.setAttribute('d', d);
+
+  // illustrative: two waves a little apart (20 vs 22 cycles) so the swells are easy to see
+  let a = '', b = '', sum = '';
+  for (let x = 0; x <= 600; x += 2) {
+    const u = x / 600;
+    const va = Math.sin(u * 20 * Math.PI * 2 - t * 4);
+    const vb = Math.sin(u * 22 * Math.PI * 2 - t * 4.6);
+    const ya = 55 + va * 28, yb = 55 + vb * 28, ys = 160 + (va + vb) * 26;
+    a += (x ? 'L' : 'M') + x + ' ' + ya.toFixed(1);
+    b += (x ? 'L' : 'M') + x + ' ' + yb.toFixed(1);
+    sum += (x ? 'L' : 'M') + x + ' ' + ys.toFixed(1);
+  }
+  beatA.setAttribute('d', a); beatB.setAttribute('d', b); beatSum.setAttribute('d', sum);
+}
+if (reduced) drawScopes(2000);
+else (function loop(now) { requestAnimationFrame(loop); if (hzVisible) drawScopes(now); })(0);
+hzRange.addEventListener('input', () => { if (reduced) drawScopes(2000); });
