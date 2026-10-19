@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dipsana — Ears open, day on</title>
+<meta name="description" content="Open-ear bone conduction headphones for days outside: the beach, the pool, walks, hikes, runs and rides. Dust-tight and waterproof (IP68), 32GB offline, 10 hours, and you can still hear the world around you.">
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-F26GGJJMGX"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-F26GGJJMGX');
+</script>
+<meta name="theme-color" content="#9fd6ee">
+<link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
+<link rel="canonical" href="https://dipsana.com/recreation/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://dipsana.com/recreation/">
+<meta property="og:title" content="Dipsana — Ears open, day on">
+<meta property="og:description" content="Bone conduction for the beach, the pool, walks, hikes and rides. Hear your music and the world around you.">
+<meta property="og:image" content="https://dipsana.com/images/product.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,200..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="/css/lp.css">
+<link rel="stylesheet" href="/recreation/recreation.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script src="/js/site.js" defer></script>
+<script type="module" src="/recreation/recreation.js"></script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar" id="topbar">
+  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+  <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Join the waitlist</span><span class="btn-short">Waitlist</span></a>
+</header>
+
+<main id="main">
+
+  <!-- ─────────── Hero: a live beach, the headset floating over it ─────────── -->
+  <section class="hero" id="hero" aria-labelledby="hero-h">
+    <canvas class="beach" id="beach" aria-hidden="true"></canvas>
+    <div class="hero-hs" id="heroHs" aria-hidden="true">
+      <picture class="hs-poster">
+        <source srcset="/images/product.webp" type="image/webp">
+        <img src="/images/product.png" alt="" width="1200" height="760">
+      </picture>
+      <canvas id="heroHsCanvas"></canvas>
+    </div>
+    <div class="hero-copy">
+      <p class="mono kicker" data-load="1">Bone conduction for days outside</p>
+      <h1 class="hero-h" id="hero-h">
+        <span data-load="2">Ears open.</span>
+        <span data-load="3" class="sun-word">Day on.</span>
+      </h1>
+      <p class="hero-sub" data-load="4">Music and podcasts through your cheekbones, so you still hear the waves, the bike bell and your name being called.</p>
+      <div class="hero-actions" data-load="5">
+        <a class="btn" href="#waitlist">Join the waitlist</a>
+        <a class="btn btn--ghost" href="#hear">Hear the difference ↓</a>
+      </div>
+    </div>
+    <ul class="stickers" aria-label="Key specs">
+      <li class="st st--1" data-load="4"><b>IP68</b>dust-tight, waterproof</li>
+      <li class="st st--2" data-load="5"><b>10 hrs</b>a whole day out</li>
+      <li class="st st--3" data-load="5"><b>32 GB</b>plays with no signal</li>
+    </ul>
+  </section>
+
+  <!-- ─────────── Hear the world, too ─────────── -->
+  <section class="hear" id="hear" data-reveal aria-labelledby="hear-h">
+    <div class="hear-copy">
+      <p class="mono rv">Try it with sound on</p>
+      <h2 class="big rv" id="hear-h">Your soundtrack. <span class="hl">Their voices too.</span></h2>
+      <p class="lede rv">Earbuds plug your ears, so the world goes muffled. Dipsana plays through your cheekbones and leaves your ears open. Press play, then switch between the two.</p>
+      <div class="hear-ctrl rv">
+        <button class="play" id="hearPlay" type="button" aria-pressed="false"><span class="play-dot" aria-hidden="true"></span><span id="hearPlayLabel">Play the beach</span></button>
+        <div class="seg" role="radiogroup" aria-label="Listen with">
+          <button type="button" role="radio" aria-checked="false" data-mode="buds">Earbuds</button>
+          <button type="button" role="radio" aria-checked="true" data-mode="open">Dipsana</button>
+          <span class="seg-pill" aria-hidden="true"></span>
+        </div>
+      </div>
+      <p class="hear-status rv" id="hearStatus" aria-live="polite">Open ears: waves and the bike bell come through clearly, with the music on top.</p>
+    </div>
+    <div class="field rv" id="field" data-mode="open" aria-hidden="true">
+      <div class="field-ring"></div>
+      <div class="listener"><span class="lis-head"></span><span class="lis-pad"></span><span class="lis-pad lis-pad--r"></span></div>
+      <div class="bubbles" id="bubbles"></div>
+      <p class="field-tag mono" id="fieldTag">Ears open</p>
+    </div>
+  </section>
+
+  <!-- ─────────── Where it goes: a horizontal day out ─────────── -->
+  <section class="trail" id="trail" aria-labelledby="trail-h">
+    <div class="trail-stage">
+      <div class="trail-head">
+        <p class="mono">Where it goes</p>
+        <h2 class="big" id="trail-h">Anywhere you’d rather <span class="hl">not miss a thing.</span></h2>
+      </div>
+      <ol class="cards" id="cards">
+        <li class="card c-beach">
+          <svg viewBox="0 0 320 220" aria-hidden="true">
+            <circle class="sun" cx="236" cy="62" r="30"/>
+            <path class="wv wv1" d="M-40 140 q20 -14 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 V220 H-40z"/>
+            <path class="wv wv2" d="M-40 160 q20 -12 40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 t40 0 V220 H-40z"/>
+            <path class="sand" d="M0 190 Q160 172 320 196 V220 H0z"/>
+          </svg>
+          <p class="mono">Beach</p><h3>Sand stays out.</h3>
+          <p>Nothing sits in your ear canal, and IP68 means it’s dust-tight. Swim in the shallows with it on, then rinse it in fresh water.</p>
+        </li>
+        <li class="card c-pool">
+          <svg viewBox="0 0 320 220" aria-hidden="true">
+            <rect class="pool-w" x="0" y="0" width="320" height="220"/>
+            <g class="caus"><path d="M20 40 q30 20 60 0 t60 0 t60 0 t60 0 t60 0"/><path d="M0 120 q30 20 60 0 t60 0 t60 0 t60 0 t60 0 t60 0"/><path d="M10 190 q30 -18 60 0 t60 0 t60 0 t60 0 t60 0"/></g>
+            <g class="rope"><circle cx="10" cy="80" r="7"/><circle cx="30" cy="80" r="7"/><circle cx="50" cy="80" r="7"/><circle cx="70" cy="80" r="7"/><circle cx="90" cy="80" r="7"/><circle cx="110" cy="80" r="7"/><circle cx="130" cy="80" r="7"/><circle cx="150" cy="80" r="7"/><circle cx="170" cy="80" r="7"/><circle cx="190" cy="80" r="7"/><circle cx="210" cy="80" r="7"/><circle cx="230" cy="80" r="7"/><circle cx="250" cy="80" r="7"/><circle cx="270" cy="80" r="7"/><circle cx="290" cy="80" r="7"/><circle cx="310" cy="80" r="7"/><circle cx="330" cy="80" r="7"/></g>
+          </svg>
+          <p class="mono">Pool</p><h3>Lengths or lounging.</h3>
+          <p>Waterproof to two metres, with music stored on the headset because Bluetooth doesn’t work underwater.</p>
+        </li>
+        <li class="card c-walk">
+          <svg viewBox="0 0 320 220" aria-hidden="true">
+            <circle class="tree" cx="60" cy="70" r="26"/><circle class="tree" cx="262" cy="56" r="22"/><circle class="tree" cx="230" cy="150" r="18"/>
+            <path class="path" d="M-10 210 C80 170 40 120 140 110 S240 60 330 30"/>
+          </svg>
+          <p class="mono">Walk</p><h3>Podcast on, world on.</h3>
+          <p>Hear cars pulling out, cyclists behind you and the friend who just caught you up.</p>
+        </li>
+        <li class="card c-hike">
+          <svg viewBox="0 0 320 220" aria-hidden="true">
+            <path class="mtn mtn2" d="M60 220 L190 50 L320 220z"/>
+            <path class="mtn" d="M-20 220 L110 70 L240 220z"/>
+            <path class="snow" d="M110 70 L132 96 L118 92 L104 102 L92 92z"/>
+            <path class="trailp" d="M20 214 L70 180 L60 160 L104 132 L96 116 L110 92"/>
+          </svg>
+          <p class="mono">Hike</p><h3>No signal? No problem.</h3>
+          <p>32GB onboard plays offline, so the album keeps going where your phone gives up. Ten hours covers a long day.</p>
+        </li>
+        <li class="card c-run">
+          <svg viewBox="0 0 320 220" aria-hidden="true">
+            <rect class="trk" x="30" y="40" width="260" height="140" rx="70"/>
+            <rect class="trk trk2" x="52" y="62" width="216" height="96" rx="48"/>
+            <path id="runPath" class="trk-guide" d="M100 51 H220 A59 59 0 0 1 220 169 H100 A59 59 0 0 1 100 51z"/>
+            <circle class="runner" r="9"><animateMotion dur="3.2s" repeatCount="indefinite"><mpath href="#runPath"/></animateMotion></circle>
+          </svg>
+          <p class="mono">Run</p><h3>Nothing bouncing in your ears.</h3>
+          <p>The band sits behind your head, there are no buds to shake loose, and you still hear footsteps and traffic.</p>
+        </li>
+        <li class="card c-ride">
+          <svg viewBox="0 0 320 220" aria-hidden="true">
+            <g class="wheel" style="transform-origin:90px 150px"><circle cx="90" cy="150" r="46"/><path d="M90 104 V196 M44 150 H136 M58 118 L122 182 M58 182 L122 118"/></g>
+            <g class="wheel" style="transform-origin:232px 150px"><circle cx="232" cy="150" r="46"/><path d="M232 104 V196 M186 150 H278 M200 118 L264 182 M200 182 L264 118"/></g>
+            <path class="frame" d="M90 150 L140 90 L212 90 L232 150 M140 90 L162 150 L212 90 M130 74 H156 M204 72 L212 90"/>
+          </svg>
+          <p class="mono">Ride</p><h3>Hear what’s coming.</h3>
+          <p>Open ears keep traffic and other riders audible. Check the local rules on headphones before you ride.</p>
+        </li>
+        <li class="card c-paddle">
+          <svg viewBox="0 0 320 220" aria-hidden="true">
+            <path class="lake" d="M0 120 H320 V220 H0z"/>
+            <g class="boat"><path class="hull" d="M60 128 Q160 150 260 128 Q160 140 60 128z"/><g class="oar" style="transform-origin:160px 116px"><path d="M100 92 L220 140"/><ellipse cx="96" cy="90" rx="14" ry="6" transform="rotate(22 96 90)"/><ellipse cx="224" cy="142" rx="14" ry="6" transform="rotate(22 224 142)"/></g></g>
+            <path class="ripple" d="M40 170 q20 -8 40 0 t40 0 M180 186 q20 -8 40 0 t40 0"/>
+          </svg>
+          <p class="mono">Paddle</p><h3>If it goes in, fine.</h3>
+          <p>Kayak, paddleboard, rowing boat. A capsize is a wet headset, not a lost earbud at the bottom of the lake.</p>
+        </li>
+        <li class="card c-garden">
+          <svg viewBox="0 0 320 220" aria-hidden="true">
+            <path class="soil" d="M0 180 H320 V220 H0z"/>
+            <g class="sprout s1"><path d="M80 180 V120"/><ellipse cx="66" cy="124" rx="16" ry="8" transform="rotate(-30 66 124)"/><ellipse cx="94" cy="112" rx="16" ry="8" transform="rotate(30 94 112)"/></g>
+            <g class="sprout s2"><path d="M160 180 V100"/><ellipse cx="146" cy="108" rx="18" ry="9" transform="rotate(-30 146 108)"/><ellipse cx="174" cy="96" rx="18" ry="9" transform="rotate(30 174 96)"/></g>
+            <g class="sprout s3"><path d="M240 180 V130"/><ellipse cx="228" cy="134" rx="14" ry="7" transform="rotate(-30 228 134)"/><ellipse cx="252" cy="124" rx="14" ry="7" transform="rotate(30 252 124)"/></g>
+          </svg>
+          <p class="mono">Garden</p><h3>No bud lost in the soil.</h3>
+          <p>Weeding, mowing, washing the car. Sweat and hose spray are no problem, and the doorbell still gets through.</p>
+        </li>
+      </ol>
+      <div class="trail-bar" aria-hidden="true"><i id="trailBar"></i></div>
+    </div>
+  </section>
+
+  <!-- ─────────── The kit ─────────── -->
+  <section class="kit" id="kit" data-reveal aria-labelledby="kit-h">
+    <div class="kit-stage rv" id="kitStage">
+      <span class="kit-sun" aria-hidden="true"></span>
+      <picture class="hs-poster">
+        <source srcset="/images/product.webp" type="image/webp">
+        <img src="/images/product.png" alt="" width="1200" height="760" loading="lazy">
+      </picture>
+      <canvas id="kitCanvas" aria-hidden="true"></canvas>
+      <p class="mono kit-hint" aria-hidden="true">Drag to turn</p>
+    </div>
+    <div class="kit-copy">
+      <p class="mono rv">Made for outside</p>
+      <h2 class="big rv" id="kit-h">Pick your <span class="hl">colour.</span></h2>
+      <p class="kit-name rv" aria-live="polite"><b id="kitName">Ember</b> <span id="kitNote">Bright enough to find in a beach bag.</span></p>
+      <ul class="kit-sw rv" id="kitSw" role="radiogroup" aria-label="Choose a colourway"></ul>
+      <dl class="kit-specs">
+        <div class="rv"><dt>IP68</dt><dd>Dust-tight and waterproof to 2m</dd></div>
+        <div class="rv"><dt>32 GB</dt><dd>Plays offline, no phone or signal needed</dd></div>
+        <div class="rv"><dt>10 hrs</dt><dd>A full day out · 10 min charge = 3 hrs</dd></div>
+        <div class="rv"><dt>0–110°C</dt><dd>Fine on a hot dashboard or a cold morning</dd></div>
+        <div class="rv"><dt>3 buttons</dt><dd>Physical, for wet or sandy fingers</dd></div>
+        <div class="rv"><dt>Open-ear</dt><dd>Pads on the cheekbone, ears stay clear</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="wait" id="waitlist" data-reveal aria-labelledby="wl-h">
+    <p class="mono rv">Founding list</p>
+    <h2 class="wait-h rv" id="wl-h">See you <span class="sun-word">out there.</span></h2>
+    <p class="lede rv">One email when it ships. That’s it.</p>
+    <div class="form-wrap rv">
+      <form id="waitlist-form" action="https://app.kit.com/forms/9811187/subscriptions" method="post" novalidate>
+        <label class="sr" for="email">Email address</label>
+        <input type="email" id="email" name="email_address" placeholder="you@example.com" required autocomplete="email" inputmode="email">
+        <div class="sr" aria-hidden="true">
+          <label for="company">Company</label>
+          <input type="text" id="company" name="company" tabindex="-1" autocomplete="off">
+        </div>
+        <button class="btn" type="submit">Join the waitlist</button>
+      </form>
+      <p class="err" id="formErr" role="alert"></p>
+      <p class="done" id="formDone">You’re on the list. Enjoy the sunshine.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="lp-foot">
+  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+  <ul>
+    <li><a href="/product/">Product</a></li>
+    <li><a href="/how-it-works/">How it works</a></li>
+    <li><a href="/terms/">Terms</a></li>
+    <li><a href="/privacy/">Privacy</a></li>
+  </ul>
+  <p class="fine">Keep the volume low enough to hear what’s around you, follow local rules on headphones while cycling or driving, and rinse with fresh water after the sea.</p>
+</footer>
+
+</body>
+</html>
