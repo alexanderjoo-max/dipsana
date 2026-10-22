@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dipsana — Swim anywhere</title>
-<meta name="description" content="Open-ear bone conduction for the pool and the sea. IP68 to 2m, 32GB onboard so music plays underwater without Bluetooth, physical buttons for wet hands, and rated to 110°C for the sauna after.">
+<title>Dipsana — Go under</title>
+<meta name="description" content="Open-ear bone conduction for under the water. IP68 to 2m, 32GB onboard so the music keeps playing where Bluetooth can’t reach, physical buttons for wet hands, and rated to 110°C for the sauna after.">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F26GGJJMGX"></script>
@@ -14,13 +14,13 @@
   gtag('js', new Date());
   gtag('config', 'G-F26GGJJMGX');
 </script>
-<meta name="theme-color" content="#021722">
+<meta name="theme-color" content="#01131b">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://dipsana.com/swim/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dipsana.com/swim/">
-<meta property="og:title" content="Dipsana — Swim. Then sauna. Same pair.">
-<meta property="og:description" content="Bone conduction for swimmers. 32GB onboard, IP68, and rated to 110°C for the sauna after.">
+<meta property="og:title" content="Dipsana — Go under. The music comes too.">
+<meta property="og:description" content="Bone conduction for under the water. 32GB onboard, IP68 to 2m, and rated to 110°C for the sauna after.">
 <meta property="og:image" content="https://dipsana.com/images/v3-plunge.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
@@ -51,143 +51,81 @@
   <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Join the waitlist</span><span class="btn-short">Waitlist</span></a>
 </header>
 
+<!-- the wobble on "under." and the depth headings -->
+<svg class="sr" aria-hidden="true" focusable="false">
+  <filter id="wobble" x="-5%" y="-20%" width="110%" height="140%">
+    <feTurbulence type="fractalNoise" baseFrequency="0.004 0.014" numOctaves="1" seed="4" result="n">
+      <animate attributeName="baseFrequency" dur="12s" values="0.004 0.014;0.006 0.01;0.004 0.014" repeatCount="indefinite"/>
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="14" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
 <main id="main">
 
-  <!-- ─────────── Hero: looking down a lane, swimming as you scroll ─────────── -->
+  <!-- ─────────── Hero: looking up at the surface from below ─────────── -->
   <section class="hero" id="hero" aria-labelledby="hero-h">
-    <canvas class="pool" id="pool" aria-hidden="true"></canvas>
-    <div class="hover" id="hover" aria-hidden="true">
-      <span class="hover-shadow"></span>
-      <canvas id="heroHs"></canvas>
-    </div>
+    <canvas class="water" id="heroWater" aria-hidden="true"></canvas>
+    <canvas class="bubbles" id="heroBubbles" aria-hidden="true"></canvas>
+    <div class="float" id="float" aria-hidden="true"><canvas id="heroHs"></canvas></div>
     <div class="hero-copy">
-      <p class="mono kicker" data-load="1">Pool · open water · bone conduction</p>
+      <p class="mono kicker" data-load="1">Under water · open-ear · 32GB onboard</p>
       <h1 class="hero-h" id="hero-h">
-        <span class="hl bob" data-split="chars load" data-delay="0.3">Swim</span>
-        <span class="hl hl--rope" data-load="3">anywhere.</span>
+        <span class="hl" data-split="chars load" data-delay="0.3">Go</span>
+        <span class="hl hl--under">under.</span>
       </h1>
-      <p class="hero-sub" data-load="4">Lengths before work. A sea swim at the weekend. 32GB onboard, because Bluetooth stops at the surface.</p>
+      <p class="hero-sub" data-load="4">Hold your breath and the world goes quiet. The music doesn’t. Bone conduction with the songs stored on the headset, because Bluetooth stops at the surface.</p>
       <div class="hero-actions" data-load="5">
         <a class="btn" href="#waitlist">Join the waitlist</a>
-        <a class="btn btn--ghost" href="#below">Dive in ↓</a>
+        <a class="btn btn--ghost" href="#depth">Sink ↓</a>
       </div>
     </div>
-    <p class="mono hero-hint" data-load="5" aria-hidden="true">Move across the water</p>
+    <p class="mono hero-hint" data-load="5" aria-hidden="true">Move to breathe out</p>
   </section>
 
-  <!-- ─────────── Pool to ocean ─────────── -->
-  <section class="waters" id="waters" aria-label="From the pool to the open sea">
-    <div class="w-stage">
-      <canvas class="pool" id="morph" aria-hidden="true"></canvas>
-      <div class="w-copy">
-        <p class="mono w-tag"><span class="w-pool">Lane 4</span><span class="w-sea">Open water</span></p>
-        <p class="w-num" aria-hidden="true"><span id="wNum">25</span><small id="wUnit">m</small></p>
-        <h2 class="big w-h"><span class="w-pool">Train in the pool.</span><span class="w-sea">Play in the sea.</span></h2>
-        <p class="lede w-sub"><span class="w-pool">Lengths, drills and pace work, with the music stored on the headset.</span><span class="w-sea">Sea swims, a float past the break, a sunset dip. Same pair, same playlist.</span></p>
-      </div>
-      <div class="w-meter" aria-hidden="true"><span>Pool</span><i><b id="wBar"></b></i><span>Sea</span></div>
-    </div>
-  </section>
-
-  <!-- ─────────── Below the surface ─────────── -->
-  <section class="below" id="below" data-reveal aria-labelledby="below-h">
-    <div class="below-copy">
-      <p class="mono rv">The problem with streaming</p>
-      <h2 class="big rv" id="below-h">Bluetooth stops at&nbsp;the&nbsp;surface.</h2>
-      <p class="lede rv">Radio signals barely travel through water, so a phone on the pool deck goes silent the moment your head goes under. Dipsana keeps the music on the headset instead: 32GB onboard, loaded once, played offline for the whole set.</p>
-      <ol class="list rv">
-        <li><b>Above water</b><span>Bluetooth 5.4 to your phone or watch.</span></li>
-        <li><b>Under water</b><span>Plays straight from onboard storage. No signal needed.</span></li>
+  <!-- ─────────── The descent: surface to two metres ─────────── -->
+  <section class="depth" id="depth" aria-label="From the surface down to two metres">
+    <div class="dp-stage">
+      <canvas class="water" id="depthWater" aria-hidden="true"></canvas>
+      <canvas class="bubbles" id="depthBubbles" aria-hidden="true"></canvas>
+      <p class="dp-num" aria-hidden="true"><span id="dpNum">0.0</span><small>m</small></p>
+      <ol class="dp-stops">
+        <li data-stop="0"><p class="mono">0.0 m · Surface</p><h2>Last breath in.</h2><p>Above the waterline it’s plain Bluetooth 5.4, to your phone or your watch.</p></li>
+        <li data-stop="1"><p class="mono">0.3 m · Just under</p><h2>The signal’s gone. The song isn’t.</h2><p>Radio barely travels through water, so the music plays from 32GB on the headset instead. Loaded once, no phone involved.</p></li>
+        <li data-stop="2"><p class="mono">1.0 m · Quiet</p><h2>Everything else goes soft.</h2><p>Under water you hear mostly through bone anyway. The pads sit on your cheekbones and play straight into it.</p></li>
+        <li data-stop="3"><p class="mono">2.0 m · The bottom</p><h2>Rated to here.</h2><p>IP68, submersible to two metres. Sit on the bottom of the deep end and let the chorus play out.</p></li>
       </ol>
-    </div>
-    <figure class="signal rv" aria-label="Illustration: Bluetooth rings from a phone on the deck fade out at the waterline, while the swimmer below keeps listening from onboard storage.">
-      <img src="/images/v3-plunge.jpg" alt="" width="864" height="1152" loading="lazy">
-      <svg viewBox="0 0 864 1152" aria-hidden="true">
-        <defs>
-          <clipPath id="air"><rect x="0" y="0" width="864" height="186"/></clipPath>
-          <clipPath id="water"><rect x="0" y="186" width="864" height="966"/></clipPath>
-        </defs>
-        <g class="rings" clip-path="url(#air)">
-          <circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/>
-        </g>
-        <g class="rings rings--lost" clip-path="url(#water)">
-          <circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/><circle cx="736" cy="70" r="20"/>
-        </g>
-        <g class="phone"><rect x="716" y="40" width="40" height="64" rx="7"/><rect x="721" y="47" width="30" height="46" rx="2"/></g>
-        <line class="wl" x1="0" y1="186" x2="864" y2="186"/>
-        <text class="wl-t" x="24" y="172">BLUETOOTH ↑</text>
-        <text class="wl-t wl-t--b" x="24" y="222">ONBOARD 32GB ↓</text>
-        <g class="notes">
-          <circle cx="252" cy="612" r="10"/><circle cx="252" cy="612" r="10"/><circle cx="252" cy="612" r="10"/>
-        </g>
-      </svg>
-    </figure>
-  </section>
-
-  <!-- ─────────── The set: five laps ─────────── -->
-  <section class="set" id="set" aria-label="Five laps, five features">
-    <div class="set-stage">
-      <div class="set-top">
-        <p class="lap-num" aria-hidden="true">Lap <span id="lapNum">1</span><small>/5</small></p>
-        <div class="pace" aria-hidden="true">
-          <svg viewBox="0 0 120 120">
-            <circle class="pc-face" cx="60" cy="60" r="56"/>
-            <g id="pcTicks"></g>
-            <line class="pc-hand pc-hand--min" id="pcMin" x1="60" y1="60" x2="60" y2="26"/>
-            <line class="pc-hand" id="pcSec" x1="60" y1="68" x2="60" y2="10"/>
-            <circle cx="60" cy="60" r="3.5" class="pc-pin"/>
-          </svg>
-          <p class="mono"><span id="split">0:00.0</span></p>
-        </div>
-      </div>
-
-      <div class="lane" aria-hidden="true">
-        <i class="rope rope--a"></i>
-        <div class="lane-water">
-          <span class="lane-t lane-t--l"></span><span class="lane-line"></span><span class="lane-t lane-t--r"></span>
-          <div class="marks"><span>0m</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25m</span></div>
-          <div class="swimmer" id="swimmer"><i class="wake"></i><b></b></div>
-        </div>
-        <i class="rope rope--b"></i>
-      </div>
-
-      <ol class="laps">
-        <li data-lap="0"><p class="mono">Lap 1 · Open-ear</p><h3>Hear the whistle.</h3><p>Pads sit on your cheekbones, not in your ears, so the coach, the clock and the next lane still get through.</p></li>
-        <li data-lap="1"><p class="mono">Lap 2 · 32GB onboard</p><h3>Thousands of tracks.</h3><p>Albums, podcasts, a whole audiobook. Loaded once. No phone in a bag on the deck.</p></li>
-        <li data-lap="2"><p class="mono">Lap 3 · Physical buttons</p><h3>Skip mid-length.</h3><p>Three real buttons you can find by feel, with goggles on and wet, cold fingers. No touch surfaces to misfire.</p></li>
-        <li data-lap="3"><p class="mono">Lap 4 · Open band</p><h3>Clear of the strap.</h3><p>The band wraps behind your head and leaves room for goggle straps and a cap.</p></li>
-        <li data-lap="4"><p class="mono">Lap 5 · Magnetic charge</p><h3>No port for chlorine.</h3><p>Magnetic contacts instead of a socket. Ten minutes on the charger gives three hours of laps.</p></li>
-      </ol>
+      <div class="dp-gauge" aria-hidden="true"><span>Surface</span><i><b id="dpBar"></b></i><span>2 m</span></div>
     </div>
   </section>
 
-  <!-- ─────────── The workout ─────────── -->
-  <section class="train" id="train" aria-labelledby="train-h">
-    <div class="train-head">
-      <p class="mono">Exercise · a sample set</p>
-      <h2 class="big" id="train-h">Press play on the deck.</h2>
-      <p class="lede">The whole set runs underwater from onboard storage. Here’s a 1,400 m session and what we’d put on for each part.</p>
+  <!-- ─────────── Ways under ─────────── -->
+  <section class="ways" id="ways" aria-labelledby="ways-h">
+    <div class="ways-head">
+      <p class="mono">Ways to go under</p>
+      <h2 class="big" id="ways-h">Pick your water.</h2>
+      <p class="lede">Nobody’s counting lengths. Here’s what we do down there, and what we’d put on for it.</p>
     </div>
-    <ol class="set-rows" id="setRows">
-      <li style="--d:400"><span class="sr-dist">400 m</span><span class="sr-what"><b>Warm-up</b>Easy freestyle, long strokes</span><span class="sr-bar"><i></i></span><span class="sr-audio mono">Podcast · conversational</span></li>
-      <li style="--d:400"><span class="sr-dist">8 × 50 m</span><span class="sr-what"><b>Build</b>Each 50 faster than the last</span><span class="sr-bar"><i></i></span><span class="sr-audio mono">Playlist · 140→170 bpm</span></li>
-      <li style="--d:400"><span class="sr-dist">4 × 100 m</span><span class="sr-what"><b>Pace</b>Hold your race pace, 20s rest</span><span class="sr-bar"><i></i></span><span class="sr-audio mono">One album, start to finish</span></li>
-      <li style="--d:200"><span class="sr-dist">200 m</span><span class="sr-what"><b>Cool-down</b>Backstroke and easy breast</span><span class="sr-bar"><i></i></span><span class="sr-audio mono">Something slow</span></li>
+    <ol class="way-list">
+      <li><span class="w-i mono">01</span><h3>Float</h3><p>Face down, arms out, ears just under the surface.</p><span class="w-play mono">One long ambient track</span></li>
+      <li><span class="w-i mono">02</span><h3>Snorkel</h3><p>An hour drifting over rocks and weed and the odd fish.</p><span class="w-play mono">A whole album</span></li>
+      <li><span class="w-i mono">03</span><h3>Duck-dive</h3><p>Under the wave as it breaks, and up the other side.</p><span class="w-play mono">Something loud</span></li>
+      <li><span class="w-i mono">04</span><h3>Sink</h3><p>Breathe out, drop to the bottom of the deep end, look up.</p><span class="w-play mono">The song you’d hold your breath for</span></li>
+      <li><span class="w-i mono">05</span><h3>Cold dip</h3><p>A lake in March. Head under once, because you said you would.</p><span class="w-play mono">One song. Get in.</span></li>
     </ol>
-    <p class="set-total"><span class="mono">Total</span><b><span data-count="1400">0</span> m</b></p>
   </section>
 
-  <!-- ─────────── The sea ─────────── -->
+  <!-- ─────────── The open water ─────────── -->
   <section class="sea" id="sea" aria-labelledby="sea-h">
     <div class="sea-head">
-      <p class="mono">Recreation</p>
+      <p class="mono">Open water</p>
       <h2 class="big" id="sea-h">Then the sea.</h2>
-      <p class="lede">Open water, a float past the break, a sunset dip with friends. IP68 to two metres, music onboard, and ears open to the lifeguard. Rinse it in fresh water afterwards.</p>
+      <p class="lede">Past the break, under the swell, a sunset dip with friends. IP68 to two metres, the music onboard, and your ears still open to the lifeguard. Rinse it in fresh water afterwards.</p>
     </div>
     <div class="float-grid">
-      <figure class="fl fl-a" data-speed="0.15"><img src="/images/rec/friends.jpg" alt="A group of friends running into the sea together" width="2000" height="1188" loading="lazy"><figcaption class="mono">Sea swim with friends</figcaption></figure>
-      <figure class="fl fl-b" data-speed="0.45"><img src="/images/rec/paddle.jpg" alt="A paddleboarder on calm water at sunset" width="1600" height="1066" loading="lazy"><figcaption class="mono">Paddle out</figcaption></figure>
-      <figure class="fl fl-c" data-speed="0.3"><img src="/images/rec/aerial.jpg" alt="An aerial view of turquoise sea meeting a busy beach" width="2000" height="1332" loading="lazy"><figcaption class="mono">Beach day</figcaption></figure>
+      <figure class="fl fl-a" data-speed="0.15"><img src="/images/rec/friends.jpg" alt="A group of friends running into the sea together" width="2000" height="1188" loading="lazy"><figcaption class="mono">In together</figcaption></figure>
+      <figure class="fl fl-b" data-speed="0.45"><img src="/images/rec/paddle.jpg" alt="A paddleboarder on calm water at sunset" width="1600" height="1066" loading="lazy"><figcaption class="mono">Out past the break</figcaption></figure>
+      <figure class="fl fl-c" data-speed="0.3"><img src="/images/rec/aerial.jpg" alt="An aerial view of turquoise sea meeting a busy beach" width="2000" height="1332" loading="lazy"><figcaption class="mono">Clear water</figcaption></figure>
       <figure class="fl fl-d" data-speed="0.6"><img src="/images/rec/evening.jpg" alt="Two people walking along the shoreline in the early evening" width="2000" height="1333" loading="lazy"><figcaption class="mono">Evening dip</figcaption></figure>
     </div>
   </section>
@@ -195,7 +133,7 @@
   <!-- ─────────── The kit ─────────── -->
   <section class="kit" id="kit" data-reveal aria-labelledby="kit-h">
     <div class="kit-stage rv" id="kitStage">
-      <canvas class="kit-water" id="kitWater" aria-hidden="true"></canvas>
+      <canvas class="water" id="kitWater" aria-hidden="true"></canvas>
       <picture class="kit-poster">
         <source srcset="/images/product.webp" type="image/webp">
         <img src="/images/product.png" alt="" width="1200" height="760" loading="lazy">
@@ -204,9 +142,9 @@
       <p class="mono kit-hint" aria-hidden="true">Drag to turn</p>
     </div>
     <div class="kit-copy">
-      <p class="mono rv">The kit</p>
-      <h2 class="big rv" id="kit-h">Built for the lane.</h2>
-      <p class="kit-name rv" aria-live="polite"><b id="kitName">Glacier</b> <span id="kitNote">Pale ice blue. Easy to spot on the pool deck.</span></p>
+      <p class="mono rv">The headset</p>
+      <h2 class="big rv" id="kit-h">Built to go under.</h2>
+      <p class="kit-name rv" aria-live="polite"><b id="kitName">Glacier</b> <span id="kitNote">Pale ice blue. Easy to spot on the bottom.</span></p>
       <ul class="kit-sw rv" id="kitSw" role="radiogroup" aria-label="Choose a colourway"></ul>
       <dl class="kit-specs rv">
         <div><dt>Waterproof</dt><dd>IP68, submersible to 2m</dd></div>
@@ -219,17 +157,17 @@
     </div>
   </section>
 
-  <!-- ─────────── After the swim ─────────── -->
+  <!-- ─────────── After the water ─────────── -->
   <section class="after" data-reveal aria-labelledby="after-h">
     <div class="after-head">
-      <p class="mono rv">Cool-down</p>
+      <p class="mono rv">Afterwards</p>
       <h2 class="big rv" id="after-h">Then the sauna.</h2>
-      <p class="lede rv">Swim headphones usually go back in the bag after the pool. Dipsana is rated to 110°C, so the same pair comes with you into the sauna and the steam room, and the episode keeps going.</p>
+      <p class="lede rv">Most waterproof headphones go back in the bag once you’re out. Dipsana is rated to 110°C, so the same pair comes with you into the sauna and the steam room, and the album keeps going.</p>
     </div>
     <div class="duo rv">
       <figure class="duo-a">
-        <img src="/images/v3-plunge.jpg" alt="Swimmer at the surface of a pool, Dipsana on the cheekbone" width="864" height="1152" loading="lazy">
-        <figcaption><b><span data-count="27">0</span>°</b><span class="mono">Pool</span></figcaption>
+        <img src="/images/v3-plunge.jpg" alt="A swimmer at the waterline, Dipsana on the cheekbone" width="864" height="1152" loading="lazy">
+        <figcaption><b><span data-count="16">0</span>°</b><span class="mono">Sea</span></figcaption>
       </figure>
       <figure class="duo-b">
         <img src="/images/v3-sauna.jpg" alt="The same headset worn in a cedar sauna" width="864" height="1152" loading="lazy">
@@ -241,18 +179,18 @@
   <section class="specs" data-reveal aria-label="Specifications">
     <ul>
       <li class="rv"><b>IP68</b><span>Submersible to 2m</span></li>
-      <li class="rv"><b>32GB</b><span>Offline playback</span></li>
-      <li class="rv"><b>0–110°C</b><span>Pool to sauna</span></li>
+      <li class="rv"><b>32GB</b><span>Plays under water</span></li>
+      <li class="rv"><b>0–110°C</b><span>Sea to sauna</span></li>
       <li class="rv"><b>10h</b><span>Per charge</span></li>
       <li class="rv"><b>BT 5.4</b><span>Above water</span></li>
     </ul>
   </section>
 
   <section class="wait" id="waitlist" data-reveal aria-labelledby="wl-h">
-    <canvas class="pool pool--wait" id="poolWait" aria-hidden="true"></canvas>
+    <canvas class="water" id="waitWater" aria-hidden="true"></canvas>
     <div class="wait-in">
       <p class="mono rv">Founding list</p>
-      <h2 class="wait-h rv" id="wl-h">Lane’s open.</h2>
+      <h2 class="wait-h rv" id="wl-h">Come on in.</h2>
       <p class="lede rv">One email when it ships. That’s it.</p>
       <div class="form-wrap rv">
         <form id="waitlist-form" action="https://app.kit.com/forms/9811187/subscriptions" method="post" novalidate>
@@ -265,7 +203,7 @@
           <button class="btn" type="submit">Join the waitlist</button>
         </form>
         <p class="err" id="formErr" role="alert"></p>
-        <p class="done" id="formDone">You’re on the list. <span class="aqua">See you in the water.</span></p>
+        <p class="done" id="formDone">You’re on the list. <span class="aqua">See you under.</span></p>
       </div>
     </div>
   </section>
@@ -278,7 +216,7 @@
     <li><a href="/terms/">Terms</a></li>
     <li><a href="/privacy/">Privacy</a></li>
   </ul>
-  <p class="fine">Swim where it’s safe and supervised, and keep the volume low enough to hear what’s going on around you. Rinse with fresh water after the sea.</p>
+  <p class="fine">Swim where it’s safe and supervised, never practise breath-holds alone, and keep the volume low enough to hear what’s going on around you. Rated to 2m: not for scuba or deep freediving. Rinse with fresh water after the sea.</p>
   <p class="fine credits">Sea photography via Unsplash: Vidar Nordli-Mathisen, Nick Fewings, Geio Tischler, Tash Williams.</p>
 </footer>
 

@@ -7,13 +7,24 @@ const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
 
 initMotion({ smooth: false });
+// "every degree." runs from sauna orange to ice blue, one letter at a time
+{
+  const RAMP = [[255, 138, 61], [226, 86, 28], [201, 183, 168], [142, 196, 212], [230, 247, 255]];
+  const chars = [...document.querySelectorAll('.hero-h > span:last-child .sc')];
+  chars.forEach((c, i) => {
+    const f = (i / Math.max(1, chars.length - 1)) * (RAMP.length - 1);
+    const k = Math.min(RAMP.length - 2, Math.floor(f));
+    c.style.color = `rgb(${RAMP[k].map((v, j) => Math.round(lerp(v, RAMP[k + 1][j], f - k))).join(',')})`;
+  });
+}
 const setLogo = climateMark(document.querySelector('#topbar .mark'), { initial: 'heat' });
 preloadMarks(['fire', 'water', 'ice']);
 
-/* ═════════ hero: embers and a slow push on the photo ═════════ */
-const heroImg = document.getElementById('heroImg');
+/* ═════════ hero: the four rooms open up, embers rise on the hot side, frost falls on the cold ═════════ */
 if (!reduced && gsap) {
-  gsap.fromTo(heroImg, { scale: 1.18 }, { scale: 1.06, duration: 3.2, ease: 'power3.out' });
+  gsap.from('.hs', { clipPath: 'inset(100% 0 0 0)', duration: 1.6, ease: 'expo.inOut', stagger: 0.12 });
+  gsap.fromTo('.hs img', { scale: 1.25 }, { scale: 1.08, duration: 3.2, ease: 'power3.out', stagger: 0.12 });
+  gsap.from('.hs figcaption', { y: 30, opacity: 0, duration: 1.2, ease: 'expo.out', stagger: 0.12, delay: 0.9 });
   gsap.from('.kicker, .hero-sub, .hero-actions .btn', { y: 24, opacity: 0, duration: 1.2, ease: 'expo.out', stagger: 0.08, delay: 0.9 });
 }
 
@@ -29,19 +40,21 @@ function embers(canvas, rate) {
     requestAnimationFrame(frame);
     if (!on) return;
     ctx.clearRect(0, 0, W, H);
-    if (Math.random() < rate) parts.push({ x: Math.random() * W, y: H + 10, vy: -(0.6 + Math.random() * 1.8) * dpr, r: (0.6 + Math.random() * 2) * dpr, life: 0, max: 220 + Math.random() * 260, ph: Math.random() * 6 });
+    // embers rise from the sauna and steam half; frost drifts down over the plunge and ice half
+    if (Math.random() < rate) parts.push({ cold: false, x: Math.random() * W * 0.55, y: H + 10, vy: -(0.6 + Math.random() * 1.8) * dpr, r: (0.6 + Math.random() * 2) * dpr, life: 0, max: 220 + Math.random() * 260, ph: Math.random() * 6 });
+    if (Math.random() < rate * 0.8) parts.push({ cold: true, x: W * (0.5 + Math.random() * 0.5), y: -10, vy: (0.35 + Math.random() * 0.7) * dpr, r: (0.5 + Math.random() * 1.6) * dpr, life: 0, max: 380 + Math.random() * 360, ph: Math.random() * 6 });
     ctx.globalCompositeOperation = 'lighter';
     for (let i = parts.length - 1; i >= 0; i--) {
       const p = parts[i];
-      p.life++; p.ph += 0.035;
-      p.x += Math.sin(p.ph) * 0.7 * dpr; p.y += p.vy;
+      p.life++; p.ph += p.cold ? 0.02 : 0.035;
+      p.x += Math.sin(p.ph) * (p.cold ? 0.45 : 0.7) * dpr; p.y += p.vy;
       const k = p.life / p.max;
-      if (k >= 1 || p.y < -20) { parts.splice(i, 1); continue; }
+      if (k >= 1 || p.y < -20 || p.y > H + 20) { parts.splice(i, 1); continue; }
       const a = Math.sin(Math.PI * k);
       // a faint halo instead of shadowBlur, which is far too slow to run per particle
-      ctx.fillStyle = `rgba(255,110,30,${0.18 * a})`;
+      ctx.fillStyle = p.cold ? `rgba(150,210,235,${0.14 * a})` : `rgba(255,110,30,${0.18 * a})`;
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 3.5, 0, 7); ctx.fill();
-      ctx.fillStyle = `rgba(255,${Math.round(110 + 90 * (1 - k))},50,${0.9 * a})`;
+      ctx.fillStyle = p.cold ? `rgba(230,247,255,${0.75 * a})` : `rgba(255,${Math.round(110 + 90 * (1 - k))},50,${0.9 * a})`;
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill();
     }
     ctx.globalCompositeOperation = 'source-over';
