@@ -35,6 +35,23 @@
 <link rel="stylesheet" href="/css/index2.css">
 <script src="/js/site.js" defer></script>
 <script type="module" src="/js/index2.js"></script>
+<script type="module">
+  // the logo takes on the colour of the room: sauna, steam, plunge, ice
+  import { climateMark, preloadMarks } from '/js/brand.js';
+  const set = climateMark(document.querySelector('#topbar .mark'));
+  const MAP = { heat: 'fire', steam: 'heat', plunge: 'water', ice: 'ice', contrast: 'original' };
+  preloadMarks(['fire', 'heat', 'water', 'ice'], ['h', 'v']);
+  const hero = document.querySelector('.hero');
+  let heroOn = true;
+  function sync() {
+    const room = document.body.dataset.climate;
+    set(MAP[room] || (heroOn ? MAP[hero.dataset.phase] : 'original') || 'original');
+  }
+  new IntersectionObserver(es => { heroOn = es[0].intersectionRatio > 0.2; sync(); }, { threshold: [0, 0.2, 0.5] }).observe(hero);
+  new MutationObserver(sync).observe(document.body, { attributes: true, attributeFilter: ['data-climate'] });
+  new MutationObserver(sync).observe(hero, { attributes: true, attributeFilter: ['data-phase'] });
+  sync();
+</script>
 
 <script type="importmap">
 { "imports": {
@@ -83,8 +100,8 @@
 
 <header class="topbar" id="topbar">
   <a class="mark" href="#top" aria-label="Dipsana, home">
-    <img class="mark-hero" src="/images/logo-footer.svg" alt="" width="300" height="177">
-    <img class="mark-bar" src="/images/logo-header.svg" alt="" width="423" height="60">
+    <img class="mark-hero" src="/images/logo-footer.svg" alt="" width="430" height="322">
+    <img class="mark-bar" src="/images/logo-header.svg" alt="" width="645" height="112">
   </a>
   <ul class="nav-tabs">
     <li><a href="#top" aria-current="page" class="is-active">Home</a></li>
@@ -332,7 +349,7 @@
 
   <footer class="s-foot" data-reveal>
     <div class="foot-row">
-      <a class="mark mark--lg rv" href="#top" aria-label="Dipsana, home"><img src="/images/logo-footer.svg" alt="" width="300" height="177"></a>
+      <a class="mark mark--lg rv" href="#top" aria-label="Dipsana, home"><img src="/images/logo-footer.svg" alt="" width="430" height="322"></a>
       <p class="mono rv" style="margin:0">© 2026 Dipsana</p>
     </div>
     <ul class="foot-nav rv">

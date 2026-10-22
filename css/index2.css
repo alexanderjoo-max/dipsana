@@ -95,6 +95,12 @@ button,input{font:inherit}
 .mark img.mark-hero{display:none}
 .mark img.mark-bar{display:block}
 .mark--lg img{height:clamp(88px,14vw,128px); display:block}
+/* colour-shifting logo (js/brand.js) */
+.mark--shift{position:relative}
+.mark--shift .lg{transition:opacity .8s ease}
+.mark--shift .lg:not(.on){opacity:0}
+.mark--shift .lg-over{position:absolute; left:0; top:50%; transform:translateY(-50%)}
+
 
 .topbar{
   position:fixed; top:0; left:0; right:0; z-index:50;
