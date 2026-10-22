@@ -102,12 +102,18 @@ function magnets() {
 }
 
 export function initMotion({ smooth = true } = {}) {
+  // the logo in the top bar takes you back to the top
+  let lenis = null;
+  document.querySelectorAll('.topbar .mark').forEach(m => m.addEventListener('click', e => {
+    e.preventDefault();
+    if (lenis) lenis.scrollTo(0, { duration: 1.4 });
+    else scrollTo({ top: 0, behavior: reduced ? 'auto' : 'smooth' });
+  }));
   if (!gsap || !ScrollTrigger) {
     document.documentElement.classList.add('no-motion');
     return { lenis: null };
   }
   gsap.registerPlugin(ScrollTrigger);
-  let lenis = null;
   if (!reduced && smooth && window.Lenis && !coarse) {
     lenis = new window.Lenis({ lerp: 0.11, smoothWheel: true });
     lenis.on('scroll', ScrollTrigger.update);

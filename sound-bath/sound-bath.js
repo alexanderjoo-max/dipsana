@@ -205,7 +205,7 @@ function setMode(i) {
 function onScroll() {
   const mid = innerHeight / 2;
   const inRect = el => { const r = el.getBoundingClientRect(); return r.top < mid && r.bottom > mid; };
-  // the plate shows in the hero, and faintly behind the vibration library
+  // the plate shows in the hero; the library still sets its mode when a sample plays
   zone = inRect(heroSec) ? 'hero' : inRect(libSec) ? 'library' : 'other';
   const at = skySections.find(inRect);
   sky = (at && SECTION_SKY[at.id]) || 'hero';
@@ -262,12 +262,10 @@ function stepPlate() {
 }
 function drawPlate() {
   const wide = innerWidth > 900;
-  // in the hero it sits right of the headline (the CSS halo uses the same numbers);
-  // behind the library it spreads out wide and faint
-  const lib = zone === 'library';
-  const tx = lib ? 0.5 : wide ? 0.68 : 0.5, ty = lib ? 0.5 : wide ? 0.5 : 0.31;
-  const tr = lib ? Math.min(W, H) * 0.62 : wide ? Math.min(W * 0.28, H * 0.42) : Math.min(W * 0.40, H * 0.30);
-  const ta = zone === 'hero' ? 0.6 : lib ? 0.22 : 0;
+  // it sits right of the headline in the hero (the CSS halo uses the same numbers) and nowhere else
+  const tx = wide ? 0.68 : 0.5, ty = wide ? 0.5 : 0.31;
+  const tr = wide ? Math.min(W * 0.28, H * 0.42) : Math.min(W * 0.40, H * 0.30);
+  const ta = zone === 'hero' ? 0.6 : 0;
   const k = reduced ? 1 : 0.05;
   cx += (tx - cx) * k; cy += (ty - cy) * k; R += (tr - R) * k; alpha += (ta - alpha) * k;
   placeHeadset();
@@ -627,9 +625,11 @@ LIB = {
   src(kind) { const s = this.ctx.createBufferSource(); s.buffer = this.noiseBuf(kind); s.loop = true; return s; },
   async play(id) {
     if (!this.ctx) this.init();
-    await this.ctx.resume();
+    // claim the slot before waiting on the audio context, so the UI can show it straight away
     this.stop();
     this.current = id;
+    await this.ctx.resume();
+    if (this.current !== id) return;
     const ctx = this.ctx, vg = ctx.createGain(), timers = [], nodes = [];
     vg.gain.value = 0;
     vg.gain.setTargetAtTime(1, ctx.currentTime, 0.4);
@@ -779,15 +779,21 @@ const VOICES = {
 
 /* the cards, the try buttons, and a "now playing" pill that follows you down the page */
 const samples = [...document.querySelectorAll('.sample')];
-// a legend of all nine above the grid, built from the cards themselves
+// the nine sounds as pills named for what they're good for; picking one opens its card and plays it
 const legend = document.getElementById('libLegend');
-samples.forEach(c => {
+let sel = samples[0].dataset.id;
+const keys = samples.map(c => {
   const k = document.createElement('button');
-  k.type = 'button'; k.className = 'key'; k.dataset.try = c.dataset.id;
-  k.innerHTML = `<i aria-hidden="true"></i>${c.querySelector('h3').textContent}<small>${c.querySelector('.smp-for b').textContent}</small>`;
+  const good = c.querySelector('.smp-for b').textContent;
+  k.type = 'button'; k.className = 'key'; k.dataset.id = c.dataset.id;
+  k.setAttribute('role', 'tab'); k.setAttribute('aria-controls', c.id = `smp-${c.dataset.id}`);
+  k.innerHTML = `<b>${good[0].toUpperCase() + good.slice(1)}</b><small>${c.querySelector('h3').textContent}</small><i class="now-bars" aria-hidden="true"><i></i><i></i><i></i></i>`;
+  k.addEventListener('click', () => { if (sel !== k.dataset.id || !LIB.current || LIB.current === sel) libToggle(k.dataset.id); sel = k.dataset.id; syncLibUi(); });
   legend.appendChild(k);
+  c.setAttribute('role', 'tabpanel');
+  return k;
 });
-const tries = [...document.querySelectorAll('[data-try]')];
+const tries = [...document.querySelectorAll('.try')];
 const pill = document.createElement('div');
 pill.className = 'now';
 pill.innerHTML = '<span class="now-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="now-t">Now playing <b></b></span><button type="button">Stop</button>';
@@ -797,14 +803,22 @@ pill.querySelector('button').addEventListener('click', () => libToggle(LIB.curre
 
 function syncLibUi() {
   const cur = LIB.current;
+  if (cur) sel = cur;
+  keys.forEach(k => {
+    k.setAttribute('aria-selected', String(k.dataset.id === sel));
+    k.tabIndex = k.dataset.id === sel ? 0 : -1;
+    k.classList.toggle('is-on', k.dataset.id === cur);
+  });
   samples.forEach(c => {
     const on = c.dataset.id === cur;
+    c.hidden = c.dataset.id !== sel;
     c.classList.toggle('is-on', on);
     const b = c.querySelector('.smp-play');
     b.setAttribute('aria-pressed', String(on));
     b.querySelector('.lbl').textContent = on ? 'Stop' : 'Play';
   });
-  tries.forEach(t => { t.classList.toggle('is-on', t.dataset.try === cur); if (t.classList.contains('key')) t.setAttribute('aria-pressed', String(t.dataset.try === cur)); });
+  tries.forEach(t => t.classList.toggle('is-on', t.dataset.try === cur));
+  sizeCards && sizeCards();
   pill.classList.toggle('on', !!cur);
   if (cur) pill.querySelector('b').textContent = LIB_NAMES[cur];
 }
@@ -820,6 +834,13 @@ function libToggle(id) {
   syncLibUi();
 }
 samples.forEach(c => c.querySelector('.smp-play').addEventListener('click', () => libToggle(c.dataset.id)));
+legend.addEventListener('keydown', e => {
+  const d = { ArrowRight: 1, ArrowDown: 3, ArrowLeft: -1, ArrowUp: -3 }[e.key];
+  if (!d) return;
+  e.preventDefault();
+  const i = (keys.findIndex(k => k.dataset.id === sel) + d + keys.length) % keys.length;
+  sel = keys[i].dataset.id; syncLibUi(); keys[i].focus();
+});
 tries.forEach(t => t.addEventListener('click', () => libToggle(t.dataset.try)));
 play.addEventListener('click', () => { if (play.getAttribute('aria-pressed') === 'true' && LIB.current) { LIB.stop(); syncLibUi(); } });
 
@@ -867,7 +888,7 @@ const DRAW = {
     g.strokeStyle = `rgba(${CL.a},${0.35 + a * 0.5})`; g.lineWidth = 1.6 * dpr;
     g.beginPath();
     for (let x = 0; x <= w; x += 2) {
-      const y = h / 2 + Math.sin(x / w * Math.PI * 2 * 5 - t * 10) * h * 0.3 * (0.25 + env * (0.4 + a)) * Math.sin(x / w * Math.PI);
+      const y = h / 2 + Math.sin(x / w * Math.PI * 2 * 12 - t * 10) * h * 0.3 * (0.25 + env * (0.4 + a)) * Math.sin(x / w * Math.PI);
       x ? g.lineTo(x, y) : g.moveTo(x, y);
     }
     g.stroke();
@@ -877,14 +898,14 @@ const DRAW = {
     [[CL.l, 0.18, 0], [CL.r, 0.22, 1.5], [CL.a, 0.3, 3]].forEach(([c, al, off], i) => {
       g.fillStyle = `rgba(${c},${al + a * 0.2})`;
       g.beginPath(); g.moveTo(0, h);
-      for (let x = 0; x <= w; x += 4) g.lineTo(x, h * (0.45 + i * 0.12) + Math.sin(x * 0.04 / dpr + t * (0.6 + i * 0.2) + off) * h * 0.07 * (0.6 + swell));
+      for (let x = 0; x <= w; x += 4) g.lineTo(x, h * (0.45 + i * 0.12) + Math.sin(x * 0.012 / dpr + t * (0.6 + i * 0.2) + off) * h * 0.07 * (0.6 + swell));
       g.lineTo(w, h); g.fill();
     });
   },
   rain(g, w, h, t, a) {
     g.strokeStyle = `rgba(${CL.l},${0.35 + a * 0.4})`; g.lineWidth = 1.1 * dpr;
     g.beginPath();
-    for (let i = 0; i < 18; i++) {
+    for (let i = 0; i < 46; i++) {
       const x = (i * 0.618 % 1) * w, sp = (0.5 + (i % 5) * 0.12) * h;
       const y = ((t * sp + i * 37 * dpr) % (h + 20 * dpr)) - 10 * dpr;
       g.moveTo(x, y); g.lineTo(x - 3 * dpr, y + 12 * dpr);
@@ -911,7 +932,7 @@ const DRAW = {
     g.strokeStyle = `rgba(${CL.r},${0.4 + a * 0.5})`; g.lineWidth = 1.6 * dpr;
     g.beginPath();
     for (let x = 0; x <= w; x += 2) {
-      const ph = (x / w * 1.2 - t) % 1, p = ph < 0 ? ph + 1 : ph;
+      const ph = (x / w * 2.5 - t) % 1, p = ph < 0 ? ph + 1 : ph;
       const bump = Math.exp(-Math.pow((p - 0.2) * 40, 2)) - 0.5 * Math.exp(-Math.pow((p - 0.27) * 34, 2)) + 0.4 * Math.exp(-Math.pow((p - 0.48) * 30, 2));
       const y = h / 2 - bump * h * 0.3 * (0.6 + a);
       x ? g.lineTo(x, y) : g.moveTo(x, y);
@@ -919,22 +940,23 @@ const DRAW = {
     g.stroke();
   },
   theta(g, w, h, t, a) {
-    [[CL.a, 7, 0, 0.32], [CL.l, 8, 0.6, 0.32]].forEach(([c, cyc, off, yy]) => {
+    [[CL.a, 20, 0, 0.32], [CL.l, 22, 0.6, 0.32]].forEach(([c, cyc, off, yy]) => {
       g.strokeStyle = `rgba(${c},${0.35 + a * 0.3})`; g.lineWidth = 1.2 * dpr; g.beginPath();
       for (let x = 0; x <= w; x += 2) { const y = h * yy + Math.sin(x / w * Math.PI * 2 * cyc - t * (3 + off)) * h * 0.1; x ? g.lineTo(x, y) : g.moveTo(x, y); }
       g.stroke();
     });
     g.strokeStyle = `rgba(${CL.p},${0.45 + a * 0.4})`; g.lineWidth = 1.8 * dpr; g.beginPath();
     for (let x = 0; x <= w; x += 2) {
-      const u = x / w, y = h * 0.68 + (Math.sin(u * Math.PI * 2 * 7 - t * 3) + Math.sin(u * Math.PI * 2 * 8 - t * 3.6)) * h * 0.1;
+      const u = x / w, y = h * 0.68 + (Math.sin(u * Math.PI * 2 * 20 - t * 3) + Math.sin(u * Math.PI * 2 * 22 - t * 3.6)) * h * 0.1;
       x ? g.lineTo(x, y) : g.moveTo(x, y);
     }
     g.stroke();
   }
 };
 const cards = samples.map(c => ({ el: c, id: c.dataset.id, cv: c.querySelector('canvas'), g: c.querySelector('canvas').getContext('2d'), vis: false, lvl: 0 }));
-function sizeCards() { cards.forEach(c => { c.cv.width = c.cv.clientWidth * dpr; c.cv.height = c.cv.clientHeight * dpr; }); }
+var sizeCards = function () { cards.forEach(c => { c.cv.width = c.cv.clientWidth * dpr; c.cv.height = c.cv.clientHeight * dpr; }); }
 sizeCards(); addEventListener('resize', sizeCards);
+syncLibUi();   // opens the first card and hides the rest
 const cio = new IntersectionObserver(es => es.forEach(e => { const c = cards.find(k => k.el === e.target); if (c) c.vis = e.isIntersecting; }));
 cards.forEach(c => cio.observe(c.el));
 function drawCards(now) {
@@ -952,8 +974,7 @@ else (function loop(now) { requestAnimationFrame(loop); drawCards(now); })(0);
 /* ═════════ motion: the flower draws itself, the deck deals, sections arrive ═════════ */
 if (gsap && !reduced) {
   gsap.fromTo('.flower circle', { '--dash': 380 }, { '--dash': 0, duration: 2.6, ease: 'power2.inOut', stagger: 0.06, delay: 0.6 });
-  gsap.from('.sample', { y: 40, opacity: 0, stagger: 0.05, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.lib-grid', start: 'top 82%', once: true } });
-  gsap.from('.lib-head > *, .lib-legend', { y: 30, opacity: 0, stagger: 0.1, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.lib-head', start: 'top 85%', once: true } });
+  gsap.from('.lib-head > *, .lib-body', { y: 30, opacity: 0, stagger: 0.1, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.lib-head', start: 'top 85%', once: true } });
 
   const deck = [...document.querySelectorAll('.pcard')];
   deck.forEach((c, i) => gsap.set(c, { zIndex: i + 1 }));

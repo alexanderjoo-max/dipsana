@@ -1,7 +1,12 @@
 import { initMotion, countUp, gsap, ScrollTrigger, reduced } from '/js/lp-motion.js';
+import { climateMark, preloadMarks } from '/js/brand.js';
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 initMotion();
+// the logo takes on each scene's colours as the day goes by
+const SCENE_MARK = { hero: 'fire', run: 'fire', ride: 'heat', hike: 'bloom', beach: 'sea', swim: 'water', pool: 'sea', walk: 'original', paddle: 'fire', evening: 'dusk' };
+const setLogo = climateMark(document.querySelector('#topbar .mark'), { tone: 'dark', initial: 'fire' });
+preloadMarks(['heat', 'bloom', 'sea', 'water', 'original', 'dusk'], ['h'], 'dark');
 
 /* ═════════ hero: a split-flap activity word ═════════ */
 const flip = document.getElementById('flip');
@@ -46,11 +51,12 @@ if (gsap && !reduced) {
   });
 }
 
-// the dotted trail: anchors on the side of each box that faces the middle
+// the sound-wave trail: anchors on the side of each box that faces the middle
 const svg = document.getElementById('route');
 const line = document.getElementById('routeLine');
 const shadow = document.getElementById('routeShadow');
 const reveal = document.getElementById('routeReveal');
+const tip = document.getElementById('routeTip');
 let samples = [], total = 0;
 function offsetIn(el) {
   let x = 0, y = 0, n = el;
@@ -74,8 +80,23 @@ function buildRoute() {
     const a = pts[i - 1], b = pts[i], dy = (b.y - a.y) * 0.55;
     d += ` C${a.x.toFixed(1)},${(a.y + dy).toFixed(1)} ${b.x.toFixed(1)},${(b.y - dy).toFixed(1)} ${b.x.toFixed(1)},${b.y.toFixed(1)}`;
   }
-  [line, shadow, reveal].forEach(p => p.setAttribute('d', d));
+  reveal.setAttribute('d', d);
   total = reveal.getTotalLength();
+  // ride a waveform along the route: a fast carrier under an envelope that swells, fades and goes quiet,
+  // like a recording. The route is sampled coarsely and interpolated, which keeps rebuilding cheap.
+  const C = 12, coarse = [];
+  for (let l = 0; l <= total + C; l += C) coarse.push(reveal.getPointAtLength(Math.min(l, total)));
+  let w = '';
+  for (let l = 0; l <= total; l += 2) {
+    const f = l / C, i = Math.min(coarse.length - 2, Math.floor(f)), k = f - i;
+    const a = coarse[i], b = coarse[i + 1];
+    const tx = b.x - a.x, ty = b.y - a.y, n = Math.hypot(tx, ty) || 1;
+    const env = 1 + 17 * Math.pow(Math.abs(Math.sin(l / 150)), 2) * (0.45 + 0.55 * Math.abs(Math.sin(l / 47 + 1.7)));
+    const off = env * Math.sin(l / 13 * Math.PI * 2);
+    const x = a.x + tx * k - ty / n * off, y = a.y + ty * k + tx / n * off;
+    w += `${l ? 'L' : 'M'}${x.toFixed(1)},${y.toFixed(1)}`;
+  }
+  line.setAttribute('d', w); shadow.setAttribute('d', w);
   samples = [];
   for (let l = 0; l <= total; l += 12) samples.push([l, reveal.getPointAtLength(l).y]);
   reveal.style.strokeDasharray = `${total} ${total}`;
@@ -90,6 +111,8 @@ function drawRoute() {
   while (lo < hi) { const mid = (lo + hi) >> 1; if (samples[mid][1] < target) lo = mid + 1; else hi = mid; }
   const len = samples[lo][0];
   reveal.style.strokeDashoffset = Math.max(0, total - len);
+  const p = reveal.getPointAtLength(len);
+  tip.setAttribute('transform', `translate(${p.x.toFixed(1)},${p.y.toFixed(1)})`);
 }
 
 // the clock in the top bar keeps time with the day
@@ -99,9 +122,10 @@ function tick() {
   const mid = innerHeight / 2;
   const sc = scenes.find(s => { const r = s.getBoundingClientRect(); return r.top <= mid && r.bottom > mid; });
   if (sc && clockTime.textContent !== sc.dataset.time) { clockTime.textContent = sc.dataset.time; clockWhat.textContent = sc.dataset.what; }
+  if (sc) setLogo(SCENE_MARK[sc.id]);
 }
 addEventListener('scroll', () => { drawRoute(); tick(); }, { passive: true });
-addEventListener('resize', buildRoute);
+let routeT; addEventListener('resize', () => { clearTimeout(routeT); routeT = setTimeout(buildRoute, 150); });
 addEventListener('load', () => { buildRoute(); if (ScrollTrigger) ScrollTrigger.refresh(); });
 document.fonts && document.fonts.ready.then(buildRoute);
 buildRoute(); tick();

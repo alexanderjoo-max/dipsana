@@ -48,18 +48,19 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="topbar" id="topbar">
-  <span class="mark" role="img" aria-label="Dipsana"><img src="/images/brand/h-fire-dark.svg" alt="" width="645" height="112"></span>
+  <a class="mark" href="#top" aria-label="Dipsana, back to top"><img src="/images/brand/h-fire-dark.svg" alt="" width="645" height="112"></a>
   <p class="clock mono" id="clock" aria-hidden="true"><span class="sun-dot"></span><b id="clockTime">06:30</b><span id="clockWhat">Sunrise</span></p>
   <a class="btn btn--sm" href="#waitlist" data-magnet><span class="btn-full">Join the waitlist</span><span class="btn-short">Waitlist</span></a>
 </header>
 
 <main id="main" class="journey">
 
-  <!-- the trail that links every stop of the day -->
+  <!-- the trail that links every stop of the day: a sound wave, drawn as you scroll -->
   <svg class="route" id="route" aria-hidden="true">
     <defs><mask id="routeMask" maskUnits="userSpaceOnUse"><path id="routeReveal"/></mask></defs>
     <path class="route-shadow" id="routeShadow" mask="url(#routeMask)"/>
     <path class="route-line" id="routeLine" mask="url(#routeMask)"/>
+    <g class="route-tip" id="routeTip"><circle class="rt-ring" r="8"/><circle class="rt-ring rt-ring--2" r="8"/><circle class="rt-dot" r="6"/></g>
   </svg>
 
   <!-- ─────────── 06:30 · the sea, first thing ─────────── -->
