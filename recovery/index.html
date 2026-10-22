@@ -40,15 +40,12 @@
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script src="/js/site.js" defer></script>
 <script type="module" src="/recovery/recovery.js"></script>
 </head>
 <body>
 
 <a class="skip" href="#main">Skip to content</a>
-
-<div class="cursor" id="cursor" aria-hidden="true"></div>
 
 <header class="topbar" id="topbar">
   <span class="mark" role="img" aria-label="Dipsana"><img class="mark-h" src="/images/brand/h-heat-light.svg" alt="" width="645" height="112"></span>
@@ -60,7 +57,6 @@
   <!-- ─────────── Hero: coal-dark sauna, smoke and embers ─────────── -->
   <section class="hero" id="hero" aria-labelledby="hero-h">
     <div class="hero-photo" aria-hidden="true"><img src="/images/v3-sauna.jpg" alt="" width="864" height="1152" id="heroImg"></div>
-    <canvas class="smoke" id="smoke" aria-hidden="true"></canvas>
     <canvas class="embers" id="embers" aria-hidden="true"></canvas>
     <div class="hero-copy">
       <p class="mono kicker"><span class="dot"></span>Sauna · cold plunge · ice bath</p>
@@ -199,7 +195,6 @@
   <!-- ─────────── Waitlist ─────────── -->
   <section class="wait" id="waitlist" aria-labelledby="wl-h">
     <div class="wait-bg" aria-hidden="true"><img src="/images/v3-sauna.jpg" alt="" width="864" height="1152" loading="lazy" data-speed="0.25"></div>
-    <canvas class="embers embers--wait" id="embersWait" aria-hidden="true"></canvas>
     <div class="wait-in">
       <p class="mono">Founding list</p>
       <h2 class="wait-h" id="wl-h" data-split="chars">First in.</h2>

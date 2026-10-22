@@ -779,7 +779,15 @@ const VOICES = {
 
 /* the cards, the try buttons, and a "now playing" pill that follows you down the page */
 const samples = [...document.querySelectorAll('.sample')];
-const tries = [...document.querySelectorAll('.try')];
+// a legend of all nine above the grid, built from the cards themselves
+const legend = document.getElementById('libLegend');
+samples.forEach(c => {
+  const k = document.createElement('button');
+  k.type = 'button'; k.className = 'key'; k.dataset.try = c.dataset.id;
+  k.innerHTML = `<i aria-hidden="true"></i>${c.querySelector('h3').textContent}<small>${c.querySelector('.smp-for b').textContent}</small>`;
+  legend.appendChild(k);
+});
+const tries = [...document.querySelectorAll('[data-try]')];
 const pill = document.createElement('div');
 pill.className = 'now';
 pill.innerHTML = '<span class="now-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="now-t">Now playing <b></b></span><button type="button">Stop</button>';
@@ -796,7 +804,7 @@ function syncLibUi() {
     b.setAttribute('aria-pressed', String(on));
     b.querySelector('.lbl').textContent = on ? 'Stop' : 'Play';
   });
-  tries.forEach(t => t.classList.toggle('is-on', t.dataset.try === cur));
+  tries.forEach(t => { t.classList.toggle('is-on', t.dataset.try === cur); if (t.classList.contains('key')) t.setAttribute('aria-pressed', String(t.dataset.try === cur)); });
   pill.classList.toggle('on', !!cur);
   if (cur) pill.querySelector('b').textContent = LIB_NAMES[cur];
 }
@@ -859,7 +867,7 @@ const DRAW = {
     g.strokeStyle = `rgba(${CL.a},${0.35 + a * 0.5})`; g.lineWidth = 1.6 * dpr;
     g.beginPath();
     for (let x = 0; x <= w; x += 2) {
-      const y = h / 2 + Math.sin(x / w * Math.PI * 2 * 12 - t * 10) * h * 0.3 * (0.25 + env * (0.4 + a)) * Math.sin(x / w * Math.PI);
+      const y = h / 2 + Math.sin(x / w * Math.PI * 2 * 5 - t * 10) * h * 0.3 * (0.25 + env * (0.4 + a)) * Math.sin(x / w * Math.PI);
       x ? g.lineTo(x, y) : g.moveTo(x, y);
     }
     g.stroke();
@@ -869,15 +877,15 @@ const DRAW = {
     [[CL.l, 0.18, 0], [CL.r, 0.22, 1.5], [CL.a, 0.3, 3]].forEach(([c, al, off], i) => {
       g.fillStyle = `rgba(${c},${al + a * 0.2})`;
       g.beginPath(); g.moveTo(0, h);
-      for (let x = 0; x <= w; x += 4) g.lineTo(x, h * (0.45 + i * 0.12) + Math.sin(x * 0.012 / dpr + t * (0.6 + i * 0.2) + off) * h * 0.07 * (0.6 + swell));
+      for (let x = 0; x <= w; x += 4) g.lineTo(x, h * (0.45 + i * 0.12) + Math.sin(x * 0.04 / dpr + t * (0.6 + i * 0.2) + off) * h * 0.07 * (0.6 + swell));
       g.lineTo(w, h); g.fill();
     });
   },
   rain(g, w, h, t, a) {
     g.strokeStyle = `rgba(${CL.l},${0.35 + a * 0.4})`; g.lineWidth = 1.1 * dpr;
     g.beginPath();
-    for (let i = 0; i < 46; i++) {
-      const x = (i * 53.7 * dpr) % w, sp = (0.5 + (i % 5) * 0.12) * h;
+    for (let i = 0; i < 18; i++) {
+      const x = (i * 0.618 % 1) * w, sp = (0.5 + (i % 5) * 0.12) * h;
       const y = ((t * sp + i * 37 * dpr) % (h + 20 * dpr)) - 10 * dpr;
       g.moveTo(x, y); g.lineTo(x - 3 * dpr, y + 12 * dpr);
     }
@@ -903,7 +911,7 @@ const DRAW = {
     g.strokeStyle = `rgba(${CL.r},${0.4 + a * 0.5})`; g.lineWidth = 1.6 * dpr;
     g.beginPath();
     for (let x = 0; x <= w; x += 2) {
-      const ph = (x / w * 2.5 - t) % 1, p = ph < 0 ? ph + 1 : ph;
+      const ph = (x / w * 1.2 - t) % 1, p = ph < 0 ? ph + 1 : ph;
       const bump = Math.exp(-Math.pow((p - 0.2) * 40, 2)) - 0.5 * Math.exp(-Math.pow((p - 0.27) * 34, 2)) + 0.4 * Math.exp(-Math.pow((p - 0.48) * 30, 2));
       const y = h / 2 - bump * h * 0.3 * (0.6 + a);
       x ? g.lineTo(x, y) : g.moveTo(x, y);
@@ -911,14 +919,14 @@ const DRAW = {
     g.stroke();
   },
   theta(g, w, h, t, a) {
-    [[CL.a, 20, 0, 0.32], [CL.l, 22, 0.6, 0.32]].forEach(([c, cyc, off, yy]) => {
+    [[CL.a, 7, 0, 0.32], [CL.l, 8, 0.6, 0.32]].forEach(([c, cyc, off, yy]) => {
       g.strokeStyle = `rgba(${c},${0.35 + a * 0.3})`; g.lineWidth = 1.2 * dpr; g.beginPath();
       for (let x = 0; x <= w; x += 2) { const y = h * yy + Math.sin(x / w * Math.PI * 2 * cyc - t * (3 + off)) * h * 0.1; x ? g.lineTo(x, y) : g.moveTo(x, y); }
       g.stroke();
     });
     g.strokeStyle = `rgba(${CL.p},${0.45 + a * 0.4})`; g.lineWidth = 1.8 * dpr; g.beginPath();
     for (let x = 0; x <= w; x += 2) {
-      const u = x / w, y = h * 0.68 + (Math.sin(u * Math.PI * 2 * 20 - t * 3) + Math.sin(u * Math.PI * 2 * 22 - t * 3.6)) * h * 0.1;
+      const u = x / w, y = h * 0.68 + (Math.sin(u * Math.PI * 2 * 7 - t * 3) + Math.sin(u * Math.PI * 2 * 8 - t * 3.6)) * h * 0.1;
       x ? g.lineTo(x, y) : g.moveTo(x, y);
     }
     g.stroke();
@@ -944,12 +952,12 @@ else (function loop(now) { requestAnimationFrame(loop); drawCards(now); })(0);
 /* ═════════ motion: the flower draws itself, the deck deals, sections arrive ═════════ */
 if (gsap && !reduced) {
   gsap.fromTo('.flower circle', { '--dash': 380 }, { '--dash': 0, duration: 2.6, ease: 'power2.inOut', stagger: 0.06, delay: 0.6 });
-  gsap.from('.sample', { y: 70, opacity: 0, rotate: 1.5, stagger: 0.07, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.lib-grid', start: 'top 82%', once: true } });
-  gsap.from('.lib-head > *', { y: 30, opacity: 0, stagger: 0.1, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.lib-head', start: 'top 85%', once: true } });
+  gsap.from('.sample', { y: 40, opacity: 0, stagger: 0.05, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.lib-grid', start: 'top 82%', once: true } });
+  gsap.from('.lib-head > *, .lib-legend', { y: 30, opacity: 0, stagger: 0.1, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.lib-head', start: 'top 85%', once: true } });
 
   const deck = [...document.querySelectorAll('.pcard')];
   deck.forEach((c, i) => gsap.set(c, { zIndex: i + 1 }));
-  gsap.set(deck.slice(1), { yPercent: 120, rotate: i => (i % 2 ? -5 : 5), opacity: 1 });
+  gsap.set(deck.slice(1), { yPercent: 120, opacity: 1 });
   const tl = gsap.timeline({
     scrollTrigger: { trigger: '#places', pin: '.pl-pin', start: 'top top', end: () => `+=${(deck.length - 1) * innerHeight * 0.75}`, scrub: 0.7, invalidateOnRefresh: true }
   });
@@ -959,11 +967,10 @@ if (gsap && !reduced) {
   tl.to(artOf(deck[0]), { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' }, 0);
   deck.forEach((c, i) => {
     if (!i) return;
-    tl.to(c, { yPercent: 0, rotate: (i % 2 ? -1.2 : 1.2), duration: 1, ease: 'power2.out' }, i - 1)
+    tl.to(c, { yPercent: 0, duration: 1, ease: 'power2.out' }, i - 1)
       .to(deck[i - 1], { scale: 0.93, yPercent: -4, filter: 'brightness(.55)', duration: 1, ease: 'power2.out' }, i - 1)
       .to(artOf(c), { strokeDashoffset: 0, duration: 0.9, ease: 'power2.out' }, i - 0.6);
   });
-  gsap.from('.why-list li', { y: 40, opacity: 0, stagger: 0.1, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.why-list', start: 'top 85%', once: true } });
   ScrollTrigger.refresh();
 } else {
   document.documentElement.classList.add('deck-static');

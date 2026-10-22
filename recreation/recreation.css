@@ -58,6 +58,30 @@ body{font-variation-settings:'opsz' 14,'wdth' 96,'wght' 400; background:#10202a}
 .scene--first .scene-bg{top:0; -webkit-mask-image:none; mask-image:none}
 .scene--last .scene-bg{bottom:0}
 .scene-bg img{position:absolute; left:0; top:-8%; width:100%; height:116%; object-fit:cover; will-change:transform}
+/* one colour screen over every photo: each is toned to a gradient that starts where the last one ended,
+   so the day reads as one sweep from sunrise coral, through the sea at midday, to dusk violet */
+.scene-bg{isolation:isolate}
+.scene-bg img{filter:grayscale(1) contrast(1.08) brightness(1.04)}
+.scene-bg::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(170deg, var(--c1), var(--c2));
+  mix-blend-mode:color;
+}
+.scene-bg::before{
+  /* a light wash of the same colours lifts the shadows so nothing goes muddy */
+  content:""; position:absolute; inset:0; z-index:1;
+  background:linear-gradient(170deg, var(--c1), var(--c2)); opacity:.18;
+}
+#hero{--c1:#ff5f3d; --c2:#ffb43d}
+#run{--c1:#ffb43d; --c2:#ff7a3d}
+#ride{--c1:#ff7a3d; --c2:#e8566e}
+#hike{--c1:#e8566e; --c2:#2fa98c}
+#beach{--c1:#2fa98c; --c2:#00b2c4}
+#swim{--c1:#00b2c4; --c2:#0a86c9}
+#pool{--c1:#0a86c9; --c2:#00a6b4}
+#walk{--c1:#00a6b4; --c2:#ffa63d}
+#paddle{--c1:#ffa63d; --c2:#ff5f3d}
+#evening{--c1:#ff5f3d; --c2:#6a3d9a}
 .scene--last::after{content:""; position:absolute; left:0; right:0; bottom:0; height:30vh; z-index:0; background:linear-gradient(transparent, #10202a); pointer-events:none}
 
 /* the dotted trail between stops */

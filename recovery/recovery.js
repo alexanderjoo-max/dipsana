@@ -1,59 +1,20 @@
 import { shader, GLSL } from '/js/lp-gl.js';
-import { initMotion, countUp, gsap, ScrollTrigger, reduced, coarse } from '/js/lp-motion.js';
+import { initMotion, countUp, gsap, ScrollTrigger, reduced } from '/js/lp-motion.js';
 import { climateMark, preloadMarks } from '/js/brand.js';
 
 const lerp = (a, b, t) => a + (b - a) * t;
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const smooth = (a, b, x) => { const t = clamp((x - a) / (b - a)); return t * t * (3 - 2 * t); };
 
-initMotion();
+initMotion({ smooth: false });
 const setLogo = climateMark(document.querySelector('#topbar .mark'), { initial: 'heat' });
 preloadMarks(['fire', 'water', 'ice']);
 
-/* ═════════ cursor: a low ember glow that follows the pointer ═════════ */
-const cursor = document.getElementById('cursor');
-if (!coarse && !reduced) {
-  let x = innerWidth / 2, y = innerHeight / 2, cx = x, cy = y;
-  addEventListener('pointermove', e => { x = e.clientX; y = e.clientY; cursor.classList.add('on'); }, { passive: true });
-  document.addEventListener('pointerleave', () => cursor.classList.remove('on'));
-  (function follow() {
-    cx += (x - cx) * 0.12; cy += (y - cy) * 0.12;
-    cursor.style.transform = `translate3d(${cx}px,${cy}px,0)`;
-    requestAnimationFrame(follow);
-  })();
-}
-
-/* ═════════ hero: smoke, embers, a slow push on the photo ═════════ */
-const SMOKE = GLSL.noise + `
-uniform vec2 uRes; uniform float uTime; uniform vec2 uMouse;
-void main(){
-  vec2 uv = gl_FragCoord.xy/uRes;
-  vec2 q = (gl_FragCoord.xy - .5*uRes)/uRes.y;
-  float t = uTime*.05;
-  vec2 p = q*1.4 + vec2((uMouse.x - .5)*.25, -t*1.6);
-  vec2 w = vec2(fbm(p + vec2(0., t)), fbm(p + vec2(4.3, -t)));
-  float n = fbm(p*1.3 + w*1.8);
-  float smoke = smoothstep(.42, .92, n)*(1. - uv.y*.55);
-  vec3 grey = vec3(.2, .18, .17);
-  vec3 lit = vec3(.95, .42, .16);
-  vec3 col = mix(grey, lit, smoothstep(.55, .0, uv.y)*.45)*smoke;
-  gl_FragColor = vec4(col, 1.);
-}`;
-const smokeGl = shader(document.getElementById('smoke'), SMOKE, { maxDpr: 0.75 });
-if (smokeGl) reduced ? smokeGl.still(3) : smokeGl.start();
-
-const hero = document.getElementById('hero');
+/* ═════════ hero: embers and a slow push on the photo ═════════ */
 const heroImg = document.getElementById('heroImg');
 if (!reduced && gsap) {
   gsap.fromTo(heroImg, { scale: 1.18 }, { scale: 1.06, duration: 3.2, ease: 'power3.out' });
-  gsap.to('.hero-photo', { yPercent: 14, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
-  gsap.to('.hero-copy', { yPercent: -18, opacity: 0.2, ease: 'none', scrollTrigger: { trigger: hero, start: 'top top', end: 'bottom top', scrub: true } });
   gsap.from('.kicker, .hero-sub, .hero-actions .btn', { y: 24, opacity: 0, duration: 1.2, ease: 'expo.out', stagger: 0.08, delay: 0.9 });
-  if (!coarse) hero.addEventListener('pointermove', e => {
-    const nx = e.clientX / innerWidth - 0.5, ny = e.clientY / innerHeight - 0.5;
-    if (smokeGl) { smokeGl.mouse[0] = nx + 0.5; smokeGl.mouse[1] = 0.5 - ny; }
-    gsap.to('.hero-photo', { x: nx * -24, y: ny * -16, duration: 1.2, ease: 'power3.out', overwrite: 'auto' });
-  });
 }
 
 function embers(canvas, rate) {
@@ -61,7 +22,7 @@ function embers(canvas, rate) {
   const ctx = canvas.getContext('2d');
   let W, H, dpr, on = true;
   const parts = [];
-  const size = () => { dpr = Math.min(2, devicePixelRatio || 1); W = canvas.width = canvas.clientWidth * dpr; H = canvas.height = canvas.clientHeight * dpr; };
+  const size = () => { dpr = Math.min(1.5, devicePixelRatio || 1); W = canvas.width = canvas.clientWidth * dpr; H = canvas.height = canvas.clientHeight * dpr; };
   size(); addEventListener('resize', size);
   new IntersectionObserver(es => { on = es[0].isIntersecting; }).observe(canvas);
   (function frame() {
@@ -77,15 +38,16 @@ function embers(canvas, rate) {
       const k = p.life / p.max;
       if (k >= 1 || p.y < -20) { parts.splice(i, 1); continue; }
       const a = Math.sin(Math.PI * k);
+      // a faint halo instead of shadowBlur, which is far too slow to run per particle
+      ctx.fillStyle = `rgba(255,110,30,${0.18 * a})`;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r * 3.5, 0, 7); ctx.fill();
       ctx.fillStyle = `rgba(255,${Math.round(110 + 90 * (1 - k))},50,${0.9 * a})`;
-      ctx.shadowColor = 'rgba(255,110,30,.9)'; ctx.shadowBlur = 10 * dpr;
       ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, 7); ctx.fill();
     }
-    ctx.shadowBlur = 0; ctx.globalCompositeOperation = 'source-over';
+    ctx.globalCompositeOperation = 'source-over';
   })();
 }
-embers(document.getElementById('embers'), 0.55);
-embers(document.getElementById('embersWait'), 0.4);
+embers(document.getElementById('embers'), 0.3);
 
 /* ═════════ descent: fire → steam → water → frost ═════════ */
 const PALETTES = `
@@ -164,7 +126,7 @@ void main(){
 }`;
 
 const descent = document.getElementById('descent');
-const dBg = shader(document.getElementById('dBg'), ROOMS, { uniforms: { uP: 0 }, maxDpr: 0.85 });
+const dBg = shader(document.getElementById('dBg'), ROOMS, { uniforms: { uP: 0 }, maxDpr: 0.5 });
 const dNum = document.getElementById('dNum');
 const dNumWrap = document.getElementById('dNumWrap');
 const dMark = document.getElementById('dMark');
@@ -265,7 +227,7 @@ if (gsap && !reduced) {
       onUpdate: self => setClock(self.progress)
     }
   });
-  gsap.from('.pr-card', { y: 80, opacity: 0, rotate: 2, stagger: 0.08, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '#protocol', start: 'top 70%', once: true } });
+  gsap.from('.pr-card', { y: 60, opacity: 0, stagger: 0.08, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '#protocol', start: 'top 70%', once: true } });
 } else {
   track.style.overflowX = 'auto';
   setClock(1);
@@ -274,7 +236,7 @@ if (gsap && !reduced) {
 /* ═════════ spec plate: a heat flush across steel, numbers counting up ═════════ */
 document.querySelectorAll('.plate [data-count]').forEach(el => countUp(el, { duration: 1.8 }));
 if (gsap && !reduced) {
-  gsap.from('.plate', { y: 60, rotateX: 12, opacity: 0, duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: '.plate', start: 'top 85%', once: true } });
+  gsap.from('.plate', { y: 60, opacity: 0, duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: '.plate', start: 'top 85%', once: true } });
   gsap.fromTo('.plate', { '--sweep': '-110%' }, { '--sweep': '120%', duration: 2.2, ease: 'power2.inOut', scrollTrigger: { trigger: '.plate', start: 'top 70%', once: true } });
   gsap.from('.plate-grid > div', { opacity: 0, y: 20, stagger: 0.07, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: '.plate', start: 'top 70%', once: true } });
 }
