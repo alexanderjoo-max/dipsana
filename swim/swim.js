@@ -1,6 +1,13 @@
 import { shader, GLSL } from '/js/lp-gl.js';
+import { initMotion, countUp, gsap, ScrollTrigger } from '/js/lp-motion.js';
+import { climateMark, preloadMarks } from '/js/brand.js';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+initMotion();
+const setLogo = climateMark(document.querySelector('#topbar .mark'), { initial: 'water' });
+preloadMarks(['sea']);
+// each letter of "Swim" bobs on its own beat
+document.querySelectorAll('.bob .si').forEach((el, i) => el.style.setProperty('--i', i));
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 
@@ -8,7 +15,7 @@ const lerp = (a, b, t) => a + (b - a) * t;
 const MAX_RIPPLES = 8;
 const POOL = GLSL.noise + `
 uniform vec2 uRes; uniform float uTime; uniform float uDpr;
-uniform float uTravel; uniform float uLaneX; uniform float uRopeD; uniform float uDim;
+uniform float uTravel; uniform float uLaneX; uniform float uRopeD; uniform float uDim; uniform float uOcean;
 uniform vec4 uRip[${MAX_RIPPLES}];
 
 float caustic(vec2 q, float t){
@@ -71,18 +78,27 @@ void main(){
   float tCross = (1. - smoothstep(.05, .056, abs(fract(f.y*.18) - .5)*5.56)) * (1. - smoothstep(.2, .206, abs(f.x - uLaneX)));
   col = mix(col, vec3(.04, .11, .17), max(lane, tCross)*.95);
 
+  // the open sea: tiles give way to rippled sand
+  if(uOcean > 0.){
+    float sr = sin((f.x*.55 + f.y)*24. + fbm(f*2.6)*5.)*.5 + .5;
+    vec3 sand = mix(vec3(.58, .55, .44), vec3(.8, .74, .58), sr) * (.85 + .3*fbm(f*1.3 + 9.));
+    col = mix(col, sand, uOcean);
+  }
+
   // rope shadows on the floor
   for(int s=0;s<2;s++){
     float x0 = uLaneX + (float(s)*2. - 1.)*uRopeD;
     vec3 sh = rope(p + refr*.3 + vec2(-.035, .05) + vec2(0., uTravel), x0);
-    col *= 1. - sh.x*.35;
+    col *= 1. - sh.x*.35*(1. - uOcean);
   }
 
   // water: depth tint and light
-  col *= vec3(.42, .78, .86);
-  col = mix(col, vec3(.01, .22, .33), .38);
-  float c1 = caustic(f*1.3 + vec2(0., 0.), t*.55);
-  float c2 = caustic(f*1.3 + vec2(.004, .003), t*.55);
+  col *= mix(vec3(.42, .78, .86), vec3(.4, .8, .84), uOcean);
+  col = mix(col, mix(vec3(.01, .22, .33), vec3(.0, .3, .4), uOcean), mix(.38, .34, uOcean));
+  // deep water shadows drift across the open sea
+  col *= 1. - uOcean*.22*smoothstep(.5, .85, fbm(f*1.1 + vec2(t*.03, 0.)));
+  float c1 = caustic(f*mix(1.3, .9, uOcean), t*.55);
+  float c2 = caustic(f*mix(1.3, .9, uOcean) + vec2(.004, .003), t*.55);
   col += vec3(.75, 1., 1.)*mix(c1, c2, .5)*.5;
   col += vec3(.8, 1., 1.)*ringLight*.12;
 
@@ -92,12 +108,12 @@ void main(){
     vec3 rp = rope(p + swell*.008 + vec2(0., uTravel), x0);
     float k = mod(rp.y, 10.);
     vec3 rc = k < 1. ? vec3(1.) : (k < 5. ? vec3(.91, .36, .13) : (k < 6. ? vec3(1.) : vec3(.95, .8, .25)));
-    col = mix(col, rc*rp.z, rp.x);
+    col = mix(col, rc*rp.z, rp.x*(1. - uOcean));
   }
 
   // surface glints
   float gl = pow(clamp(vnoise(p*40. + swell*18. + t*.6), 0., 1.), 14.);
-  col += gl*.7;
+  col += gl*(.7 + uOcean*.15);
 
   float v = smoothstep(1.3, .3, length((uv - .5)*vec2(uRes.x/uRes.y, 1.)));
   col *= mix(.6, 1., v)*uDim;
@@ -110,7 +126,7 @@ function makePool(canvas, opts) {
   let ri = 0;
   const pool = shader(canvas, POOL, {
     maxDpr: opts.maxDpr ?? 1.25,
-    uniforms: { uTravel: 0, uLaneX: 0.3, uRopeD: 0.5, uDim: opts.dim ?? 1, uRip: ripples },
+    uniforms: { uTravel: 0, uLaneX: 0.3, uRopeD: 0.5, uDim: opts.dim ?? 1, uOcean: opts.ocean ?? 0, uRip: ripples },
     beforeDraw: opts.beforeDraw
   });
   if (!pool) return null;
@@ -358,3 +374,60 @@ import('/js/lp-headset.js').then(({ headset }) => headset(kitCanvas, {
   if (reduced) { frame(performance.now()); kitPaint = i => { mat.color.set(KIT[i].hex); frame(performance.now()); }; }
   else (function loop(now) { requestAnimationFrame(loop); if (visible || ct < 1) frame(now); })(performance.now());
 }).catch(() => { /* the poster stays */ });
+
+
+/* ═════════ pool to ocean: the lane dissolves into open sea ═════════ */
+const waters = document.getElementById('waters');
+const wNum = document.getElementById('wNum');
+const wUnit = document.getElementById('wUnit');
+const wBar = document.getElementById('wBar');
+const seaSec = document.getElementById('sea');
+let wp = 0, wTravel = 0;
+const morph = makePool(document.getElementById('morph'), {
+  maxDpr: 1,
+  beforeDraw() {
+    const wide = innerWidth > 900;
+    const oc = Math.min(1, Math.max(0, (wp - 0.28) / 0.4));
+    morph.set('uOcean', oc * oc * (3 - 2 * oc));
+    morph.set('uLaneX', wide ? 0.42 : 0.15);
+    morph.set('uRopeD', wide ? 0.36 : 0.3);
+    wTravel += 0.0011;
+    morph.set('uTravel', wTravel + wp * 3);
+  }
+});
+if (morph) reduced ? morph.still(2) : morph.start();
+function onWaters() {
+  const r = waters.getBoundingClientRect();
+  wp = clamp(-r.top / (r.height - innerHeight));
+  const sea = wp > 0.5;
+  waters.dataset.w = sea ? 'sea' : 'pool';
+  if (sea) { wNum.textContent = '∞'; wUnit.textContent = ''; }
+  else { wNum.textContent = Math.round(25 + (wp / 0.5) * 375); wUnit.textContent = 'm'; }
+  wBar.parentElement.style.setProperty('--wb', `${wp * 100}%`);
+  // the logo turns from pool blue to sea teal with the water
+  const s = seaSec.getBoundingClientRect();
+  const inSea = s.top < innerHeight / 2 && s.bottom > innerHeight / 2;
+  const inWaters = r.top <= 0 && r.bottom >= innerHeight;
+  setLogo((inWaters && sea) || inSea ? 'sea' : 'water');
+  if (reduced && morph) morph.redraw();
+}
+addEventListener('scroll', onWaters, { passive: true });
+onWaters();
+
+/* ═════════ the workout bars fill as you scroll, the total counts up ═════════ */
+document.querySelectorAll('.set-total [data-count]').forEach(el => countUp(el, { duration: 1.8 }));
+if (gsap && !reduced) {
+  gsap.utils.toArray('.set-rows li').forEach((li, i) => {
+    gsap.fromTo(li.querySelector('.sr-bar i'), { '--fill': 0 }, { '--fill': 1, ease: 'none', scrollTrigger: { trigger: li, start: 'top 85%', end: 'top 45%', scrub: true } });
+    gsap.from(li, { x: -40, opacity: 0, duration: 1, ease: 'expo.out', scrollTrigger: { trigger: li, start: 'top 90%', once: true } });
+  });
+  // sea photos float on a gentle swell
+  gsap.utils.toArray('.fl').forEach((f, i) => {
+    gsap.from(f, { y: 120, opacity: 0, rotate: i % 2 ? 4 : -4, duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: f, start: 'top 92%', once: true } });
+    gsap.to(f.querySelector('img'), { y: i % 2 ? 10 : -10, rotate: i % 2 ? 1.2 : -1.2, scale: 1.06, duration: 3 + i * 0.6, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  });
+  ['.train-head', '.sea-head'].forEach(h => gsap.from(h + ' > *', { y: 30, opacity: 0, stagger: 0.08, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: h, start: 'top 85%', once: true } }));
+  ScrollTrigger.refresh();
+} else {
+  document.querySelectorAll('.sr-bar i').forEach(i => i.style.setProperty('--fill', 1));
+}

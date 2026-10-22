@@ -1,41 +1,116 @@
-const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+import { initMotion, countUp, gsap, ScrollTrigger, reduced, coarse } from '/js/lp-motion.js';
+
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+initMotion();
 
-/* ═════════ Where it goes: vertical scroll drives a horizontal row of photos ═════════ */
-const trail = document.getElementById('trail');
-const cards = document.getElementById('cards');
-const trailBar = document.getElementById('trailBar');
-let travel = 0;
-function sizeTrail() {
-  travel = Math.max(0, cards.scrollWidth - innerWidth);
-  trail.style.setProperty('--trail-h', `${travel + innerHeight * 1.1}px`);
-  onScroll();
-}
-
-/* the aerial band drifts a little slower than the page */
-const band = document.querySelector('.band');
-const bandImg = document.getElementById('bandImg');
-
-function onScroll() {
-  const r = trail.getBoundingClientRect();
-  const p = clamp(-r.top / Math.max(1, r.height - innerHeight));
-  cards.style.setProperty('--tx', `${-p * travel}px`);
-  trailBar.style.width = `${p * 100}%`;
-  if (!reduced) {
-    const b = band.getBoundingClientRect();
-    if (b.bottom > 0 && b.top < innerHeight) {
-      const k = (b.top + b.height / 2 - innerHeight / 2) / innerHeight;
-      bandImg.style.setProperty('--py', `${(k * -8).toFixed(2)}%`);
-    }
+/* ═════════ hero: a split-flap activity word, a collage on a sun ═════════ */
+const flip = document.getElementById('flip');
+const words = [...flip.children];
+const inner = document.createElement('span');
+inner.className = 'flip-inner';
+words.forEach(w => inner.appendChild(w));
+flip.appendChild(inner);
+if (gsap && !reduced) {
+  const widths = () => words.map(w => w.scrollWidth);
+  let ws = widths();
+  gsap.set(flip, { width: ws[0] });
+  const tl = gsap.timeline({ repeat: -1, delay: 1.6 });
+  for (let i = 1; i < words.length; i++) {
+    tl.to(inner, { yPercent: -(100 / words.length) * i, duration: 0.7, ease: 'expo.inOut' }, '+=1.5')
+      .to(flip, { width: () => ws[i], duration: 0.7, ease: 'expo.inOut' }, '<');
   }
-}
-addEventListener('scroll', onScroll, { passive: true });
-addEventListener('resize', sizeTrail);
-sizeTrail();
-document.fonts && document.fonts.ready.then(sizeTrail);
-addEventListener('load', sizeTrail);
+  tl.set(inner, { yPercent: 0 });
+  addEventListener('resize', () => { ws = widths(); });
+  document.fonts && document.fonts.ready.then(() => { ws = widths(); gsap.set(flip, { width: ws[0] }); });
 
-/* ═════════ The headset, in four colours ═════════ */
+  gsap.from('.cl', { y: 160, rotate: i => (i % 2 ? 14 : -14), opacity: 0, duration: 1.6, ease: 'expo.out', stagger: 0.12, delay: 0.2 });
+  gsap.from('.sun', { scale: 0.4, opacity: 0, duration: 2, ease: 'expo.out' });
+  gsap.from('.kicker, .flip-line, .hero-sub, .hero-actions', { y: 30, opacity: 0, duration: 1.2, ease: 'expo.out', stagger: 0.08, delay: 0.35 });
+  gsap.to('.sun', { rotate: 360, duration: 120, ease: 'none', repeat: -1 });
+  // the collage drifts with the pointer and slides apart as you scroll away
+  const cls = [...document.querySelectorAll('.cl')];
+  if (!coarse) document.getElementById('hero').addEventListener('pointermove', e => {
+    const nx = e.clientX / innerWidth - 0.5, ny = e.clientY / innerHeight - 0.5;
+    cls.forEach(c => { const d = parseFloat(c.dataset.depth); gsap.to(c, { x: nx * 40 * d, y: ny * 30 * d, duration: 1, ease: 'power3.out', overwrite: 'auto' }); });
+  });
+  cls.forEach((c, i) => gsap.to(c, { yPercent: -30 * parseFloat(c.dataset.depth), rotate: (i % 2 ? 8 : -8), ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } }));
+} else {
+  inner.querySelectorAll('span').forEach((w, i) => { if (i) w.style.display = 'none'; });
+}
+
+/* ═════════ marquee: runs on its own, faster while you scroll ═════════ */
+const mq = document.getElementById('mqA');
+if (gsap && !reduced) {
+  const loop = gsap.to(mq, { xPercent: -50, duration: 26, ease: 'none', repeat: -1 });
+  let boost = 0, dir = 1;
+  ScrollTrigger.create({ onUpdate: self => { boost = Math.min(4, Math.abs(self.getVelocity()) / 500); dir = self.direction || 1; } });
+  gsap.ticker.add(() => { boost *= 0.93; loop.timeScale(dir * (1 + boost)); });
+}
+
+/* ═════════ pick your day: the photo opens from where you tapped ═════════ */
+const DAYS = {
+  beach:  { img: 'friends', alt: 'A group of friends running into the sea together', tag: 'Beach · IP68', title: 'Sand stays out.', text: 'IP68 is dust-tight as well as waterproof, and nothing sits in your ear canal. Swim in the shallows with it on, then rinse it in fresh water.', list: 'A summer album, start to finish' },
+  hike:   { img: 'hike', alt: 'A woman looking out over a range of green mountains', tag: 'Hike · 32GB offline', title: 'No signal, no problem.', text: '32GB onboard plays offline, so the album keeps going where your phone gives up. Ten hours covers a long day on the hill.', list: 'A long audiobook' },
+  ride:   { img: 'ride', alt: 'Two road cyclists riding a winding path at sunset', tag: 'Ride · open-ear', title: 'Hear what’s coming.', text: 'Open ears keep traffic and other riders audible. Check the local rules on headphones before you ride.', list: 'Something with a steady beat' },
+  run:    { img: 'run', alt: 'A runner on a grassy ridge above the clouds', tag: 'Run · stays put', title: 'Nothing bouncing in your ears.', text: 'The band sits behind your head, so there are no buds to shake loose, and you still hear footsteps and traffic.', list: 'Tempo playlist, about 165 bpm' },
+  paddle: { img: 'paddle', alt: 'A paddleboarder on calm water at sunset', tag: 'Paddle · waterproof', title: 'If it goes in, fine.', text: 'A capsize means a wet headset, not an earbud at the bottom of the lake. IP68 to two metres.', list: 'A sunset playlist' },
+  pool:   { img: 'pool', alt: 'A woman in a sun hat sitting on the edge of a bright blue pool', tag: 'Pool · plays underwater', title: 'Lengths or lounging.', text: 'Waterproof to two metres, with music stored on the headset, because Bluetooth doesn’t reach underwater.', list: 'A podcast for the lounger' },
+  walk:   { img: 'walk', alt: 'Two people with backpacks walking a tree-lined coastal path', tag: 'Walk · ears open', title: 'Podcast on, world on.', text: 'Hear cars pulling out, cyclists behind you and the friend who’s just caught you up.', list: 'Your favourite podcast' }
+};
+Object.values(DAYS).forEach(d => { const i = new Image(); i.src = `/images/rec/${d.img}.jpg`; });
+const photos = document.getElementById('pickPhotos');
+const card = document.getElementById('pickCard');
+const tabs = [...document.querySelectorAll('.pick-tabs button')];
+let pickBusy = false;
+function pickDay(k, ev) {
+  const d = DAYS[k];
+  if (!d || pickBusy) return;
+  tabs.forEach(t => t.setAttribute('aria-selected', String(t.dataset.k === k)));
+  const img = new Image();
+  img.src = `/images/rec/${d.img}.jpg`; img.alt = d.alt; img.width = 1600; img.height = 1067;
+  const r = photos.getBoundingClientRect();
+  const cx = ev && ev.clientX ? clamp((ev.clientX - r.left) / r.width) * 100 : 50;
+  const cy = ev && ev.clientY ? clamp((ev.clientY - r.top) / r.height) * 100 : 50;
+  const fill = () => {
+    document.getElementById('pkTag').textContent = d.tag;
+    document.getElementById('pkTitle').textContent = d.title;
+    document.getElementById('pkText').textContent = d.text;
+    document.getElementById('pkList').textContent = d.list;
+  };
+  if (!gsap || reduced) { photos.replaceChildren(img); fill(); return; }
+  pickBusy = true;
+  img.className = 'incoming';
+  img.style.setProperty('--cx', cx + '%'); img.style.setProperty('--cy', cy + '%');
+  photos.appendChild(img);
+  gsap.fromTo(img, { clipPath: `circle(0% at ${cx}% ${cy}%)`, scale: 1.15 }, {
+    clipPath: `circle(150% at ${cx}% ${cy}%)`, scale: 1, duration: 1.1, ease: 'expo.inOut',
+    onComplete: () => { [...photos.children].forEach(c => { if (c !== img) c.remove(); }); img.className = ''; img.style.clipPath = ''; pickBusy = false; }
+  });
+  gsap.to(card.children, { y: -14, opacity: 0, duration: 0.3, stagger: 0.03, ease: 'power2.in', onComplete: () => {
+    fill();
+    gsap.fromTo(card.children, { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.05, ease: 'expo.out' });
+  } });
+}
+tabs.forEach(t => t.addEventListener('click', e => pickDay(t.dataset.k, e)));
+document.querySelector('.pick-tabs').addEventListener('keydown', e => {
+  const i = tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+  const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+  if (!d) return;
+  e.preventDefault();
+  const n = tabs[(i + d + tabs.length) % tabs.length];
+  n.focus(); pickDay(n.dataset.k);
+});
+
+/* ═════════ stats bounce in and count up ═════════ */
+document.querySelectorAll('.stats [data-count]').forEach(el => countUp(el, { duration: 1.6 }));
+if (gsap && !reduced) {
+  gsap.from('.stats li', { y: 60, scale: 0.85, opacity: 0, duration: 1.1, ease: 'back.out(2)', stagger: 0.1, scrollTrigger: { trigger: '.stats', start: 'top 80%', once: true } });
+  gsap.from('.pick-stage', { y: 80, opacity: 0, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: '.pick-stage', start: 'top 85%', once: true } });
+  gsap.from('.mixer', { y: 60, rotate: 2, opacity: 0, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: '.mixer', start: 'top 85%', once: true } });
+  gsap.from('.kit-sun', { scale: 0.5, opacity: 0, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: '.kit', start: 'top 75%', once: true } });
+}
+
+/* ═════════ the headset, in four colours ═════════ */
 const KIT = [
   { name: 'Ember',    hex: '#E2542C', note: 'Easy to spot in a beach bag.' },
   { name: 'Glacier',  hex: '#A8D5E2', note: 'Sea-glass blue, cool on a hot day.' },
@@ -72,8 +147,8 @@ KIT.forEach((c, i) => {
   li.appendChild(b); kitList.appendChild(li);
 });
 import('/js/lp-headset.js').then(({ headset }) => headset(kitCanvas, {
-  color: KIT[0].hex, key: 0xffe9d2, rim: 0xffc58a, fill: 0xbfdbe6, exposure: 1.08,
-  material: { roughness: 0.45, clearcoat: 0.55, clearcoatRoughness: 0.28 }
+  color: KIT[0].hex, key: 0xfff1d6, rim: 0xffd27a, fill: 0xbfe9f0, exposure: 1.12,
+  material: { roughness: 0.42, clearcoat: 0.6, clearcoatRoughness: 0.25 }
 })).then(hs => {
   kitStage.classList.add('is-live');
   const { THREE, mat } = hs;
@@ -84,15 +159,13 @@ import('/js/lp-headset.js').then(({ headset }) => headset(kitCanvas, {
   let spin = 0, vel = 0, drag = false, lastX = 0, visible = false, t0 = performance.now();
   function frame(now) {
     const dt = Math.min(64, now - t0); t0 = now;
-    spin += (reduced ? 0 : dt * 0.00013) + vel;
-    vel *= 0.94;
+    spin += (reduced ? 0 : dt * 0.00015) + vel; vel *= 0.94;
     if (ct < 1) { ct = Math.min(1, ct + dt / 500); mat.color.copy(from).lerp(to, ct * ct * (3 - 2 * ct)); }
     hs.state.az = -75 * Math.PI / 180 + spin;
-    hs.state.el = (16 + (reduced ? 0 : Math.sin(now / 2400) * 5)) * Math.PI / 180;
-    hs.state.y = reduced ? 0 : Math.sin(now / 1800) * 0.015;
+    hs.state.el = (16 + (reduced ? 0 : Math.sin(now / 2200) * 6)) * Math.PI / 180;
+    hs.state.y = reduced ? 0 : Math.sin(now / 1700) * 0.02;
     hs.render();
   }
-  // draw straight away when it scrolls in, rather than waiting on the loop
   new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) frame(performance.now()); }).observe(kitCanvas);
   kitCanvas.addEventListener('pointerdown', e => { drag = true; lastX = e.clientX; kitCanvas.setPointerCapture(e.pointerId); });
   kitCanvas.addEventListener('pointermove', e => { if (drag) { vel += (e.clientX - lastX) * 0.0006; lastX = e.clientX; } });
@@ -100,7 +173,7 @@ import('/js/lp-headset.js').then(({ headset }) => headset(kitCanvas, {
   kitCanvas.addEventListener('pointercancel', () => { drag = false; });
   if (reduced) { frame(performance.now()); kitPaint = i => { mat.color.set(KIT[i].hex); frame(performance.now()); }; }
   else (function loop(now) { requestAnimationFrame(loop); if (visible || ct < 1) frame(now); })(performance.now());
-}).catch(() => { /* the poster stays */ });
+}).catch(() => {});
 
 /* ═════════ Hear the difference: the same beach through earbuds vs open ears ═════════ */
 const mixer = document.getElementById('mixer');

@@ -36,6 +36,9 @@
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script src="/js/site.js" defer></script>
 <script type="module" src="/sound-bath/sound-bath.js"></script>
 </head>
@@ -55,13 +58,14 @@
 </div>
 
 <header class="topbar" id="topbar">
-  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+  <a class="mark" href="/" aria-label="Dipsana, home"><img class="mark-h" src="/images/brand/h-dusk-light.svg" alt="" width="645" height="112"></a>
   <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Hold my place</span><span class="btn-short">Waitlist</span></a>
 </header>
 
 <main id="main">
 
   <section class="hero" id="hero" aria-labelledby="hero-h">
+    <svg class="flower" viewBox="0 0 600 600" aria-hidden="true"><g><circle cx="300.00" cy="300.00" r="60"/><circle cx="360.00" cy="300.00" r="60"/><circle cx="330.00" cy="351.96" r="60"/><circle cx="270.00" cy="351.96" r="60"/><circle cx="240.00" cy="300.00" r="60"/><circle cx="270.00" cy="248.04" r="60"/><circle cx="330.00" cy="248.04" r="60"/><circle cx="420.00" cy="300.00" r="60"/><circle cx="390.00" cy="351.96" r="60"/><circle cx="360.00" cy="403.92" r="60"/><circle cx="300.00" cy="403.92" r="60"/><circle cx="240.00" cy="403.92" r="60"/><circle cx="210.00" cy="351.96" r="60"/><circle cx="180.00" cy="300.00" r="60"/><circle cx="210.00" cy="248.04" r="60"/><circle cx="240.00" cy="196.08" r="60"/><circle cx="300.00" cy="196.08" r="60"/><circle cx="360.00" cy="196.08" r="60"/><circle cx="390.00" cy="248.04" r="60"/><circle class="fl-outer" cx="300" cy="300" r="180"/></g></svg>
     <svg class="halo" viewBox="0 0 600 600" aria-hidden="true">
       <defs><path id="rim" d="M300,300 m-282,0 a282,282 0 1,1 564,0 a282,282 0 1,1 -564,0"/></defs>
       <text><textPath href="#rim">the portable sound bath · open-ear · through the cheekbone · the portable sound bath · open-ear · through the cheekbone ·</textPath></text>
@@ -156,6 +160,63 @@
     </ul>
   </section>
 
+  <!-- The vibration library -->
+  <section class="lib" id="library" data-sky="evening" aria-labelledby="lib-h">
+    <div class="lib-head">
+      <p class="mono">The vibration library</p>
+      <h2 class="h2" id="lib-h">Nine ways <em>to be still.</em></h2>
+      <p class="lede">Every sound here is generated live in your browser, the way Dipsana would play it: as vibration through the cheekbones. Press one, close your eyes, and see what it does to your breathing.</p>
+    </div>
+    <ul class="lib-grid" id="libGrid">
+      <li class="sample" data-id="bowl">
+        <canvas aria-hidden="true"></canvas>
+        <div class="smp-copy"><p class="mono">~196 Hz · shimmering overtones</p><h3>Singing bowl</h3><p>A long, shimmering decay gives the mind one thing to follow. The classic way to start a session.</p><p class="smp-for">Good for <b>settling in</b> · <b>the sauna</b></p></div>
+        <button class="smp-play" type="button" aria-pressed="false"><span class="play-ring" aria-hidden="true"></span><span class="lbl">Play</span><span class="sr"> singing bowl</span></button>
+      </li>
+      <li class="sample" data-id="crystal">
+        <canvas aria-hidden="true"></canvas>
+        <div class="smp-copy"><p class="mono">~523 Hz · pure, sustained</p><h3>Crystal bowl</h3><p>Brighter and cleaner than metal. A clear tone many people reach for to reset in the middle of the day.</p><p class="smp-for">Good for <b>focus</b> · <b>mornings</b></p></div>
+        <button class="smp-play" type="button" aria-pressed="false"><span class="play-ring" aria-hidden="true"></span><span class="lbl">Play</span><span class="sr"> crystal bowl</span></button>
+      </li>
+      <li class="sample" data-id="gong">
+        <canvas aria-hidden="true"></canvas>
+        <div class="smp-copy"><p class="mono">Wide wash · 40–600 Hz</p><h3>Gong wash</h3><p>Big and enveloping. Through bone conduction you feel it as much as hear it, a slow wave across the cheekbones.</p><p class="smp-for">Good for <b>letting go</b> · <b>the bath</b></p></div>
+        <button class="smp-play" type="button" aria-pressed="false"><span class="play-ring" aria-hidden="true"></span><span class="lbl">Play</span><span class="sr"> gong wash</span></button>
+      </li>
+      <li class="sample" data-id="fork">
+        <canvas aria-hidden="true"></canvas>
+        <div class="smp-copy"><p class="mono">128 Hz · a single pure tone</p><h3>Tuning fork</h3><p>128 Hz is the fork clinicians use to test how well you feel vibration. Through the pads it lands as a fine buzz on the bone.</p><p class="smp-for">Good for <b>body awareness</b> · <b>a desk break</b></p></div>
+        <button class="smp-play" type="button" aria-pressed="false"><span class="play-ring" aria-hidden="true"></span><span class="lbl">Play</span><span class="sr"> tuning fork</span></button>
+      </li>
+      <li class="sample" data-id="ocean">
+        <canvas aria-hidden="true"></canvas>
+        <div class="smp-copy"><p class="mono">Swells · about six a minute</p><h3>Ocean drone</h3><p>Waves that rise and fall at roughly six a minute, the slow breathing pace used in a lot of relaxation practice. Breathe with them.</p><p class="smp-for">Good for <b>slowing down</b> · <b>a parked car</b></p></div>
+        <button class="smp-play" type="button" aria-pressed="false"><span class="play-ring" aria-hidden="true"></span><span class="lbl">Play</span><span class="sr"> ocean drone</span></button>
+      </li>
+      <li class="sample" data-id="rain">
+        <canvas aria-hidden="true"></canvas>
+        <div class="smp-copy"><p class="mono">Broadband · soft and steady</p><h3>Rain and pad</h3><p>Steady rain over a warm, low chord. It covers the small sounds of a house at night that keep you listening.</p><p class="smp-for">Good for <b>falling asleep</b> · <b>bed</b></p></div>
+        <button class="smp-play" type="button" aria-pressed="false"><span class="play-ring" aria-hidden="true"></span><span class="lbl">Play</span><span class="sr"> rain and pad</span></button>
+      </li>
+      <li class="sample" data-id="om">
+        <canvas aria-hidden="true"></canvas>
+        <div class="smp-copy"><p class="mono">~136 Hz · a chant-like hum</p><h3>Om drone</h3><p>A low, vowel-shaped hum in the tradition of chanted Om. Hum along: humming naturally lengthens your exhale.</p><p class="smp-for">Good for <b>meditation</b> · <b>the floor at home</b></p></div>
+        <button class="smp-play" type="button" aria-pressed="false"><span class="play-ring" aria-hidden="true"></span><span class="lbl">Play</span><span class="sr"> om drone</span></button>
+      </li>
+      <li class="sample" data-id="heart">
+        <canvas aria-hidden="true"></canvas>
+        <div class="smp-copy"><p class="mono">60 beats a minute</p><h3>Slow pulse</h3><p>A soft, steady heartbeat to settle against. Some people notice their breathing quietly slows to meet it.</p><p class="smp-for">Good for <b>winding down</b> · <b>the couch</b></p></div>
+        <button class="smp-play" type="button" aria-pressed="false"><span class="play-ring" aria-hidden="true"></span><span class="lbl">Play</span><span class="sr"> slow pulse</span></button>
+      </li>
+      <li class="sample" data-id="theta">
+        <canvas aria-hidden="true"></canvas>
+        <div class="smp-copy"><p class="mono">200 + 206 Hz · a 6 Hz beat</p><h3>Theta beat</h3><p>Each side plays a slightly different tone and you hear a slow 6 Hz pulse between them. The research on binaural beats is mixed; plenty of people simply find it calming.</p><p class="smp-for">Good for <b>deep rest</b> · <b>both sides on</b></p></div>
+        <button class="smp-play" type="button" aria-pressed="false"><span class="play-ring" aria-hidden="true"></span><span class="lbl">Play</span><span class="sr"> theta beat</span></button>
+      </li>
+    </ul>
+    <p class="fine lib-note">Keep the volume gentle. These are short demos generated in your browser, not recordings.</p>
+  </section>
+
   <!-- Hertz, by ear -->
   <section class="hz" id="hz" data-reveal aria-labelledby="hz-h">
     <div class="hz-head">
@@ -205,6 +266,50 @@
     </div>
   </section>
 
+  <!-- Wherever you can be still -->
+  <section class="places" id="places" data-sky="dusk" aria-labelledby="places-h">
+    <div class="pl-pin">
+      <div class="pl-head">
+        <p class="mono">Wherever you can be still</p>
+        <h2 class="h2" id="places-h">Your sound bath, <em>anywhere.</em></h2>
+      </div>
+      <ol class="deck" id="deck">
+        <li class="pcard">
+          <svg viewBox="0 0 320 220" aria-hidden="true"><g class="la"><path d="M20 170 H300 M20 150 H300 M20 130 H300 M40 170 V200 M280 170 V200"/><path d="M210 128 q0 -26 22 -26 q22 0 22 26"/><path d="M232 102 L262 72"/><path class="steam" d="M90 118 c-14 -18 14 -30 0 -50 c-14 -18 14 -30 0 -48"/><path class="steam s2" d="M130 118 c-14 -18 14 -30 0 -50 c-14 -18 14 -30 0 -48"/><path class="steam s3" d="M170 118 c-14 -18 14 -30 0 -50"/></g></svg>
+          <div class="pc-copy"><p class="mono">01 · 10 min</p><h3>In the sauna</h3><p>Rated to 110°C, so the bowls come in with you. Ten minutes of slow tones at 80 degrees.</p><button class="try" type="button" data-try="bowl">Try the singing bowl</button></div>
+        </li>
+        <li class="pcard">
+          <svg viewBox="0 0 320 220" aria-hidden="true"><g class="la"><path d="M40 100 H280 Q280 170 220 178 H100 Q40 170 40 100 Z"/><path d="M80 178 L70 200 M240 178 L250 200"/><path d="M262 100 V52 q0 -16 -16 -16 h-10 v14"/><path class="ripple" d="M60 112 q20 -8 40 0 t40 0 t40 0 t40 0 t40 0"/><circle class="bub" cx="120" cy="96" r="4"/><circle class="bub b2" cx="170" cy="92" r="3"/><circle class="bub b3" cx="210" cy="96" r="5"/></g></svg>
+          <div class="pc-copy"><p class="mono">02 · 20 min</p><h3>In the bath</h3><p>Waterproof to two metres. Warm water, lights low, and a gong wash rolling across the cheekbones.</p><button class="try" type="button" data-try="gong">Try the gong wash</button></div>
+        </li>
+        <li class="pcard">
+          <svg viewBox="0 0 320 220" aria-hidden="true"><g class="la"><path d="M40 170 V120 q0 -20 20 -20 h150 q20 0 20 20 V170 Z"/><path d="M40 140 H230 M30 120 q0 -12 10 -12 V170 H30 Z M230 108 q10 0 10 12 V170 H230"/><path d="M50 170 V186 M220 170 V186"/><path d="M276 186 V60 M258 60 h36 l-8 -26 h-20 Z"/><circle class="glow" cx="276" cy="70" r="26"/></g></svg>
+          <div class="pc-copy"><p class="mono">03 · 8 min</p><h3>On the couch</h3><p>Phone face down, feet up. One slow pulse until the day stops talking to you.</p><button class="try" type="button" data-try="heart">Try the slow pulse</button></div>
+        </li>
+        <li class="pcard">
+          <svg viewBox="0 0 320 220" aria-hidden="true"><g class="la"><path d="M30 190 V130 H290 V190 M30 160 H290"/><path d="M50 130 q0 -24 30 -24 h50 q30 0 30 24"/><path d="M30 130 V90"/><path class="moon" d="M250 40 a26 26 0 1 0 22 38 a20 20 0 1 1 -22 -38 Z"/><circle class="star" cx="196" cy="34" r="2"/><circle class="star s2" cx="160" cy="60" r="1.6"/><circle class="star s3" cx="214" cy="80" r="1.4"/></g></svg>
+          <div class="pc-copy"><p class="mono">04 · 30 min</p><h3>In bed</h3><p>Rain over a warm chord to drift off to. Set it to stop on its own, and leave the phone on the other side of the room.</p><button class="try" type="button" data-try="rain">Try the rain</button></div>
+        </li>
+        <li class="pcard">
+          <svg viewBox="0 0 320 220" aria-hidden="true"><g class="la"><path d="M20 40 Q160 10 300 40 L280 120 Q160 104 40 120 Z"/><path d="M40 150 Q160 132 280 150"/><circle cx="110" cy="178" r="34"/><circle cx="110" cy="178" r="8"/><g class="rain"><path d="M80 40 l-6 30 M130 34 l-6 30 M180 34 l-6 30 M230 38 l-6 30 M260 44 l-6 30"/></g></g></svg>
+          <div class="pc-copy"><p class="mono">05 · 5 min · parked</p><h3>In the car</h3><p>Five minutes in the car park before you walk in. Engine off, seat back, ocean swells to breathe with.</p><button class="try" type="button" data-try="ocean">Try the ocean drone</button></div>
+        </li>
+        <li class="pcard">
+          <svg viewBox="0 0 320 220" aria-hidden="true"><g class="la"><path d="M30 186 H250 a12 12 0 0 1 0 -24 H30 Z"/><ellipse cx="140" cy="150" rx="50" ry="12"/><path d="M262 186 V140 h22 V186"/><path class="flame" d="M273 140 c-8 -10 0 -18 0 -28 c0 10 8 18 0 28 Z"/><path class="smoke" d="M60 160 c-10 -20 12 -30 0 -52 c-10 -18 10 -28 2 -48"/></g></svg>
+          <div class="pc-copy"><p class="mono">06 · 15 min</p><h3>On the floor at home</h3><p>Mat, cushion, candle. The classic sound bath, without booking one or driving anywhere.</p><button class="try" type="button" data-try="om">Try the Om drone</button></div>
+        </li>
+        <li class="pcard">
+          <svg viewBox="0 0 320 220" aria-hidden="true"><g class="la"><path d="M20 140 H300 M20 200 H300"/><path d="M40 140 V200 M80 140 V200 M120 140 V200 M160 140 V200 M200 140 V200 M240 140 V200 M280 140 V200"/><circle class="sun" cx="210" cy="92" r="30"/><path d="M20 128 Q160 108 300 128"/><g class="leaf"><path d="M60 140 q-6 -40 20 -60 q6 30 -20 60 Z"/><path d="M60 140 q16 -30 46 -34 q-10 26 -46 34 Z"/></g></g></svg>
+          <div class="pc-copy"><p class="mono">07 · 6 min</p><h3>On the balcony</h3><p>Morning air and a bright crystal bowl before the inbox opens.</p><button class="try" type="button" data-try="crystal">Try the crystal bowl</button></div>
+        </li>
+        <li class="pcard">
+          <svg viewBox="0 0 320 220" aria-hidden="true"><g class="la"><path d="M20 150 H300 M50 150 V200 M270 150 V200"/><path d="M90 150 l14 -40 h90 l14 40"/><path d="M230 150 v-34 h28 v34 M258 124 q14 0 14 12 q0 12 -14 12"/><path class="steam" d="M240 108 c-8 -12 8 -18 0 -30"/><path d="M200 30 h90 v70 h-90 Z M245 30 v70 M200 65 h90"/></g></svg>
+          <div class="pc-copy"><p class="mono">08 · 3 min</p><h3>At your desk</h3><p>Between calls. Eyes closed, one tuning fork, and back to it with a quieter head.</p><button class="try" type="button" data-try="fork">Try the tuning fork</button></div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
   <!-- What people come for -->
   <section class="why" id="why" data-reveal aria-labelledby="why-h">
     <p class="mono rv">What people come for</p>
@@ -232,43 +337,6 @@
     </div>
   </section>
 
-  <!-- A day: the plate re-forms around the headset for each moment -->
-  <section class="day" id="day" aria-label="A day with Dipsana">
-    <article class="moment" data-mode="0" data-sky="dawn">
-      <p class="mono"><time>06:40</time> · At home</p>
-      <h3>Meditate</h3>
-      <p>Ten minutes on the floor before anyone else is up. A slow bowl and a low drone, and nothing in your ears to fidget with.</p>
-    </article>
-    <article class="moment" data-mode="1" data-sky="morning">
-      <p class="mono"><time>08:15</time> · Commute</p>
-      <h3>Drive</h3>
-      <p>Calm audio in the car with your ears still open to the road, the indicator and the person in the passenger seat.</p>
-    </article>
-    <article class="moment" data-mode="2" data-sky="noon">
-      <p class="mono"><time>14:30</time> · Between things</p>
-      <h3>Reset</h3>
-      <p>A brighter set for the mid-afternoon slump. Close your eyes for one track and come back with more in the tank.</p>
-    </article>
-    <article class="moment" data-mode="3" data-sky="dusk">
-      <p class="mono"><time>18:45</time> · Sauna or bath</p>
-      <h3>Soak</h3>
-      <p>Rated to 110°C and waterproof to two metres, so the sound bath comes into the sauna, the steam room and the tub.</p>
-    </article>
-    <article class="moment" data-mode="4" data-sky="evening">
-      <p class="mono"><time>21:30</time> · Winding down</p>
-      <h3>Unwind</h3>
-      <p>The part of the evening where the day lets go of you. Long tones, nothing to follow, nothing to skip.</p>
-    </article>
-    <article class="moment" data-mode="5" data-sky="night">
-      <p class="mono"><time>23:00</time> · Lights out</p>
-      <h3>Sleep</h3>
-      <p>A drone to drift off to. Set it to stop on its own, or let it run. 32GB onboard means no phone glowing on the pillow.</p>
-    </article>
-    <div class="day-clock" id="dayClock" aria-hidden="true">
-      <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46"/><circle class="dc-arc" id="dcArc" cx="50" cy="50" r="46"/></svg>
-      <span id="dcTime">06:40</span>
-    </div>
-  </section>
 
   <!-- Four finishes -->
   <section class="finish" id="finish" data-reveal aria-labelledby="fin-h">
@@ -316,8 +384,8 @@
 
 </main>
 
-<footer class="lp-foot">
-  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+<footer class="lp-foot sb-foot">
+  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/brand/v-dusk-light.svg" alt="" width="430" height="322"></a>
   <ul>
     <li><a href="/product/">Product</a></li>
     <li><a href="/how-it-works/">How it works</a></li>

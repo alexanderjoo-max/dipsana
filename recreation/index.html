@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dipsana — Ears open, day on</title>
-<meta name="description" content="Open-ear bone conduction headphones for days outside: the beach, the pool, walks, hikes, runs and rides. Dust-tight and waterproof (IP68), 32GB offline, 10 hours, and you still hear the world around you.">
+<meta name="description" content="Open-ear bone conduction headphones for days outside: the beach, trails, rides, runs, the pool and the sea. Dust-tight and waterproof (IP68), 32GB offline, 10 hours, and you still hear the world around you.">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F26GGJJMGX"></script>
@@ -14,13 +14,13 @@
   gtag('js', new Date());
   gtag('config', 'G-F26GGJJMGX');
 </script>
-<meta name="theme-color" content="#0f2430">
+<meta name="theme-color" content="#ffcc3d">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://dipsana.com/recreation/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dipsana.com/recreation/">
 <meta property="og:title" content="Dipsana — Ears open, day on">
-<meta property="og:description" content="Bone conduction for the beach, the pool, walks, hikes and rides. Hear your music and the world around you.">
+<meta property="og:description" content="Bone conduction for beach days, trails, rides and swims. Hear your music and the world around you.">
 <meta property="og:image" content="https://dipsana.com/images/rec/hero.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
@@ -37,6 +37,9 @@
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script src="/js/site.js" defer></script>
 <script type="module" src="/recreation/recreation.js"></script>
 </head>
@@ -45,48 +48,50 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="topbar" id="topbar">
-  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
-  <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Join the waitlist</span><span class="btn-short">Waitlist</span></a>
+  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/brand/h-fire-dark.svg" alt="" width="645" height="112"></a>
+  <a class="btn btn--sm" href="#waitlist" data-magnet><span class="btn-full">Join the waitlist</span><span class="btn-short">Waitlist</span></a>
 </header>
 
 <main id="main">
 
   <!-- ─────────── Hero ─────────── -->
   <section class="hero" id="hero" aria-labelledby="hero-h">
-    <div class="hero-media">
-      <img src="/images/rec/hero.jpg" width="2400" height="1600" alt="A group of friends wading into the sea on a bright, sunny beach" fetchpriority="high">
-    </div>
     <div class="hero-copy">
-      <p class="mono kicker" data-load="1">Bone conduction · for days outside</p>
+      <p class="mono kicker"><span class="sun-dot" aria-hidden="true"></span>Bone conduction for days outside</p>
       <h1 class="hero-h" id="hero-h">
-        <span data-load="2">Ears open.</span>
-        <span data-load="3">Day on.</span>
+        <span class="hh-line" data-split="words load" data-delay="0.15">Ears open.</span>
+        <span class="hh-line flip-line" aria-hidden="true"><span class="flip" id="flip"><span>Beach</span><span>Trail</span><span>Ride</span><span>Swim</span><span>Run</span><span>Beach</span></span><span class="hh-day">day.</span></span>
+        <span class="sr">Beach, trail, ride, swim or run day.</span>
       </h1>
-      <p class="hero-sub" data-load="4">Music and podcasts through your cheekbones, so the waves, the bike bell and your name being called all still get through.</p>
-      <div class="hero-actions" data-load="5">
-        <a class="btn" href="#waitlist">Join the waitlist</a>
-        <a class="btn btn--ghost" href="#hear">Hear the difference</a>
+      <p class="hero-sub">Music and podcasts through your cheekbones, so the waves, the bike bell and your friends still get through. Dust-tight, waterproof, ten hours a charge.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#waitlist" data-magnet>Join the waitlist</a>
+        <a class="btn btn--ghost" href="#hear" data-magnet>Hear the difference</a>
       </div>
     </div>
-    <ul class="facts" data-load="5">
-      <li><b>IP68</b><span>Dust-tight, waterproof</span></li>
-      <li><b>32 GB</b><span>Plays with no signal</span></li>
-      <li><b>10 hrs</b><span>A full day out</span></li>
-      <li><b>Open-ear</b><span>Nothing in the canal</span></li>
-    </ul>
+    <div class="collage" id="collage" aria-hidden="true">
+      <span class="sun"></span>
+      <figure class="cl cl-1" data-depth="0.6"><img src="/images/rec/hero.jpg" alt="" width="2400" height="1600"></figure>
+      <figure class="cl cl-2" data-depth="1.1"><img src="/images/rec/ride.jpg" alt="" width="1600" height="1067"></figure>
+      <figure class="cl cl-3" data-depth="0.85"><img src="/images/rec/hike.jpg" alt="" width="1600" height="1067"></figure>
+      <figure class="cl cl-4" data-depth="1.4"><img src="/images/rec/pool.jpg" alt="" width="1600" height="1067"></figure>
+    </div>
   </section>
 
+  <!-- ─────────── Marquee ─────────── -->
+  <div class="marquee" aria-hidden="true">
+    <div class="mq-row" id="mqA"><span>Beach</span><i></i><span>Trail</span><i></i><span>Ride</span><i></i><span>Run</span><i></i><span>Paddle</span><i></i><span>Pool</span><i></i><span>Picnic</span><i></i><span>Garden</span><i></i><span>Beach</span><i></i><span>Trail</span><i></i><span>Ride</span><i></i><span>Run</span><i></i><span>Paddle</span><i></i><span>Pool</span><i></i><span>Picnic</span><i></i><span>Garden</span><i></i></div>
+  </div>
+
   <!-- ─────────── Hear the difference ─────────── -->
-  <section class="hear" id="hear" data-reveal aria-labelledby="hear-h">
-    <div class="hear-bg" aria-hidden="true"><img src="/images/rec/aerial.jpg" alt="" width="2000" height="1332" loading="lazy"></div>
+  <section class="hear" id="hear" aria-labelledby="hear-h">
     <div class="hear-in">
       <div class="hear-copy">
-        <p class="mono rv">Try it, sound on</p>
-        <h2 class="big rv" id="hear-h">Your soundtrack, and everything around it.</h2>
-        <p class="lede rv">Earbuds seal your ears, so the world goes muffled. Dipsana plays through the cheekbones and leaves them open. Press play on the beach below, then switch between the two.</p>
+        <p class="mono">Try it, sound on</p>
+        <h2 class="big" id="hear-h" data-split="words">Your soundtrack, plus everything around it.</h2>
+        <p class="lede">Earbuds seal your ears, so the world goes muffled. Dipsana plays through the cheekbones and leaves them open. Press play on the beach, then flip between the two.</p>
       </div>
-
-      <div class="mixer rv" id="mixer" data-mode="open">
+      <div class="mixer" id="mixer" data-mode="open">
         <div class="mx-top">
           <button class="play" id="hearPlay" type="button" aria-pressed="false"><span class="play-ico" aria-hidden="true"></span><span id="hearPlayLabel">Play the beach</span></button>
           <div class="seg" role="radiogroup" aria-label="Listen with" data-mode="open">
@@ -95,113 +100,78 @@
             <span class="seg-pill" aria-hidden="true"></span>
           </div>
         </div>
-        <div class="mx-row">
-          <p class="mx-label"><span>Your music</span><b class="mono" id="mxMusicVal">—</b></p>
-          <div class="meter"><i id="mxMusic"></i></div>
-        </div>
-        <div class="mx-row">
-          <p class="mx-label"><span>The world around you</span><b class="mono" id="mxWorldVal">—</b></p>
-          <div class="meter meter--world"><i id="mxWorld"></i></div>
-          <p class="mx-note">Surf on the shore, and a bike bell every few seconds</p>
-        </div>
+        <div class="mx-row"><p class="mx-label"><span>Your music</span><b class="mono" id="mxMusicVal">—</b></p><div class="meter"><i id="mxMusic"></i></div></div>
+        <div class="mx-row"><p class="mx-label"><span>The world around you</span><b class="mono" id="mxWorldVal">—</b></p><div class="meter meter--world"><i id="mxWorld"></i></div><p class="mx-note">Surf on the shore, and a bike bell every few seconds</p></div>
         <p class="mx-status" id="hearStatus" aria-live="polite">Open ears: the surf and the bike bell come through clearly, with the music on top.</p>
       </div>
     </div>
   </section>
 
-  <!-- ─────────── Where it goes ─────────── -->
-  <section class="trail" id="trail" aria-labelledby="trail-h">
-    <div class="trail-stage">
-      <div class="trail-head">
-        <p class="mono">Where it goes</p>
-        <h2 class="big" id="trail-h">Anywhere you’d rather not miss a thing.</h2>
+  <!-- ─────────── Pick your day ─────────── -->
+  <section class="pick" id="pick" aria-labelledby="pick-h">
+    <div class="pick-head">
+      <p class="mono">Pick your day</p>
+      <h2 class="big" id="pick-h" data-split="words">Where are you headed?</h2>
+    </div>
+    <div class="pick-tabs" role="tablist" aria-label="Activities">
+      <button role="tab" aria-selected="true" data-k="beach">Beach</button>
+      <button role="tab" aria-selected="false" data-k="hike">Hike</button>
+      <button role="tab" aria-selected="false" data-k="ride">Ride</button>
+      <button role="tab" aria-selected="false" data-k="run">Run</button>
+      <button role="tab" aria-selected="false" data-k="paddle">Paddle</button>
+      <button role="tab" aria-selected="false" data-k="pool">Pool</button>
+      <button role="tab" aria-selected="false" data-k="walk">Walk</button>
+    </div>
+    <div class="pick-stage" role="tabpanel" aria-live="polite">
+      <div class="pick-photos" id="pickPhotos"><img src="/images/rec/friends.jpg" alt="A group of friends running into the sea together" width="2000" height="1188"></div>
+      <div class="pick-card" id="pickCard">
+        <p class="mono" id="pkTag">Beach · IP68</p>
+        <h3 id="pkTitle">Sand stays out.</h3>
+        <p id="pkText">IP68 is dust-tight as well as waterproof, and nothing sits in your ear canal. Swim in the shallows with it on, then rinse it in fresh water.</p>
+        <p class="pk-play"><span class="mono">On the playlist</span><b id="pkList">A summer album, start to finish</b></p>
       </div>
-      <ol class="cards" id="cards">
-        <li class="card">
-          <img src="/images/rec/friends.jpg" alt="A group of friends running into the sea together" width="2000" height="1188" loading="lazy" style="object-position:55% 50%">
-          <div class="card-copy"><p class="mono">Beach</p><h3>Sand stays out.</h3><p>IP68 is dust-tight as well as waterproof, and nothing sits in your ear canal. Rinse in fresh water after the sea.</p></div>
-        </li>
-        <li class="card">
-          <img src="/images/rec/pool.jpg" alt="A woman in a sun hat sitting on the edge of a bright blue pool" width="1600" height="1067" loading="lazy" style="object-position:62% 50%">
-          <div class="card-copy"><p class="mono">Pool</p><h3>Lengths or lounging.</h3><p>Waterproof to two metres, with music stored on the headset, because Bluetooth doesn’t reach underwater.</p></div>
-        </li>
-        <li class="card">
-          <img src="/images/rec/walk.jpg" alt="Two people with backpacks walking a tree-lined coastal path" width="1600" height="1069" loading="lazy" style="object-position:62% 50%">
-          <div class="card-copy"><p class="mono">Walk</p><h3>Podcast on, world on.</h3><p>Hear cars pulling out, cyclists behind you and the friend who’s just caught you up.</p></div>
-        </li>
-        <li class="card">
-          <img src="/images/rec/hike.jpg" alt="A woman looking out over a range of green mountains" width="1600" height="1067" loading="lazy" style="object-position:30% 50%">
-          <div class="card-copy"><p class="mono">Hike</p><h3>No signal, no problem.</h3><p>32GB onboard plays offline, so the album keeps going where your phone gives up. Ten hours covers a long day.</p></div>
-        </li>
-        <li class="card">
-          <img src="/images/rec/run.jpg" alt="A runner on a grassy ridge above the clouds" width="1600" height="1068" loading="lazy" style="object-position:66% 50%">
-          <div class="card-copy"><p class="mono">Run</p><h3>Nothing bouncing in your ears.</h3><p>The band sits behind your head, so there are no buds to shake loose. You still hear footsteps and traffic.</p></div>
-        </li>
-        <li class="card">
-          <img src="/images/rec/ride.jpg" alt="Two road cyclists riding a winding path at sunset" width="1600" height="1067" loading="lazy" style="object-position:60% 50%">
-          <div class="card-copy"><p class="mono">Ride</p><h3>Hear what’s coming.</h3><p>Open ears keep traffic and other riders audible. Check the local rules on headphones before you ride.</p></div>
-        </li>
-        <li class="card">
-          <img src="/images/rec/paddle.jpg" alt="A paddleboarder on calm water at sunset" width="1600" height="1066" loading="lazy" style="object-position:48% 50%">
-          <div class="card-copy"><p class="mono">Paddle</p><h3>If it goes in, fine.</h3><p>A capsize means a wet headset, not an earbud lost at the bottom of the lake.</p></div>
-        </li>
-        <li class="card">
-          <img src="/images/rec/evening.jpg" alt="Two people walking along the shoreline in the early evening" width="2000" height="1333" loading="lazy" style="object-position:62% 50%">
-          <div class="card-copy"><p class="mono">Golden hour</p><h3>The walk home.</h3><p>Ten hours of battery means there’s still music left when the sun goes down.</p></div>
-        </li>
-      </ol>
-      <div class="trail-bar" aria-hidden="true"><i id="trailBar"></i></div>
     </div>
   </section>
 
-  <!-- ─────────── Built for it ─────────── -->
-  <section class="band" data-reveal aria-labelledby="band-h">
-    <div class="band-bg" aria-hidden="true"><img src="/images/rec/aerial.jpg" alt="" width="2000" height="1332" loading="lazy" id="bandImg"></div>
-    <div class="band-in">
-      <p class="mono rv">Built for the beach bag</p>
-      <h2 class="big rv" id="band-h">Sand, sun, spray.<br>None of it gets in.</h2>
-      <ul class="band-list">
-        <li class="rv"><b>Dust-tight</b>The 6 in IP68 means sand and dust are fully sealed out.</li>
-        <li class="rv"><b>Waterproof</b>The 8 means it can go under, down to two metres.</li>
-        <li class="rv"><b>Heat-rated</b>Rated 0–110°C, so a hot car dashboard won’t hurt it.</li>
-      </ul>
-    </div>
+  <!-- ─────────── Stats ─────────── -->
+  <section class="stats" aria-label="Specifications">
+    <ul>
+      <li><b>IP<span data-count="68">0</span></b><span>Dust-tight and waterproof to 2m</span></li>
+      <li><b><span data-count="32">0</span>GB</b><span>Plays offline, no signal needed</span></li>
+      <li><b><span data-count="10">0</span>h</b><span>A full day out on one charge</span></li>
+      <li><b><span data-count="110">0</span>°C</b><span>Fine on a hot dashboard</span></li>
+    </ul>
   </section>
 
-  <!-- ─────────── The kit ─────────── -->
-  <section class="kit" id="kit" data-reveal aria-labelledby="kit-h">
-    <div class="kit-stage rv" id="kitStage">
-      <div class="kit-backdrop" aria-hidden="true"><img src="/images/rec/evening.jpg" alt="" width="2000" height="1333" loading="lazy"></div>
-      <picture class="hs-poster">
-        <source srcset="/images/product.webp" type="image/webp">
-        <img src="/images/product.png" alt="" width="1200" height="760" loading="lazy">
-      </picture>
+  <!-- ─────────── Kit ─────────── -->
+  <section class="kit" id="kit" aria-labelledby="kit-h">
+    <div class="kit-stage" id="kitStage">
+      <span class="kit-sun" aria-hidden="true"></span>
+      <picture class="hs-poster"><source srcset="/images/product.webp" type="image/webp"><img src="/images/product.png" alt="" width="1200" height="760" loading="lazy"></picture>
       <canvas id="kitCanvas" aria-hidden="true"></canvas>
       <p class="mono kit-hint" aria-hidden="true">Drag to turn</p>
     </div>
     <div class="kit-copy">
-      <p class="mono rv">The headset</p>
-      <h2 class="big rv" id="kit-h">Four colours. One for every bag.</h2>
-      <p class="kit-name rv" aria-live="polite"><b id="kitName">Ember</b> <span id="kitNote">Easy to spot in a beach bag.</span></p>
-      <ul class="kit-sw rv" id="kitSw" role="radiogroup" aria-label="Choose a colourway"></ul>
-      <dl class="kit-specs rv">
-        <div><dt>Water and dust</dt><dd>IP68, submersible to 2m</dd></div>
-        <div><dt>Storage</dt><dd>32GB, plays offline</dd></div>
-        <div><dt>Battery</dt><dd>10 hours · 10 min charge = 3 hrs</dd></div>
-        <div><dt>Temperature</dt><dd>Rated 0–110°C</dd></div>
-        <div><dt>Controls</dt><dd>3 physical buttons</dd></div>
-        <div><dt>Fit</dt><dd>Open-ear, pads on the cheekbone</dd></div>
+      <p class="mono">The headset</p>
+      <h2 class="big" id="kit-h" data-split="words">Four colours. Pick a loud one.</h2>
+      <p class="kit-name" aria-live="polite"><b id="kitName">Ember</b> <span id="kitNote">Easy to spot in a beach bag.</span></p>
+      <ul class="kit-sw" id="kitSw" role="radiogroup" aria-label="Choose a colourway"></ul>
+      <dl class="kit-specs">
+        <div><dt>Fit</dt><dd>Open-ear, pads on the cheekbone, band behind the head</dd></div>
+        <div><dt>Controls</dt><dd>Three physical buttons, fine with sandy or wet fingers</dd></div>
+        <div><dt>Charging</dt><dd>Magnetic, no port for sand or salt to get into</dd></div>
       </dl>
     </div>
   </section>
 
-  <section class="wait" id="waitlist" data-reveal aria-labelledby="wl-h">
-    <div class="wait-bg" aria-hidden="true"><img src="/images/rec/evening.jpg" alt="" width="2000" height="1333" loading="lazy"></div>
+  <!-- ─────────── Waitlist ─────────── -->
+  <section class="wait" id="waitlist" aria-labelledby="wl-h">
+    <div class="wait-bg" aria-hidden="true"><img src="/images/rec/aerial.jpg" alt="" width="2000" height="1332" loading="lazy" data-speed="0.25"></div>
     <div class="wait-in">
-      <p class="mono rv">Founding list</p>
-      <h2 class="wait-h rv" id="wl-h">See you out there.</h2>
-      <p class="lede rv">One email when it ships. That’s it.</p>
-      <div class="form-wrap rv">
+      <p class="mono">Founding list</p>
+      <h2 class="wait-h" id="wl-h" data-split="words">See you out there.</h2>
+      <p class="lede">One email when it ships. That’s it.</p>
+      <div class="form-wrap">
         <form id="waitlist-form" action="https://app.kit.com/forms/9811187/subscriptions" method="post" novalidate>
           <label class="sr" for="email">Email address</label>
           <input type="email" id="email" name="email_address" placeholder="you@example.com" required autocomplete="email" inputmode="email">
@@ -219,8 +189,8 @@
 
 </main>
 
-<footer class="lp-foot">
-  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+<footer class="lp-foot rc-foot">
+  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/brand/v-fire-light.svg" alt="" width="430" height="322"></a>
   <ul>
     <li><a href="/product/">Product</a></li>
     <li><a href="/how-it-works/">How it works</a></li>

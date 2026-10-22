@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dipsana — Swim headphones that follow you into the sauna</title>
-<meta name="description" content="Open-ear bone conduction for swimmers. IP68 to 2m, 32GB onboard so music plays underwater without Bluetooth, physical buttons for wet hands, and rated to 110°C for the sauna after your set.">
+<title>Dipsana — Swim anywhere</title>
+<meta name="description" content="Open-ear bone conduction for the pool and the sea. IP68 to 2m, 32GB onboard so music plays underwater without Bluetooth, physical buttons for wet hands, and rated to 110°C for the sauna after.">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F26GGJJMGX"></script>
@@ -36,6 +36,9 @@
   "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
 } }
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js" defer></script>
 <script src="/js/site.js" defer></script>
 <script type="module" src="/swim/swim.js"></script>
 </head>
@@ -44,7 +47,7 @@
 <a class="skip" href="#main">Skip to content</a>
 
 <header class="topbar" id="topbar">
-  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+  <a class="mark" href="/" aria-label="Dipsana, home"><img class="mark-h" src="/images/brand/h-water-light.svg" alt="" width="645" height="112"></a>
   <a class="btn btn--sm" href="#waitlist"><span class="btn-full">Join the waitlist</span><span class="btn-short">Waitlist</span></a>
 </header>
 
@@ -58,18 +61,32 @@
       <canvas id="heroHs"></canvas>
     </div>
     <div class="hero-copy">
-      <p class="mono kicker" data-load="1">Bone conduction for swimmers · IP68 · 32GB onboard</p>
+      <p class="mono kicker" data-load="1">Pool · open water · bone conduction</p>
       <h1 class="hero-h" id="hero-h">
-        <span class="hl" data-load="2">Swim.</span>
-        <span class="hl" data-load="3">Then sauna.</span>
-        <span class="hl hl--rope" data-load="4">Same pair.</span>
+        <span class="hl bob" data-split="chars load" data-delay="0.3">Swim</span>
+        <span class="hl hl--rope" data-load="3">anywhere.</span>
       </h1>
+      <p class="hero-sub" data-load="4">Lengths before work. A sea swim at the weekend. 32GB onboard, because Bluetooth stops at the surface.</p>
       <div class="hero-actions" data-load="5">
         <a class="btn" href="#waitlist">Join the waitlist</a>
         <a class="btn btn--ghost" href="#below">Dive in ↓</a>
       </div>
     </div>
     <p class="mono hero-hint" data-load="5" aria-hidden="true">Move across the water</p>
+  </section>
+
+  <!-- ─────────── Pool to ocean ─────────── -->
+  <section class="waters" id="waters" aria-label="From the pool to the open sea">
+    <div class="w-stage">
+      <canvas class="pool" id="morph" aria-hidden="true"></canvas>
+      <div class="w-copy">
+        <p class="mono w-tag"><span class="w-pool">Lane 4</span><span class="w-sea">Open water</span></p>
+        <p class="w-num" aria-hidden="true"><span id="wNum">25</span><small id="wUnit">m</small></p>
+        <h2 class="big w-h"><span class="w-pool">Train in the pool.</span><span class="w-sea">Play in the sea.</span></h2>
+        <p class="lede w-sub"><span class="w-pool">Lengths, drills and pace work, with the music stored on the headset.</span><span class="w-sea">Sea swims, a float past the break, a sunset dip. Same pair, same playlist.</span></p>
+      </div>
+      <div class="w-meter" aria-hidden="true"><span>Pool</span><i><b id="wBar"></b></i><span>Sea</span></div>
+    </div>
   </section>
 
   <!-- ─────────── Below the surface ─────────── -->
@@ -141,6 +158,37 @@
         <li data-lap="3"><p class="mono">Lap 4 · Open band</p><h3>Clear of the strap.</h3><p>The band wraps behind your head and leaves room for goggle straps and a cap.</p></li>
         <li data-lap="4"><p class="mono">Lap 5 · Magnetic charge</p><h3>No port for chlorine.</h3><p>Magnetic contacts instead of a socket. Ten minutes on the charger gives three hours of laps.</p></li>
       </ol>
+    </div>
+  </section>
+
+  <!-- ─────────── The workout ─────────── -->
+  <section class="train" id="train" aria-labelledby="train-h">
+    <div class="train-head">
+      <p class="mono">Exercise · a sample set</p>
+      <h2 class="big" id="train-h">Press play on the deck.</h2>
+      <p class="lede">The whole set runs underwater from onboard storage. Here’s a 1,400 m session and what we’d put on for each part.</p>
+    </div>
+    <ol class="set-rows" id="setRows">
+      <li style="--d:400"><span class="sr-dist">400 m</span><span class="sr-what"><b>Warm-up</b>Easy freestyle, long strokes</span><span class="sr-bar"><i></i></span><span class="sr-audio mono">Podcast · conversational</span></li>
+      <li style="--d:400"><span class="sr-dist">8 × 50 m</span><span class="sr-what"><b>Build</b>Each 50 faster than the last</span><span class="sr-bar"><i></i></span><span class="sr-audio mono">Playlist · 140→170 bpm</span></li>
+      <li style="--d:400"><span class="sr-dist">4 × 100 m</span><span class="sr-what"><b>Pace</b>Hold your race pace, 20s rest</span><span class="sr-bar"><i></i></span><span class="sr-audio mono">One album, start to finish</span></li>
+      <li style="--d:200"><span class="sr-dist">200 m</span><span class="sr-what"><b>Cool-down</b>Backstroke and easy breast</span><span class="sr-bar"><i></i></span><span class="sr-audio mono">Something slow</span></li>
+    </ol>
+    <p class="set-total"><span class="mono">Total</span><b><span data-count="1400">0</span> m</b></p>
+  </section>
+
+  <!-- ─────────── The sea ─────────── -->
+  <section class="sea" id="sea" aria-labelledby="sea-h">
+    <div class="sea-head">
+      <p class="mono">Recreation</p>
+      <h2 class="big" id="sea-h">Then the sea.</h2>
+      <p class="lede">Open water, a float past the break, a sunset dip with friends. IP68 to two metres, music onboard, and ears open to the lifeguard. Rinse it in fresh water afterwards.</p>
+    </div>
+    <div class="float-grid">
+      <figure class="fl fl-a" data-speed="0.15"><img src="/images/rec/friends.jpg" alt="A group of friends running into the sea together" width="2000" height="1188" loading="lazy"><figcaption class="mono">Sea swim with friends</figcaption></figure>
+      <figure class="fl fl-b" data-speed="0.45"><img src="/images/rec/paddle.jpg" alt="A paddleboarder on calm water at sunset" width="1600" height="1066" loading="lazy"><figcaption class="mono">Paddle out</figcaption></figure>
+      <figure class="fl fl-c" data-speed="0.3"><img src="/images/rec/aerial.jpg" alt="An aerial view of turquoise sea meeting a busy beach" width="2000" height="1332" loading="lazy"><figcaption class="mono">Beach day</figcaption></figure>
+      <figure class="fl fl-d" data-speed="0.6"><img src="/images/rec/evening.jpg" alt="Two people walking along the shoreline in the early evening" width="2000" height="1333" loading="lazy"><figcaption class="mono">Evening dip</figcaption></figure>
     </div>
   </section>
 
@@ -224,8 +272,8 @@
 
 </main>
 
-<footer class="lp-foot">
-  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/logo-header.svg" alt="" width="423" height="60"></a>
+<footer class="lp-foot sw-foot">
+  <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/brand/v-sea-light.svg" alt="" width="430" height="322"></a>
   <ul>
     <li><a href="/product/">Product</a></li>
     <li><a href="/how-it-works/">How it works</a></li>
@@ -233,7 +281,8 @@
     <li><a href="/terms/">Terms</a></li>
     <li><a href="/privacy/">Privacy</a></li>
   </ul>
-  <p class="fine">Swim where it’s safe and supervised, and keep the volume low enough to hear what’s going on around you.</p>
+  <p class="fine">Swim where it’s safe and supervised, and keep the volume low enough to hear what’s going on around you. Rinse with fresh water after the sea.</p>
+  <p class="fine credits">Sea photography via Unsplash: Vidar Nordli-Mathisen, Nick Fewings, Geio Tischler, Tash Williams.</p>
 </footer>
 
 </body>

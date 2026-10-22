@@ -76,6 +76,12 @@ button,input{font:inherit}
 }
 .mark{display:inline-flex; align-items:center; text-decoration:none}
 .mark img{height:26px; width:auto}
+/* colour-shifting logo (js/brand.js) */
+.mark--shift{position:relative}
+.mark--shift .lg{transition:opacity .8s ease}
+.mark--shift .lg:not(.on){opacity:0}
+.mark--shift .lg-over{position:absolute; left:0; top:50%; transform:translateY(-50%)}
+
 
 /* ── buttons ── */
 .btn{
@@ -138,6 +144,15 @@ form.invalid input[type=email]{border-color:#e06a5c}
   transition:opacity .9s var(--ease), transform .9s var(--ease);
 }
 .in .rv{opacity:1; transform:none}
+
+
+/* ── shared motion (js/lp-motion.js) ── */
+html.lenis, html.lenis body{height:auto}
+.lenis.lenis-smooth{scroll-behavior:auto !important}
+.lenis.lenis-stopped{overflow:hidden}
+.sw{display:inline-block; overflow:hidden; vertical-align:top; padding-bottom:.1em; margin-bottom:-.1em}
+.si{display:inline-block; will-change:transform}
+[data-magnet]{will-change:transform}
 
 /* ── footer ── */
 .lp-foot{

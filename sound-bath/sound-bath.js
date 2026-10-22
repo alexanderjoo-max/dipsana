@@ -1,21 +1,18 @@
 import { shader, GLSL } from '/js/lp-gl.js';
+import { initMotion, gsap, ScrollTrigger, coarse } from '/js/lp-motion.js';
+import { climateMark } from '/js/brand.js';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+initMotion();
+climateMark(document.querySelector('#topbar .mark'), { initial: 'dusk' });
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
 
-/* Each moment of the day gets its own plate mode, bowl and sky. The hero uses the last slot. */
-const MODES = [
-  { n: 2, m: 5, root: 196.0 },   // meditate · G3
-  { n: 1, m: 4, root: 220.0 },   // drive · A3
-  { n: 3, m: 7, root: 293.7 },   // reset · D4, brighter
-  { n: 2, m: 3, root: 174.6 },   // soak · F3
-  { n: 3, m: 5, root: 164.8 },   // unwind · E3
-  { n: 1, m: 2, root: 130.8 },   // sleep · C3, lowest
-  { n: 3, m: 4, root: 196.0 }    // hero
-];
-const HERO = MODES.length - 1;
+/* The hero bowl's plate mode and pitch. Library samples bring their own plate modes (below). */
+const MODES = [{ n: 3, m: 4, root: 196.0 }];
+const HERO = 0;
+let plateMode = MODES[HERO];
 const SKIES = {
   hero:    ['#3a1d3a', '#e59a96', '#160c19'],
   dawn:    ['#3a2136', '#eaa58c', '#170e1b'],
@@ -193,18 +190,11 @@ else reduced ? silk.still(6) : silk.start();
 /* ═════════ where are we on the page ═════════ */
 const plateHs = document.getElementById('plateHs');
 let hsW = 0, hsH = 0, hsShow = 0;
-const moments = [...document.querySelectorAll('.moment')];
-const day = document.getElementById('day');
-const breath = document.getElementById('breath');
 const heroSec = document.getElementById('hero');
-const dayClock = document.getElementById('dayClock');
-const dcArc = document.getElementById('dcArc');
-const dcTime = document.getElementById('dcTime');
+const libSec = document.getElementById('library');
+const SECTION_SKY = { hero: 'hero', wear: 'dawn', works: 'morning', library: 'evening', hz: 'noon', places: 'dusk', why: 'dawn', breath: 'dusk', finish: 'night', waitlist: 'hero' };
+const skySections = [...document.querySelectorAll('main > section[id]')];
 let zone = 'hero';
-const TIMES = moments.map(m => {
-  const [h, mm] = m.querySelector('time').textContent.split(':').map(Number);
-  return h * 60 + mm;
-});
 
 function setMode(i) {
   if (i === mode) return;
@@ -215,32 +205,11 @@ function setMode(i) {
 function onScroll() {
   const mid = innerHeight / 2;
   const inRect = el => { const r = el.getBoundingClientRect(); return r.top < mid && r.bottom > mid; };
-  const dr = day.getBoundingClientRect();
-  // the plate only shows in the hero and through the day; every other section gets a clear stage
-  zone = inRect(heroSec) ? 'hero' : inRect(day) ? 'day' : inRect(breath) ? 'breath' : dr.bottom <= mid ? 'after' : 'between';
-  dayClock.classList.toggle('is-on', zone === 'day');
-
-  if (zone === 'hero' || zone === 'between' || zone === 'breath') {
-    setMode(HERO);
-    sky = zone === 'breath' ? 'dusk' : 'hero';
-    moments.forEach(m => m.classList.remove('is-on'));
-  } else {
-    let active = zone === 'after' ? moments.length - 1 : 0;
-    if (zone === 'day') moments.forEach((m, i) => { if (inRect(m)) active = i; });
-    moments.forEach((m, i) => m.classList.toggle('is-on', i === active && zone === 'day'));
-    sky = moments[active].dataset.sky;
-    setMode(+moments[active].dataset.mode);
-
-    // the day clock runs continuously between the moments
-    // centred on a moment the clock reads that moment's time
-    const f = clamp(clamp((mid - dr.top) / dr.height) * moments.length - 0.5, 0, moments.length - 1);
-    const i = Math.min(moments.length - 1, Math.floor(f));
-    const nextT = TIMES[Math.min(TIMES.length - 1, i + 1)];
-    const mins = i === moments.length - 1 ? TIMES[i] : lerp(TIMES[i], nextT, f - i);
-    const hh = Math.floor(mins / 60), mm = Math.floor(mins % 60);
-    dcTime.textContent = `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
-    dcArc.style.setProperty('--o', 289 * (1 - (mins - TIMES[0]) / (TIMES[TIMES.length - 1] - TIMES[0])));
-  }
+  // the plate shows in the hero, and faintly behind the vibration library
+  zone = inRect(heroSec) ? 'hero' : inRect(libSec) ? 'library' : 'other';
+  const at = skySections.find(inRect);
+  sky = (at && SECTION_SKY[at.id]) || 'hero';
+  if (zone !== 'library' && !libPlaying()) plateMode = MODES[HERO];
   if (reduced) { drawPlate(); silk && silk.redraw(); }
 }
 addEventListener('scroll', onScroll, { passive: true });
@@ -271,10 +240,10 @@ const field = (x, y, n, m) => {
 
 let cx = innerWidth > 900 ? 0.68 : 0.5, cy = innerWidth > 900 ? 0.5 : 0.31, R = 300, alpha = 0, rot = 0;
 function stepPlate() {
-  level += (Math.min(1, audio.read() * 6) - level) * 0.2;
+  level += (Math.min(1, Math.max(audio.read(), libRead()) * 6) - level) * 0.2;
   kick *= 0.985;
   rot += 0.0006 + level * 0.002;
-  const { n, m } = MODES[mode];
+  const { n, m } = plateMode;
   const jitter = 0.012 + kick * 0.06 + level * 0.025;
   const e = 0.002;
   for (let i = 0; i < N; i++) {
@@ -293,10 +262,12 @@ function stepPlate() {
 }
 function drawPlate() {
   const wide = innerWidth > 900;
-  // same spot in the hero and through the day (the CSS halo uses the same numbers)
-  const tx = wide ? 0.68 : 0.5, ty = wide ? 0.5 : 0.31;
-  const tr = wide ? Math.min(W * 0.28, H * 0.42) : Math.min(W * 0.40, H * 0.30);
-  const ta = zone === 'hero' ? 0.6 : zone === 'day' ? (wide ? 1 : 0.75) : 0;
+  // in the hero it sits right of the headline (the CSS halo uses the same numbers);
+  // behind the library it spreads out wide and faint
+  const lib = zone === 'library';
+  const tx = lib ? 0.5 : wide ? 0.68 : 0.5, ty = lib ? 0.5 : wide ? 0.5 : 0.31;
+  const tr = lib ? Math.min(W, H) * 0.62 : wide ? Math.min(W * 0.28, H * 0.42) : Math.min(W * 0.40, H * 0.30);
+  const ta = zone === 'hero' ? 0.6 : lib ? 0.22 : 0;
   const k = reduced ? 1 : 0.05;
   cx += (tx - cx) * k; cy += (ty - cy) * k; R += (tr - R) * k; alpha += (ta - alpha) * k;
   placeHeadset();
@@ -394,7 +365,7 @@ function placeHeadset() {
   }
   plateHs.style.setProperty('--hs-x', (cx * innerWidth - w / 2).toFixed(1) + 'px');
   plateHs.style.setProperty('--hs-y', (cy * innerHeight - h / 2).toFixed(1) + 'px');
-  hsShow = clamp(alpha / 0.55);
+  hsShow += ((zone === 'hero' ? clamp(alpha / 0.55) : 0) - hsShow) * 0.22;
   plateHs.style.setProperty('--hs-o', hsShow.toFixed(3));
 }
 placeHeadset();
@@ -616,3 +587,384 @@ function drawScopes(now) {
 if (reduced) drawScopes(2000);
 else (function loop(now) { requestAnimationFrame(loop); if (hzVisible) drawScopes(now); })(0);
 hzRange.addEventListener('input', () => { if (reduced) drawScopes(2000); });
+
+/* ═════════ the vibration library: nine generated sounds ═════════ */
+var LIB = null;   // assigned below; the plate asks about it every frame
+function libPlaying() { return !!(LIB && LIB.current); }
+function libRead() { return LIB ? LIB.read() : 0; }
+const LIB_MODES = {
+  bowl: { n: 2, m: 5 }, crystal: { n: 3, m: 7 }, gong: { n: 1, m: 4 }, fork: { n: 1, m: 2 }, ocean: { n: 2, m: 3 },
+  rain: { n: 3, m: 5 }, om: { n: 3, m: 4 }, heart: { n: 2, m: 4 }, theta: { n: 4, m: 5 }
+};
+const LIB_NAMES = { bowl: 'Singing bowl', crystal: 'Crystal bowl', gong: 'Gong wash', fork: 'Tuning fork', ocean: 'Ocean drone', rain: 'Rain and pad', om: 'Om drone', heart: 'Slow pulse', theta: 'Theta beat' };
+
+LIB = {
+  ctx: null, out: null, wet: null, an: null, buf: null, current: null, voice: null, noise: {},
+  init() {
+    const ctx = this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    this.out = ctx.createGain(); this.out.gain.value = 0.9;
+    this.an = ctx.createAnalyser(); this.an.fftSize = 1024; this.buf = new Float32Array(1024);
+    const comp = ctx.createDynamicsCompressor();
+    this.out.connect(comp).connect(this.an).connect(ctx.destination);
+    const len = ctx.sampleRate * 3.2, ir = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let c = 0; c < 2; c++) { const d = ir.getChannelData(c); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+    const verb = ctx.createConvolver(); verb.buffer = ir;
+    this.wet = ctx.createGain(); this.wet.gain.value = 0.45;
+    this.wet.connect(verb).connect(this.out);
+  },
+  noiseBuf(kind) {
+    if (this.noise[kind]) return this.noise[kind];
+    const ctx = this.ctx, len = ctx.sampleRate * 4, b = ctx.createBuffer(1, len, ctx.sampleRate), d = b.getChannelData(0);
+    let last = 0;
+    for (let i = 0; i < len; i++) {
+      const w = Math.random() * 2 - 1;
+      if (kind === 'brown') { last = (last + 0.02 * w) / 1.02; d[i] = last * 3.5; }
+      else if (kind === 'drops') d[i] = Math.random() < 0.0009 ? (Math.random() * 2 - 1) : 0;
+      else d[i] = w;
+    }
+    return (this.noise[kind] = b);
+  },
+  src(kind) { const s = this.ctx.createBufferSource(); s.buffer = this.noiseBuf(kind); s.loop = true; return s; },
+  async play(id) {
+    if (!this.ctx) this.init();
+    await this.ctx.resume();
+    this.stop();
+    this.current = id;
+    const ctx = this.ctx, vg = ctx.createGain(), timers = [], nodes = [];
+    vg.gain.value = 0;
+    vg.gain.setTargetAtTime(1, ctx.currentTime, 0.4);
+    vg.connect(this.out); vg.connect(this.wet);
+    const v = { vg, timers, nodes };
+    VOICES[id](this, v);
+    this.voice = v;
+  },
+  stop() {
+    if (!this.voice) { this.current = null; return; }
+    const v = this.voice, t = this.ctx.currentTime;
+    v.timers.forEach(clearTimeout); v.timers.forEach(clearInterval);
+    v.vg.gain.cancelScheduledValues(t);
+    v.vg.gain.setTargetAtTime(0, t, 0.35);
+    setTimeout(() => { v.nodes.forEach(n => { try { n.stop(); } catch (e) {} }); v.vg.disconnect(); }, 2200);
+    this.voice = null; this.current = null;
+  },
+  read() {
+    if (!this.ctx || !this.current) return 0;
+    this.an.getFloatTimeDomainData(this.buf);
+    let s = 0; for (let i = 0; i < this.buf.length; i++) s += this.buf[i] * this.buf[i];
+    return Math.sqrt(s / this.buf.length);
+  }
+};
+
+function tone(L, v, freq, at, vol, decay, type = 'sine', attack = 0.01) {
+  const o = L.ctx.createOscillator(), g = L.ctx.createGain();
+  o.type = type; o.frequency.value = freq;
+  g.gain.setValueAtTime(0, at);
+  g.gain.linearRampToValueAtTime(vol, at + attack);
+  g.gain.exponentialRampToValueAtTime(0.0001, at + decay);
+  o.connect(g).connect(v.vg); o.start(at); o.stop(at + decay + 0.1);
+}
+function every(v, ms, fn) { fn(); v.timers.push(setInterval(fn, ms)); }
+
+const VOICES = {
+  bowl(L, v) {
+    const notes = [196, 196 * 1.5, 196 * 2, 196];
+    let k = 0;
+    every(v, 5600, () => {
+      const f = notes[k++ % notes.length], t = L.ctx.currentTime + 0.05;
+      [[1, 1], [2.76, 0.42], [5.4, 0.2], [8.93, 0.08]].forEach(([r, a]) =>
+        [-0.7, 0.7].forEach(dt => tone(L, v, f * r + dt, t, 0.07 * a, 9 / Math.sqrt(r))));
+    });
+  },
+  crystal(L, v) {
+    const g = L.ctx.createGain(); g.gain.value = 0; g.connect(v.vg);
+    const t = L.ctx.currentTime;
+    g.gain.linearRampToValueAtTime(0.11, t + 2.5);
+    const lfo = L.ctx.createOscillator(), la = L.ctx.createGain();
+    lfo.frequency.value = 0.15; la.gain.value = 0.035; lfo.connect(la).connect(g.gain); lfo.start(); v.nodes.push(lfo);
+    [[523.25, 1], [524.9, 0.8], [1046.5, 0.18], [1569.8, 0.05]].forEach(([f, a]) => {
+      const o = L.ctx.createOscillator(), og = L.ctx.createGain();
+      o.frequency.value = f; og.gain.value = a; o.connect(og).connect(g); o.start(); v.nodes.push(o);
+    });
+  },
+  gong(L, v) {
+    const bank = [[62, 0.5], [97, 0.45], [141, 0.4], [189, 0.35], [262, 0.3], [347, 0.22], [455, 0.16], [610, 0.1]];
+    const swellGain = L.ctx.createGain(); swellGain.gain.value = 0; swellGain.connect(v.vg);
+    const src = L.src('white'); src.start(); v.nodes.push(src);
+    bank.forEach(([f, a]) => {
+      const bp = L.ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = f; bp.Q.value = 38;
+      const g = L.ctx.createGain(); g.gain.value = a * 1.6;
+      src.connect(bp).connect(g).connect(swellGain);
+    });
+    every(v, 13000, () => {
+      const t = L.ctx.currentTime;
+      swellGain.gain.cancelScheduledValues(t);
+      swellGain.gain.setValueAtTime(Math.max(0.02, swellGain.gain.value), t);
+      swellGain.gain.linearRampToValueAtTime(0.55, t + 3.2);
+      swellGain.gain.exponentialRampToValueAtTime(0.03, t + 12.5);
+      tone(L, v, 55, t, 0.06, 11, 'sine', 2.5);
+    });
+  },
+  fork(L, v) {
+    every(v, 6500, () => {
+      const t = L.ctx.currentTime + 0.05;
+      tone(L, v, 128, t, 0.2, 7);
+      tone(L, v, 256, t, 0.025, 1.6);
+      tone(L, v, 128 * 6.27, t, 0.01, 0.3);
+    });
+  },
+  ocean(L, v) {
+    const src = L.src('brown'); src.start(); v.nodes.push(src);
+    const lp = L.ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 760;
+    const g = L.ctx.createGain(); g.gain.value = 0.2;
+    const lfo = L.ctx.createOscillator(), la = L.ctx.createGain();
+    lfo.frequency.value = 0.1; la.gain.value = 0.17; lfo.connect(la).connect(g.gain); lfo.start(); v.nodes.push(lfo);
+    src.connect(lp).connect(g).connect(v.vg);
+    const foam = L.src('white'); foam.start(); v.nodes.push(foam);
+    const hp = L.ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 2400;
+    const fg = L.ctx.createGain(); fg.gain.value = 0.012; la.connect(fg.gain);
+    foam.connect(hp).connect(fg).connect(v.vg);
+  },
+  rain(L, v) {
+    const hiss = L.src('white'); hiss.start(); v.nodes.push(hiss);
+    const hp = L.ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 2600;
+    const hg = L.ctx.createGain(); hg.gain.value = 0.035;
+    hiss.connect(hp).connect(hg).connect(v.vg);
+    const drops = L.src('drops'); drops.start(); v.nodes.push(drops);
+    const bp = L.ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = 3200; bp.Q.value = 1.2;
+    const dg = L.ctx.createGain(); dg.gain.value = 0.35;
+    drops.connect(bp).connect(dg).connect(v.vg);
+    const lp = L.ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 600; lp.connect(v.vg);
+    [130.8, 164.8, 196, 246.9].forEach(f => {
+      const o = L.ctx.createOscillator(), og = L.ctx.createGain();
+      o.type = 'triangle'; o.frequency.value = f; og.gain.value = 0.018; o.connect(og).connect(lp); o.start(); v.nodes.push(o);
+    });
+  },
+  om(L, v) {
+    const g = L.ctx.createGain(); g.gain.value = 0.06; g.connect(v.vg);
+    const lfo = L.ctx.createOscillator(), la = L.ctx.createGain();
+    lfo.frequency.value = 0.07; la.gain.value = 0.04; lfo.connect(la).connect(g.gain); lfo.start(); v.nodes.push(lfo);
+    const vib = L.ctx.createOscillator(), va = L.ctx.createGain();
+    vib.frequency.value = 4.6; va.gain.value = 0.5; vib.connect(va); vib.start(); v.nodes.push(vib);
+    const mix = L.ctx.createGain(); mix.gain.value = 1;
+    [136.1, 136.6].forEach(f => {
+      const o = L.ctx.createOscillator(); o.type = 'sawtooth'; o.frequency.value = f; va.connect(o.frequency);
+      o.connect(mix); o.start(); v.nodes.push(o);
+    });
+    [[400, 5, 1], [800, 8, 0.5], [2600, 12, 0.12]].forEach(([f, q, a]) => {
+      const bp = L.ctx.createBiquadFilter(); bp.type = 'bandpass'; bp.frequency.value = f; bp.Q.value = q;
+      const fg = L.ctx.createGain(); fg.gain.value = a;
+      mix.connect(bp).connect(fg).connect(g);
+    });
+  },
+  heart(L, v) {
+    const lp = L.ctx.createBiquadFilter(); lp.type = 'lowpass'; lp.frequency.value = 180; lp.connect(v.vg);
+    const thump = (t, f, a, d) => {
+      const o = L.ctx.createOscillator(), g = L.ctx.createGain();
+      o.frequency.setValueAtTime(f * 1.6, t); o.frequency.exponentialRampToValueAtTime(f, t + 0.05);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(a, t + 0.012); g.gain.exponentialRampToValueAtTime(0.0001, t + d);
+      o.connect(g).connect(lp); o.start(t); o.stop(t + d + 0.05);
+    };
+    every(v, 1000, () => { const t = L.ctx.currentTime + 0.05; thump(t, 56, 0.55, 0.16); thump(t + 0.28, 48, 0.32, 0.13); });
+  },
+  theta(L, v) {
+    [[200, -1], [206, 1]].forEach(([f, pan]) => {
+      const o = L.ctx.createOscillator(), g = L.ctx.createGain(), p = L.ctx.createStereoPanner();
+      o.frequency.value = f; g.gain.value = 0.075; p.pan.value = pan;
+      o.connect(g).connect(p).connect(v.vg); o.start(); v.nodes.push(o);
+    });
+    const bed = L.src('brown'); bed.start(); v.nodes.push(bed);
+    const bg = L.ctx.createGain(); bg.gain.value = 0.03; bed.connect(bg).connect(v.vg);
+  }
+};
+
+/* the cards, the try buttons, and a "now playing" pill that follows you down the page */
+const samples = [...document.querySelectorAll('.sample')];
+const tries = [...document.querySelectorAll('.try')];
+const pill = document.createElement('div');
+pill.className = 'now';
+pill.innerHTML = '<span class="now-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="now-t">Now playing <b></b></span><button type="button">Stop</button>';
+pill.setAttribute('role', 'status');
+document.body.appendChild(pill);
+pill.querySelector('button').addEventListener('click', () => libToggle(LIB.current));
+
+function syncLibUi() {
+  const cur = LIB.current;
+  samples.forEach(c => {
+    const on = c.dataset.id === cur;
+    c.classList.toggle('is-on', on);
+    const b = c.querySelector('.smp-play');
+    b.setAttribute('aria-pressed', String(on));
+    b.querySelector('.lbl').textContent = on ? 'Stop' : 'Play';
+  });
+  tries.forEach(t => t.classList.toggle('is-on', t.dataset.try === cur));
+  pill.classList.toggle('on', !!cur);
+  if (cur) pill.querySelector('b').textContent = LIB_NAMES[cur];
+}
+function libToggle(id) {
+  if (!id) return;
+  if (LIB.current === id) { LIB.stop(); plateMode = MODES[HERO]; }
+  else {
+    // one sound at a time: quiet the hero bowl if it's on
+    if (play.getAttribute('aria-pressed') === 'true') play.click();
+    LIB.play(id);
+    plateMode = LIB_MODES[id]; kick = 1;
+  }
+  syncLibUi();
+}
+samples.forEach(c => c.querySelector('.smp-play').addEventListener('click', () => libToggle(c.dataset.id)));
+tries.forEach(t => t.addEventListener('click', () => libToggle(t.dataset.try)));
+play.addEventListener('click', () => { if (play.getAttribute('aria-pressed') === 'true' && LIB.current) { LIB.stop(); syncLibUi(); } });
+
+/* each card draws its own picture of the sound */
+const CL = { a: '244,194,174', r: '233,162,184', l: '201,182,238', p: '255,240,232' };
+const DRAW = {
+  bowl(g, w, h, t, a) {
+    for (let k = 0; k < 7; k++) {
+      const ph = (t * 0.22 + k / 7) % 1;
+      g.strokeStyle = `rgba(${CL.a},${(1 - ph) * (0.22 + a * 0.6)})`;
+      g.lineWidth = 1.4 * dpr;
+      g.beginPath(); g.arc(w / 2, h / 2, ph * w * 0.55, 0, 7); g.stroke();
+    }
+  },
+  crystal(g, w, h, t, a) {
+    const n = 24;
+    for (let i = 0; i < n; i++) {
+      const ang = i / n * Math.PI * 2 + t * 0.05;
+      const len = h * (0.16 + 0.22 * (0.5 + 0.5 * Math.sin(t * 2.2 + i * 1.7))) * (0.7 + a);
+      g.strokeStyle = `rgba(${i % 2 ? CL.l : CL.p},${0.25 + a * 0.5})`;
+      g.lineWidth = 1.2 * dpr;
+      g.beginPath(); g.moveTo(w / 2 + Math.cos(ang) * h * 0.08, h / 2 + Math.sin(ang) * h * 0.08);
+      g.lineTo(w / 2 + Math.cos(ang) * (h * 0.08 + len), h / 2 + Math.sin(ang) * (h * 0.08 + len)); g.stroke();
+    }
+  },
+  gong(g, w, h, t, a) {
+    const R = h * (0.3 + 0.03 * Math.sin(t * 0.7)) * (1 + a * 0.25);
+    const grd = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, R * 1.4);
+    grd.addColorStop(0, `rgba(${CL.a},${0.25 + a * 0.4})`); grd.addColorStop(1, `rgba(${CL.r},0)`);
+    g.fillStyle = grd; g.beginPath(); g.arc(w / 2, h / 2, R * 1.4, 0, 7); g.fill();
+    for (let ring = 0; ring < 3; ring++) {
+      g.strokeStyle = `rgba(${CL.p},${0.18 + a * 0.3 - ring * 0.05})`; g.lineWidth = 1.2 * dpr;
+      g.beginPath();
+      for (let k = 0; k <= 120; k++) {
+        const ang = k / 120 * Math.PI * 2;
+        const r = R * (0.6 + ring * 0.25) + Math.sin(ang * (5 + ring * 2) + t * (0.8 + ring * 0.3)) * h * 0.02 * (1 + a * 3);
+        const x = w / 2 + Math.cos(ang) * r, y = h / 2 + Math.sin(ang) * r;
+        k ? g.lineTo(x, y) : g.moveTo(x, y);
+      }
+      g.stroke();
+    }
+  },
+  fork(g, w, h, t, a) {
+    const env = Math.exp(-((t % 6.5) / 2.2));
+    g.strokeStyle = `rgba(${CL.a},${0.35 + a * 0.5})`; g.lineWidth = 1.6 * dpr;
+    g.beginPath();
+    for (let x = 0; x <= w; x += 2) {
+      const y = h / 2 + Math.sin(x / w * Math.PI * 2 * 12 - t * 10) * h * 0.3 * (0.25 + env * (0.4 + a)) * Math.sin(x / w * Math.PI);
+      x ? g.lineTo(x, y) : g.moveTo(x, y);
+    }
+    g.stroke();
+  },
+  ocean(g, w, h, t, a) {
+    const swell = 0.5 + 0.5 * Math.sin(t * 0.63);
+    [[CL.l, 0.18, 0], [CL.r, 0.22, 1.5], [CL.a, 0.3, 3]].forEach(([c, al, off], i) => {
+      g.fillStyle = `rgba(${c},${al + a * 0.2})`;
+      g.beginPath(); g.moveTo(0, h);
+      for (let x = 0; x <= w; x += 4) g.lineTo(x, h * (0.45 + i * 0.12) + Math.sin(x * 0.012 / dpr + t * (0.6 + i * 0.2) + off) * h * 0.07 * (0.6 + swell));
+      g.lineTo(w, h); g.fill();
+    });
+  },
+  rain(g, w, h, t, a) {
+    g.strokeStyle = `rgba(${CL.l},${0.35 + a * 0.4})`; g.lineWidth = 1.1 * dpr;
+    g.beginPath();
+    for (let i = 0; i < 46; i++) {
+      const x = (i * 53.7 * dpr) % w, sp = (0.5 + (i % 5) * 0.12) * h;
+      const y = ((t * sp + i * 37 * dpr) % (h + 20 * dpr)) - 10 * dpr;
+      g.moveTo(x, y); g.lineTo(x - 3 * dpr, y + 12 * dpr);
+    }
+    g.stroke();
+    g.fillStyle = `rgba(${CL.a},${0.12 + a * 0.2})`;
+    g.fillRect(0, h * 0.86, w, h * 0.14);
+  },
+  om(g, w, h, t, a) {
+    const base = h * 0.26 * (1 + 0.12 * Math.sin(t * 0.44));
+    const grd = g.createRadialGradient(w / 2, h / 2, 0, w / 2, h / 2, base * 1.6);
+    grd.addColorStop(0, `rgba(${CL.a},${0.35 + a * 0.4})`); grd.addColorStop(1, `rgba(${CL.l},0)`);
+    g.fillStyle = grd;
+    g.beginPath();
+    for (let k = 0; k <= 160; k++) {
+      const ang = k / 160 * Math.PI * 2;
+      const r = base * (1 + 0.08 * Math.sin(ang * 3 + t) + 0.05 * Math.sin(ang * 5 - t * 1.3) * (1 + a * 4));
+      const x = w / 2 + Math.cos(ang) * r * 1.4, y = h / 2 + Math.sin(ang) * r;
+      k ? g.lineTo(x, y) : g.moveTo(x, y);
+    }
+    g.fill();
+  },
+  heart(g, w, h, t, a) {
+    g.strokeStyle = `rgba(${CL.r},${0.4 + a * 0.5})`; g.lineWidth = 1.6 * dpr;
+    g.beginPath();
+    for (let x = 0; x <= w; x += 2) {
+      const ph = (x / w * 2.5 - t) % 1, p = ph < 0 ? ph + 1 : ph;
+      const bump = Math.exp(-Math.pow((p - 0.2) * 40, 2)) - 0.5 * Math.exp(-Math.pow((p - 0.27) * 34, 2)) + 0.4 * Math.exp(-Math.pow((p - 0.48) * 30, 2));
+      const y = h / 2 - bump * h * 0.3 * (0.6 + a);
+      x ? g.lineTo(x, y) : g.moveTo(x, y);
+    }
+    g.stroke();
+  },
+  theta(g, w, h, t, a) {
+    [[CL.a, 20, 0, 0.32], [CL.l, 22, 0.6, 0.32]].forEach(([c, cyc, off, yy]) => {
+      g.strokeStyle = `rgba(${c},${0.35 + a * 0.3})`; g.lineWidth = 1.2 * dpr; g.beginPath();
+      for (let x = 0; x <= w; x += 2) { const y = h * yy + Math.sin(x / w * Math.PI * 2 * cyc - t * (3 + off)) * h * 0.1; x ? g.lineTo(x, y) : g.moveTo(x, y); }
+      g.stroke();
+    });
+    g.strokeStyle = `rgba(${CL.p},${0.45 + a * 0.4})`; g.lineWidth = 1.8 * dpr; g.beginPath();
+    for (let x = 0; x <= w; x += 2) {
+      const u = x / w, y = h * 0.68 + (Math.sin(u * Math.PI * 2 * 20 - t * 3) + Math.sin(u * Math.PI * 2 * 22 - t * 3.6)) * h * 0.1;
+      x ? g.lineTo(x, y) : g.moveTo(x, y);
+    }
+    g.stroke();
+  }
+};
+const cards = samples.map(c => ({ el: c, id: c.dataset.id, cv: c.querySelector('canvas'), g: c.querySelector('canvas').getContext('2d'), vis: false, lvl: 0 }));
+function sizeCards() { cards.forEach(c => { c.cv.width = c.cv.clientWidth * dpr; c.cv.height = c.cv.clientHeight * dpr; }); }
+sizeCards(); addEventListener('resize', sizeCards);
+const cio = new IntersectionObserver(es => es.forEach(e => { const c = cards.find(k => k.el === e.target); if (c) c.vis = e.isIntersecting; }));
+cards.forEach(c => cio.observe(c.el));
+function drawCards(now) {
+  const t = now / 1000, lv = Math.min(1, libRead() * 7);
+  for (const c of cards) {
+    if (!c.vis) continue;
+    c.lvl += ((c.id === LIB.current ? 0.35 + lv : 0.08) - c.lvl) * 0.12;
+    c.g.clearRect(0, 0, c.cv.width, c.cv.height);
+    DRAW[c.id](c.g, c.cv.width, c.cv.height, t, c.lvl);
+  }
+}
+if (reduced) drawCards(4000);
+else (function loop(now) { requestAnimationFrame(loop); drawCards(now); })(0);
+
+/* ═════════ motion: the flower draws itself, the deck deals, sections arrive ═════════ */
+if (gsap && !reduced) {
+  gsap.fromTo('.flower circle', { '--dash': 380 }, { '--dash': 0, duration: 2.6, ease: 'power2.inOut', stagger: 0.06, delay: 0.6 });
+  gsap.from('.sample', { y: 70, opacity: 0, rotate: 1.5, stagger: 0.07, duration: 1.2, ease: 'expo.out', scrollTrigger: { trigger: '.lib-grid', start: 'top 82%', once: true } });
+  gsap.from('.lib-head > *', { y: 30, opacity: 0, stagger: 0.1, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.lib-head', start: 'top 85%', once: true } });
+
+  const deck = [...document.querySelectorAll('.pcard')];
+  deck.forEach((c, i) => gsap.set(c, { zIndex: i + 1 }));
+  gsap.set(deck.slice(1), { yPercent: 120, rotate: i => (i % 2 ? -5 : 5), opacity: 1 });
+  const tl = gsap.timeline({
+    scrollTrigger: { trigger: '#places', pin: '.pl-pin', start: 'top top', end: () => `+=${(deck.length - 1) * innerHeight * 0.75}`, scrub: 0.7, invalidateOnRefresh: true }
+  });
+  // each card's line art draws itself as it lands on the deck
+  const artOf = c => [...c.querySelectorAll('.la path:not(.steam):not(.smoke):not(.ripple), .la circle:not(.bub):not(.star), .la ellipse')];
+  deck.forEach(c => artOf(c).forEach(el => { const len = el.getTotalLength ? Math.ceil(el.getTotalLength()) : 400; gsap.set(el, { strokeDasharray: len, strokeDashoffset: len }); }));
+  tl.to(artOf(deck[0]), { strokeDashoffset: 0, duration: 0.8, ease: 'power2.out' }, 0);
+  deck.forEach((c, i) => {
+    if (!i) return;
+    tl.to(c, { yPercent: 0, rotate: (i % 2 ? -1.2 : 1.2), duration: 1, ease: 'power2.out' }, i - 1)
+      .to(deck[i - 1], { scale: 0.93, yPercent: -4, filter: 'brightness(.55)', duration: 1, ease: 'power2.out' }, i - 1)
+      .to(artOf(c), { strokeDashoffset: 0, duration: 0.9, ease: 'power2.out' }, i - 0.6);
+  });
+  gsap.from('.why-list li', { y: 40, opacity: 0, stagger: 0.1, duration: 1.1, ease: 'expo.out', scrollTrigger: { trigger: '.why-list', start: 'top 85%', once: true } });
+  ScrollTrigger.refresh();
+} else {
+  document.documentElement.classList.add('deck-static');
+}
