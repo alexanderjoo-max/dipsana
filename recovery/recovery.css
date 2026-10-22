@@ -35,9 +35,6 @@ body{font-variation-settings:'opsz' 14,'wdth' 88,'wght' 400}
 .topbar{background:linear-gradient(180deg, rgba(10,10,11,.7), transparent)}
 .topbar.is-scrolled{background:rgba(10,10,11,.86)}
 .mark img{height:28px}
-.r-nav{display:flex; gap:clamp(16px,2.4vw,32px)}
-.r-nav a{font-size:13px; text-decoration:none; color:var(--ink); opacity:.6; transition:opacity .25s ease}
-.r-nav a:hover{opacity:1}
 
 /* ember cursor glow */
 .cursor{
@@ -253,7 +250,7 @@ input[type=email]{border-radius:2px}
 .r-foot .mark img{height:84px}
 
 @media (max-width:900px){
-  .r-nav{display:none}
+
   .hero-copy{bottom:84px}
   .hero-actions .btn--ghost{display:none}
   .d-num{top:36%; font-size:min(66vw,48vh)}
