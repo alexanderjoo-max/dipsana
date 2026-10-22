@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Dipsana — Ears open, day on</title>
-<meta name="description" content="Open-ear bone conduction headphones for days outside: the beach, trails, rides, runs, the pool and the sea. Dust-tight and waterproof (IP68), 32GB offline, 10 hours, and you still hear the world around you.">
+<meta name="description" content="Open-ear bone conduction headphones for a whole day outside: a run, a ride, a hike, the beach, the pool and a sunset paddle. Dust-tight and waterproof (IP68), 32GB offline, 10 hours, and you still hear the world around you.">
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-F26GGJJMGX"></script>
@@ -14,13 +14,13 @@
   gtag('js', new Date());
   gtag('config', 'G-F26GGJJMGX');
 </script>
-<meta name="theme-color" content="#ffcc3d">
+<meta name="theme-color" content="#8fd3ee">
 <link rel="icon" href="/images/favicon.svg" type="image/svg+xml">
 <link rel="canonical" href="https://dipsana.com/recreation/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://dipsana.com/recreation/">
 <meta property="og:title" content="Dipsana — Ears open, day on">
-<meta property="og:description" content="Bone conduction for beach days, trails, rides and swims. Hear your music and the world around you.">
+<meta property="og:description" content="One pair for a whole day outside. Hear your music and the world around you.">
 <meta property="og:image" content="https://dipsana.com/images/rec/hero.jpg">
 <meta name="twitter:card" content="summary_large_image">
 
@@ -49,48 +49,87 @@
 
 <header class="topbar" id="topbar">
   <a class="mark" href="/" aria-label="Dipsana, home"><img src="/images/brand/h-fire-dark.svg" alt="" width="645" height="112"></a>
+  <p class="clock mono" id="clock" aria-hidden="true"><span class="sun-dot"></span><b id="clockTime">06:30</b><span id="clockWhat">Sunrise</span></p>
   <a class="btn btn--sm" href="#waitlist" data-magnet><span class="btn-full">Join the waitlist</span><span class="btn-short">Waitlist</span></a>
 </header>
 
-<main id="main">
+<main id="main" class="journey">
 
-  <!-- ─────────── Hero ─────────── -->
-  <section class="hero" id="hero" aria-labelledby="hero-h">
-    <div class="hero-copy">
-      <p class="mono kicker"><span class="sun-dot" aria-hidden="true"></span>Bone conduction for days outside</p>
+  <!-- the trail that links every stop of the day -->
+  <svg class="route" id="route" aria-hidden="true">
+    <defs><mask id="routeMask" maskUnits="userSpaceOnUse"><path id="routeReveal"/></mask></defs>
+    <path class="route-shadow" id="routeShadow" mask="url(#routeMask)"/>
+    <path class="route-line" id="routeLine" mask="url(#routeMask)"/>
+  </svg>
+
+  <!-- ─────────── 06:30 · the sea, first thing ─────────── -->
+  <section class="scene scene--first" id="hero" data-time="06:30" data-what="Sunrise" aria-labelledby="hero-h">
+    <div class="scene-bg" aria-hidden="true"><img src="/images/rec/hero.jpg" alt="" width="2400" height="1600" fetchpriority="high" style="object-position:62% 40%"></div>
+    <div class="box box--hero box--white" data-stop>
+      <p class="mono kicker"><span class="sun-dot" aria-hidden="true"></span>Bone conduction for a day outside</p>
       <h1 class="hero-h" id="hero-h">
         <span class="hh-line" data-split="words load" data-delay="0.15">Ears open.</span>
         <span class="hh-line flip-line" aria-hidden="true"><span class="flip" id="flip"><span>Beach</span><span>Trail</span><span>Ride</span><span>Swim</span><span>Run</span><span>Beach</span></span><span class="hh-day">day.</span></span>
         <span class="sr">Beach, trail, ride, swim or run day.</span>
       </h1>
-      <p class="hero-sub">Music and podcasts through your cheekbones, so the waves, the bike bell and your friends still get through. Dust-tight, waterproof, ten hours a charge.</p>
+      <p class="hero-sub">Music and podcasts through your cheekbones, so the waves, the bike bell and your friends still get through. One pair, sunrise to sunset.</p>
       <div class="hero-actions">
         <a class="btn" href="#waitlist" data-magnet>Join the waitlist</a>
-        <a class="btn btn--ghost" href="#hear" data-magnet>Hear the difference</a>
+        <a class="btn btn--ghost" href="#run" data-magnet>Follow the day ↓</a>
       </div>
-    </div>
-    <div class="collage" id="collage" aria-hidden="true">
-      <span class="sun"></span>
-      <figure class="cl cl-1" data-depth="0.6"><img src="/images/rec/hero.jpg" alt="" width="2400" height="1600"></figure>
-      <figure class="cl cl-2" data-depth="1.1"><img src="/images/rec/ride.jpg" alt="" width="1600" height="1067"></figure>
-      <figure class="cl cl-3" data-depth="0.85"><img src="/images/rec/hike.jpg" alt="" width="1600" height="1067"></figure>
-      <figure class="cl cl-4" data-depth="1.4"><img src="/images/rec/pool.jpg" alt="" width="1600" height="1067"></figure>
+      <ul class="facts">
+        <li><b>IP68</b><span>Dust-tight, waterproof</span></li>
+        <li><b>32 GB</b><span>No signal needed</span></li>
+        <li><b>10 hrs</b><span>Sunrise to sunset</span></li>
+      </ul>
     </div>
   </section>
 
-  <!-- ─────────── Marquee ─────────── -->
-  <div class="marquee" aria-hidden="true">
-    <div class="mq-row" id="mqA"><span>Beach</span><i></i><span>Trail</span><i></i><span>Ride</span><i></i><span>Run</span><i></i><span>Paddle</span><i></i><span>Pool</span><i></i><span>Picnic</span><i></i><span>Garden</span><i></i><span>Beach</span><i></i><span>Trail</span><i></i><span>Ride</span><i></i><span>Run</span><i></i><span>Paddle</span><i></i><span>Pool</span><i></i><span>Picnic</span><i></i><span>Garden</span><i></i></div>
-  </div>
+  <!-- ─────────── 07:15 · run ─────────── -->
+  <section class="scene" id="run" data-time="07:15" data-what="Run" aria-label="Run">
+    <div class="scene-bg" aria-hidden="true"><img src="/images/rec/run.jpg" alt="" width="1600" height="1068" loading="lazy" style="object-position:66% 50%"></div>
+    <article class="box box--sun box--right" data-stop>
+      <p class="pill"><b>07:15</b> Run</p>
+      <h2>Nothing bouncing in your ears.</h2>
+      <p>The band sits behind your head, so there are no buds to shake loose, and you still hear footsteps, dogs and traffic.</p>
+      <p class="on-air"><span class="mono">On the playlist</span>Tempo mix, about 165 bpm</p>
+    </article>
+  </section>
 
-  <!-- ─────────── Hear the difference ─────────── -->
-  <section class="hear" id="hear" aria-labelledby="hear-h">
-    <div class="hear-in">
-      <div class="hear-copy">
-        <p class="mono">Try it, sound on</p>
-        <h2 class="big" id="hear-h" data-split="words">Your soundtrack, plus everything around it.</h2>
-        <p class="lede">Earbuds seal your ears, so the world goes muffled. Dipsana plays through the cheekbones and leaves them open. Press play on the beach, then flip between the two.</p>
-      </div>
+  <!-- ─────────── 08:45 · ride ─────────── -->
+  <section class="scene" id="ride" data-time="08:45" data-what="Ride" aria-label="Ride">
+    <div class="scene-bg" aria-hidden="true"><img src="/images/rec/ride.jpg" alt="" width="1600" height="1067" loading="lazy" style="object-position:60% 50%"></div>
+    <article class="box box--ink box--left" data-stop>
+      <p class="pill"><b>08:45</b> Ride</p>
+      <h2>Hear what’s coming.</h2>
+      <p>Open ears keep traffic, other riders and the shout of “on your left” audible. Check the local rules on headphones before you ride.</p>
+      <p class="on-air"><span class="mono">On the playlist</span>Something with a steady beat</p>
+    </article>
+  </section>
+
+  <!-- ─────────── 10:30 · hike ─────────── -->
+  <section class="scene" id="hike" data-time="10:30" data-what="Hike" aria-label="Hike">
+    <div class="scene-bg" aria-hidden="true"><img src="/images/rec/hike.jpg" alt="" width="1600" height="1067" loading="lazy" style="object-position:30% 50%"></div>
+    <article class="box box--white box--right" data-stop>
+      <p class="pill"><b>10:30</b> Hike</p>
+      <h2>No signal, no problem.</h2>
+      <p>32GB onboard plays offline, so the audiobook keeps going where your phone gives up on the hill.</p>
+      <p class="on-air"><span class="mono">On the playlist</span>A long audiobook</p>
+    </article>
+  </section>
+
+  <!-- ─────────── 12:30 · beach ─────────── -->
+  <section class="scene scene--tall" id="beach" data-time="12:30" data-what="Beach" aria-label="Beach">
+    <div class="scene-bg" aria-hidden="true"><img src="/images/rec/aerial.jpg" alt="" width="2000" height="1332" loading="lazy"></div>
+    <article class="box box--sea box--left" data-stop>
+      <p class="pill"><b>12:30</b> Beach</p>
+      <h2>Sand stays out.</h2>
+      <p>IP68 is dust-tight as well as waterproof, and nothing sits in your ear canal. Swim in the shallows with it on, then rinse it in fresh water.</p>
+    </article>
+    <div class="box box--white box--mixer box--right" id="hear" data-stop>
+      <p class="mono">Try it, sound on</p>
+      <h2>Your soundtrack, plus everything around it.</h2>
+      <p>Earbuds seal your ears, so the beach goes muffled. Dipsana leaves them open. Press play, then flip between the two.</p>
       <div class="mixer" id="mixer" data-mode="open">
         <div class="mx-top">
           <button class="play" id="hearPlay" type="button" aria-pressed="false"><span class="play-ico" aria-hidden="true"></span><span id="hearPlayLabel">Play the beach</span></button>
@@ -101,76 +140,85 @@
           </div>
         </div>
         <div class="mx-row"><p class="mx-label"><span>Your music</span><b class="mono" id="mxMusicVal">—</b></p><div class="meter"><i id="mxMusic"></i></div></div>
-        <div class="mx-row"><p class="mx-label"><span>The world around you</span><b class="mono" id="mxWorldVal">—</b></p><div class="meter meter--world"><i id="mxWorld"></i></div><p class="mx-note">Surf on the shore, and a bike bell every few seconds</p></div>
+        <div class="mx-row"><p class="mx-label"><span>The world around you</span><b class="mono" id="mxWorldVal">—</b></p><div class="meter meter--world"><i id="mxWorld"></i></div></div>
         <p class="mx-status" id="hearStatus" aria-live="polite">Open ears: the surf and the bike bell come through clearly, with the music on top.</p>
       </div>
     </div>
   </section>
 
-  <!-- ─────────── Pick your day ─────────── -->
-  <section class="pick" id="pick" aria-labelledby="pick-h">
-    <div class="pick-head">
-      <p class="mono">Pick your day</p>
-      <h2 class="big" id="pick-h" data-split="words">Where are you headed?</h2>
+  <!-- ─────────── 13:30 · swim ─────────── -->
+  <section class="scene" id="swim" data-time="13:30" data-what="Swim" aria-label="Sea swim">
+    <div class="scene-bg" aria-hidden="true"><img src="/images/rec/friends.jpg" alt="" width="2000" height="1188" loading="lazy" style="object-position:55% 50%"></div>
+    <article class="box box--coral box--right" data-stop>
+      <p class="pill"><b>13:30</b> Sea swim</p>
+      <h2>Straight in, still playing.</h2>
+      <p>Waterproof to two metres, with the music stored on the headset, because Bluetooth doesn’t reach underwater.</p>
+      <p class="on-air"><span class="mono">On the playlist</span>A summer album, start to finish</p>
+    </article>
+  </section>
+
+  <!-- ─────────── 15:00 · pool ─────────── -->
+  <section class="scene" id="pool" data-time="15:00" data-what="Pool" aria-label="Pool">
+    <div class="scene-bg" aria-hidden="true"><img src="/images/rec/pool.jpg" alt="" width="1600" height="1067" loading="lazy" style="object-position:62% 50%"></div>
+    <article class="box box--white box--left" data-stop>
+      <p class="pill"><b>15:00</b> Pool</p>
+      <h2>Lengths or lounging.</h2>
+      <p>A few lengths, then the lounger. Same pair, same playlist, nothing to fish out of the water.</p>
+      <p class="on-air"><span class="mono">On the playlist</span>A podcast for the lounger</p>
+    </article>
+  </section>
+
+  <!-- ─────────── 17:00 · walk ─────────── -->
+  <section class="scene" id="walk" data-time="17:00" data-what="Walk" aria-label="Walk">
+    <div class="scene-bg" aria-hidden="true"><img src="/images/rec/walk.jpg" alt="" width="1600" height="1069" loading="lazy" style="object-position:62% 50%"></div>
+    <article class="box box--sun box--right" data-stop>
+      <p class="pill"><b>17:00</b> Walk</p>
+      <h2>Podcast on, world on.</h2>
+      <p>Hear cars pulling out, cyclists behind you and the friend who’s just caught you up.</p>
+      <p class="on-air"><span class="mono">On the playlist</span>Your favourite podcast</p>
+    </article>
+  </section>
+
+  <!-- ─────────── 19:30 · paddle ─────────── -->
+  <section class="scene scene--tall" id="paddle" data-time="19:30" data-what="Paddle" aria-label="Paddle">
+    <div class="scene-bg" aria-hidden="true"><img src="/images/rec/paddle.jpg" alt="" width="1600" height="1066" loading="lazy" style="object-position:48% 50%"></div>
+    <article class="box box--ink box--left" data-stop>
+      <p class="pill"><b>19:30</b> Paddle</p>
+      <h2>If it goes in, fine.</h2>
+      <p>A capsize means a wet headset, not an earbud at the bottom of the lake.</p>
+    </article>
+    <div class="box box--sun box--stats box--right" data-stop>
+      <p class="mono">The whole day, on one pair</p>
+      <ul class="stats">
+        <li><b>IP<span data-count="68">0</span></b><span>Dust-tight, waterproof to 2m</span></li>
+        <li><b><span data-count="32">0</span>GB</b><span>Plays offline</span></li>
+        <li><b><span data-count="10">0</span>h</b><span>Per charge</span></li>
+        <li><b><span data-count="110">0</span>°</b><span>Fine on a hot dashboard</span></li>
+      </ul>
     </div>
-    <div class="pick-tabs" role="tablist" aria-label="Activities">
-      <button role="tab" aria-selected="true" data-k="beach">Beach</button>
-      <button role="tab" aria-selected="false" data-k="hike">Hike</button>
-      <button role="tab" aria-selected="false" data-k="ride">Ride</button>
-      <button role="tab" aria-selected="false" data-k="run">Run</button>
-      <button role="tab" aria-selected="false" data-k="paddle">Paddle</button>
-      <button role="tab" aria-selected="false" data-k="pool">Pool</button>
-      <button role="tab" aria-selected="false" data-k="walk">Walk</button>
-    </div>
-    <div class="pick-stage" role="tabpanel" aria-live="polite">
-      <div class="pick-photos" id="pickPhotos"><img src="/images/rec/friends.jpg" alt="A group of friends running into the sea together" width="2000" height="1188"></div>
-      <div class="pick-card" id="pickCard">
-        <p class="mono" id="pkTag">Beach · IP68</p>
-        <h3 id="pkTitle">Sand stays out.</h3>
-        <p id="pkText">IP68 is dust-tight as well as waterproof, and nothing sits in your ear canal. Swim in the shallows with it on, then rinse it in fresh water.</p>
-        <p class="pk-play"><span class="mono">On the playlist</span><b id="pkList">A summer album, start to finish</b></p>
+  </section>
+
+  <!-- ─────────── 21:00 · the walk home ─────────── -->
+  <section class="scene scene--last" id="evening" data-time="21:00" data-what="Home" aria-label="The headset and the waitlist">
+    <div class="scene-bg" aria-hidden="true"><img src="/images/rec/evening.jpg" alt="" width="2000" height="1333" loading="lazy" style="object-position:62% 50%"></div>
+    <div class="box box--white box--kit box--left" id="kit" data-stop>
+      <div class="kit-stage" id="kitStage">
+        <span class="kit-sun" aria-hidden="true"></span>
+        <picture class="hs-poster"><source srcset="/images/product.webp" type="image/webp"><img src="/images/product.png" alt="" width="1200" height="760" loading="lazy"></picture>
+        <canvas id="kitCanvas" aria-hidden="true"></canvas>
+      </div>
+      <div class="kit-copy">
+        <p class="pill"><b>21:00</b> The walk home</p>
+        <h2>Four colours. Pick a loud one.</h2>
+        <p class="kit-name" aria-live="polite"><b id="kitName">Ember</b> <span id="kitNote">Easy to spot in a beach bag.</span></p>
+        <ul class="kit-sw" id="kitSw" role="radiogroup" aria-label="Choose a colourway"></ul>
+        <p class="kit-hint mono">Drag the headset to turn it</p>
       </div>
     </div>
-  </section>
-
-  <!-- ─────────── Stats ─────────── -->
-  <section class="stats" aria-label="Specifications">
-    <ul>
-      <li><b>IP<span data-count="68">0</span></b><span>Dust-tight and waterproof to 2m</span></li>
-      <li><b><span data-count="32">0</span>GB</b><span>Plays offline, no signal needed</span></li>
-      <li><b><span data-count="10">0</span>h</b><span>A full day out on one charge</span></li>
-      <li><b><span data-count="110">0</span>°C</b><span>Fine on a hot dashboard</span></li>
-    </ul>
-  </section>
-
-  <!-- ─────────── Kit ─────────── -->
-  <section class="kit" id="kit" aria-labelledby="kit-h">
-    <div class="kit-stage" id="kitStage">
-      <span class="kit-sun" aria-hidden="true"></span>
-      <picture class="hs-poster"><source srcset="/images/product.webp" type="image/webp"><img src="/images/product.png" alt="" width="1200" height="760" loading="lazy"></picture>
-      <canvas id="kitCanvas" aria-hidden="true"></canvas>
-      <p class="mono kit-hint" aria-hidden="true">Drag to turn</p>
-    </div>
-    <div class="kit-copy">
-      <p class="mono">The headset</p>
-      <h2 class="big" id="kit-h" data-split="words">Four colours. Pick a loud one.</h2>
-      <p class="kit-name" aria-live="polite"><b id="kitName">Ember</b> <span id="kitNote">Easy to spot in a beach bag.</span></p>
-      <ul class="kit-sw" id="kitSw" role="radiogroup" aria-label="Choose a colourway"></ul>
-      <dl class="kit-specs">
-        <div><dt>Fit</dt><dd>Open-ear, pads on the cheekbone, band behind the head</dd></div>
-        <div><dt>Controls</dt><dd>Three physical buttons, fine with sandy or wet fingers</dd></div>
-        <div><dt>Charging</dt><dd>Magnetic, no port for sand or salt to get into</dd></div>
-      </dl>
-    </div>
-  </section>
-
-  <!-- ─────────── Waitlist ─────────── -->
-  <section class="wait" id="waitlist" aria-labelledby="wl-h">
-    <div class="wait-bg" aria-hidden="true"><img src="/images/rec/aerial.jpg" alt="" width="2000" height="1332" loading="lazy" data-speed="0.25"></div>
-    <div class="wait-in">
+    <div class="box box--coral box--wait box--right" id="waitlist" data-stop>
       <p class="mono">Founding list</p>
-      <h2 class="wait-h" id="wl-h" data-split="words">See you out there.</h2>
-      <p class="lede">One email when it ships. That’s it.</p>
+      <h2 id="wl-h">See you out there.</h2>
+      <p>One email when it ships. That’s it.</p>
       <div class="form-wrap">
         <form id="waitlist-form" action="https://app.kit.com/forms/9811187/subscriptions" method="post" novalidate>
           <label class="sr" for="email">Email address</label>
@@ -198,7 +246,7 @@
     <li><a href="/privacy/">Privacy</a></li>
   </ul>
   <p class="fine">Keep the volume low enough to hear what’s around you, follow local rules on headphones while cycling or driving, and rinse with fresh water after the sea.</p>
-  <p class="fine credits">Photography via Unsplash: Kylie Lugo, Geio Tischler, Vidar Nordli-Mathisen, Tash Williams, Josh Hild, James Harrison, Alessio Soggetti, David Dvořáček, Nick Fewings, Simona Hantáková.</p>
+  <p class="fine credits">Photography via Unsplash: Kylie Lugo, Alessio Soggetti, David Dvořáček, James Harrison, Geio Tischler, Vidar Nordli-Mathisen, Simona Hantáková, Josh Hild, Nick Fewings, Tash Williams.</p>
 </footer>
 
 </body>

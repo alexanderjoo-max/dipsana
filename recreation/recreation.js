@@ -1,9 +1,9 @@
-import { initMotion, countUp, gsap, ScrollTrigger, reduced, coarse } from '/js/lp-motion.js';
+import { initMotion, countUp, gsap, ScrollTrigger, reduced } from '/js/lp-motion.js';
 
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 initMotion();
 
-/* ═════════ hero: a split-flap activity word, a collage on a sun ═════════ */
+/* ═════════ hero: a split-flap activity word ═════════ */
 const flip = document.getElementById('flip');
 const words = [...flip.children];
 const inner = document.createElement('span');
@@ -23,92 +23,90 @@ if (gsap && !reduced) {
   addEventListener('resize', () => { ws = widths(); });
   document.fonts && document.fonts.ready.then(() => { ws = widths(); gsap.set(flip, { width: ws[0] }); });
 
-  gsap.from('.cl', { y: 160, rotate: i => (i % 2 ? 14 : -14), opacity: 0, duration: 1.6, ease: 'expo.out', stagger: 0.12, delay: 0.2 });
-  gsap.from('.sun', { scale: 0.4, opacity: 0, duration: 2, ease: 'expo.out' });
-  gsap.from('.kicker, .flip-line, .hero-sub, .hero-actions', { y: 30, opacity: 0, duration: 1.2, ease: 'expo.out', stagger: 0.08, delay: 0.35 });
-  gsap.to('.sun', { rotate: 360, duration: 120, ease: 'none', repeat: -1 });
-  // the collage drifts with the pointer and slides apart as you scroll away
-  const cls = [...document.querySelectorAll('.cl')];
-  if (!coarse) document.getElementById('hero').addEventListener('pointermove', e => {
-    const nx = e.clientX / innerWidth - 0.5, ny = e.clientY / innerHeight - 0.5;
-    cls.forEach(c => { const d = parseFloat(c.dataset.depth); gsap.to(c, { x: nx * 40 * d, y: ny * 30 * d, duration: 1, ease: 'power3.out', overwrite: 'auto' }); });
-  });
-  cls.forEach((c, i) => gsap.to(c, { yPercent: -30 * parseFloat(c.dataset.depth), rotate: (i % 2 ? 8 : -8), ease: 'none', scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true } }));
+  gsap.from('.box--hero', { y: 50, opacity: 0, duration: 1.4, ease: 'expo.out', delay: 0.1 });
+  gsap.from('.box--hero .kicker, .flip-line, .hero-sub, .hero-actions, .facts', { y: 24, opacity: 0, duration: 1.1, ease: 'expo.out', stagger: 0.07, delay: 0.4 });
+  gsap.fromTo('#hero .scene-bg img', { scale: 1.15 }, { scale: 1, duration: 2.6, ease: 'power3.out' });
 } else {
   inner.querySelectorAll('span').forEach((w, i) => { if (i) w.style.display = 'none'; });
 }
 
-/* ═════════ marquee: runs on its own, faster while you scroll ═════════ */
-const mq = document.getElementById('mqA');
+/* ═════════ the journey: photos drift, boxes land, a trail follows you down ═════════ */
+const journeyEl = document.querySelector('.journey');
+const scenes = [...document.querySelectorAll('.scene')];
+const boxes = [...document.querySelectorAll('[data-stop]')];
 if (gsap && !reduced) {
-  const loop = gsap.to(mq, { xPercent: -50, duration: 26, ease: 'none', repeat: -1 });
-  let boost = 0, dir = 1;
-  ScrollTrigger.create({ onUpdate: self => { boost = Math.min(4, Math.abs(self.getVelocity()) / 500); dir = self.direction || 1; } });
-  gsap.ticker.add(() => { boost *= 0.93; loop.timeScale(dir * (1 + boost)); });
-}
-
-/* ═════════ pick your day: the photo opens from where you tapped ═════════ */
-const DAYS = {
-  beach:  { img: 'friends', alt: 'A group of friends running into the sea together', tag: 'Beach · IP68', title: 'Sand stays out.', text: 'IP68 is dust-tight as well as waterproof, and nothing sits in your ear canal. Swim in the shallows with it on, then rinse it in fresh water.', list: 'A summer album, start to finish' },
-  hike:   { img: 'hike', alt: 'A woman looking out over a range of green mountains', tag: 'Hike · 32GB offline', title: 'No signal, no problem.', text: '32GB onboard plays offline, so the album keeps going where your phone gives up. Ten hours covers a long day on the hill.', list: 'A long audiobook' },
-  ride:   { img: 'ride', alt: 'Two road cyclists riding a winding path at sunset', tag: 'Ride · open-ear', title: 'Hear what’s coming.', text: 'Open ears keep traffic and other riders audible. Check the local rules on headphones before you ride.', list: 'Something with a steady beat' },
-  run:    { img: 'run', alt: 'A runner on a grassy ridge above the clouds', tag: 'Run · stays put', title: 'Nothing bouncing in your ears.', text: 'The band sits behind your head, so there are no buds to shake loose, and you still hear footsteps and traffic.', list: 'Tempo playlist, about 165 bpm' },
-  paddle: { img: 'paddle', alt: 'A paddleboarder on calm water at sunset', tag: 'Paddle · waterproof', title: 'If it goes in, fine.', text: 'A capsize means a wet headset, not an earbud at the bottom of the lake. IP68 to two metres.', list: 'A sunset playlist' },
-  pool:   { img: 'pool', alt: 'A woman in a sun hat sitting on the edge of a bright blue pool', tag: 'Pool · plays underwater', title: 'Lengths or lounging.', text: 'Waterproof to two metres, with music stored on the headset, because Bluetooth doesn’t reach underwater.', list: 'A podcast for the lounger' },
-  walk:   { img: 'walk', alt: 'Two people with backpacks walking a tree-lined coastal path', tag: 'Walk · ears open', title: 'Podcast on, world on.', text: 'Hear cars pulling out, cyclists behind you and the friend who’s just caught you up.', list: 'Your favourite podcast' }
-};
-Object.values(DAYS).forEach(d => { const i = new Image(); i.src = `/images/rec/${d.img}.jpg`; });
-const photos = document.getElementById('pickPhotos');
-const card = document.getElementById('pickCard');
-const tabs = [...document.querySelectorAll('.pick-tabs button')];
-let pickBusy = false;
-function pickDay(k, ev) {
-  const d = DAYS[k];
-  if (!d || pickBusy) return;
-  tabs.forEach(t => t.setAttribute('aria-selected', String(t.dataset.k === k)));
-  const img = new Image();
-  img.src = `/images/rec/${d.img}.jpg`; img.alt = d.alt; img.width = 1600; img.height = 1067;
-  const r = photos.getBoundingClientRect();
-  const cx = ev && ev.clientX ? clamp((ev.clientX - r.left) / r.width) * 100 : 50;
-  const cy = ev && ev.clientY ? clamp((ev.clientY - r.top) / r.height) * 100 : 50;
-  const fill = () => {
-    document.getElementById('pkTag').textContent = d.tag;
-    document.getElementById('pkTitle').textContent = d.title;
-    document.getElementById('pkText').textContent = d.text;
-    document.getElementById('pkList').textContent = d.list;
-  };
-  if (!gsap || reduced) { photos.replaceChildren(img); fill(); return; }
-  pickBusy = true;
-  img.className = 'incoming';
-  img.style.setProperty('--cx', cx + '%'); img.style.setProperty('--cy', cy + '%');
-  photos.appendChild(img);
-  gsap.fromTo(img, { clipPath: `circle(0% at ${cx}% ${cy}%)`, scale: 1.15 }, {
-    clipPath: `circle(150% at ${cx}% ${cy}%)`, scale: 1, duration: 1.1, ease: 'expo.inOut',
-    onComplete: () => { [...photos.children].forEach(c => { if (c !== img) c.remove(); }); img.className = ''; img.style.clipPath = ''; pickBusy = false; }
+  scenes.forEach(sc => {
+    const img = sc.querySelector('.scene-bg img');
+    gsap.fromTo(img, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: sc, start: 'top bottom', end: 'bottom top', scrub: true } });
   });
-  gsap.to(card.children, { y: -14, opacity: 0, duration: 0.3, stagger: 0.03, ease: 'power2.in', onComplete: () => {
-    fill();
-    gsap.fromTo(card.children, { y: 18, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, stagger: 0.05, ease: 'expo.out' });
-  } });
+  boxes.forEach(b => {
+    if (b.classList.contains('box--hero')) return;
+    const left = b.classList.contains('box--left');
+    gsap.from(b, { y: 110, x: left ? -40 : 40, rotate: left ? -3 : 3, opacity: 0, duration: 1.4, ease: 'expo.out', scrollTrigger: { trigger: b, start: 'top 90%', once: true } });
+  });
 }
-tabs.forEach(t => t.addEventListener('click', e => pickDay(t.dataset.k, e)));
-document.querySelector('.pick-tabs').addEventListener('keydown', e => {
-  const i = tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
-  const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
-  if (!d) return;
-  e.preventDefault();
-  const n = tabs[(i + d + tabs.length) % tabs.length];
-  n.focus(); pickDay(n.dataset.k);
-});
 
-/* ═════════ stats bounce in and count up ═════════ */
-document.querySelectorAll('.stats [data-count]').forEach(el => countUp(el, { duration: 1.6 }));
-if (gsap && !reduced) {
-  gsap.from('.stats li', { y: 60, scale: 0.85, opacity: 0, duration: 1.1, ease: 'back.out(2)', stagger: 0.1, scrollTrigger: { trigger: '.stats', start: 'top 80%', once: true } });
-  gsap.from('.pick-stage', { y: 80, opacity: 0, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: '.pick-stage', start: 'top 85%', once: true } });
-  gsap.from('.mixer', { y: 60, rotate: 2, opacity: 0, duration: 1.3, ease: 'expo.out', scrollTrigger: { trigger: '.mixer', start: 'top 85%', once: true } });
-  gsap.from('.kit-sun', { scale: 0.5, opacity: 0, duration: 1.6, ease: 'expo.out', scrollTrigger: { trigger: '.kit', start: 'top 75%', once: true } });
+// the dotted trail: anchors on the side of each box that faces the middle
+const svg = document.getElementById('route');
+const line = document.getElementById('routeLine');
+const shadow = document.getElementById('routeShadow');
+const reveal = document.getElementById('routeReveal');
+let samples = [], total = 0;
+function offsetIn(el) {
+  let x = 0, y = 0, n = el;
+  while (n && n !== journeyEl) { x += n.offsetLeft; y += n.offsetTop; n = n.offsetParent; }
+  return { x, y };
 }
+function buildRoute() {
+  const W = journeyEl.clientWidth, H = journeyEl.offsetHeight;
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width', W); svg.setAttribute('height', H);
+  const narrow = innerWidth <= 900;
+  const pts = boxes.map((b, i) => {
+    const o = offsetIn(b), w = b.offsetWidth, h = b.offsetHeight;
+    if (narrow) return { x: i % 2 ? W - 18 : 18, y: o.y + h / 2 };
+    if (b.classList.contains('box--hero')) return { x: o.x + w * 0.62, y: o.y + h + 10 };
+    const left = b.classList.contains('box--left');
+    return { x: left ? o.x + w + 14 : o.x - 14, y: o.y + h / 2 };
+  });
+  let d = `M${pts[0].x.toFixed(1)},${pts[0].y.toFixed(1)}`;
+  for (let i = 1; i < pts.length; i++) {
+    const a = pts[i - 1], b = pts[i], dy = (b.y - a.y) * 0.55;
+    d += ` C${a.x.toFixed(1)},${(a.y + dy).toFixed(1)} ${b.x.toFixed(1)},${(b.y - dy).toFixed(1)} ${b.x.toFixed(1)},${b.y.toFixed(1)}`;
+  }
+  [line, shadow, reveal].forEach(p => p.setAttribute('d', d));
+  total = reveal.getTotalLength();
+  samples = [];
+  for (let l = 0; l <= total; l += 12) samples.push([l, reveal.getPointAtLength(l).y]);
+  reveal.style.strokeDasharray = `${total} ${total}`;
+  drawRoute();
+}
+function drawRoute() {
+  if (!samples.length) return;
+  if (reduced) { reveal.style.strokeDashoffset = 0; return; }
+  // the trail's tip sits a little below the middle of the screen
+  const target = scrollY + innerHeight * 0.62 - (journeyEl.getBoundingClientRect().top + scrollY);
+  let lo = 0, hi = samples.length - 1;
+  while (lo < hi) { const mid = (lo + hi) >> 1; if (samples[mid][1] < target) lo = mid + 1; else hi = mid; }
+  const len = samples[lo][0];
+  reveal.style.strokeDashoffset = Math.max(0, total - len);
+}
+
+// the clock in the top bar keeps time with the day
+const clockTime = document.getElementById('clockTime');
+const clockWhat = document.getElementById('clockWhat');
+function tick() {
+  const mid = innerHeight / 2;
+  const sc = scenes.find(s => { const r = s.getBoundingClientRect(); return r.top <= mid && r.bottom > mid; });
+  if (sc && clockTime.textContent !== sc.dataset.time) { clockTime.textContent = sc.dataset.time; clockWhat.textContent = sc.dataset.what; }
+}
+addEventListener('scroll', () => { drawRoute(); tick(); }, { passive: true });
+addEventListener('resize', buildRoute);
+addEventListener('load', () => { buildRoute(); if (ScrollTrigger) ScrollTrigger.refresh(); });
+document.fonts && document.fonts.ready.then(buildRoute);
+buildRoute(); tick();
+
+document.querySelectorAll('.stats [data-count]').forEach(el => countUp(el, { duration: 1.6 }));
 
 /* ═════════ the headset, in four colours ═════════ */
 const KIT = [
@@ -171,8 +169,10 @@ import('/js/lp-headset.js').then(({ headset }) => headset(kitCanvas, {
   kitCanvas.addEventListener('pointermove', e => { if (drag) { vel += (e.clientX - lastX) * 0.0006; lastX = e.clientX; } });
   kitCanvas.addEventListener('pointerup', () => { drag = false; });
   kitCanvas.addEventListener('pointercancel', () => { drag = false; });
+  // don't rely only on the observer: a cheap on-screen check keeps it drawing everywhere
+  const onScreen = () => { const r = kitCanvas.getBoundingClientRect(); return r.bottom > 0 && r.top < innerHeight; };
   if (reduced) { frame(performance.now()); kitPaint = i => { mat.color.set(KIT[i].hex); frame(performance.now()); }; }
-  else (function loop(now) { requestAnimationFrame(loop); if (visible || ct < 1) frame(now); })(performance.now());
+  else (function loop(now) { requestAnimationFrame(loop); if (visible || ct < 1 || onScreen()) frame(now); })(performance.now());
 }).catch(() => {});
 
 /* ═════════ Hear the difference: the same beach through earbuds vs open ears ═════════ */
