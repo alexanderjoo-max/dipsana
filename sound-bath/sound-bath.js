@@ -4,7 +4,7 @@ import { climateMark } from '/js/brand.js';
 
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 initMotion();
-climateMark(document.querySelector('#topbar .mark'), { initial: 'dusk' });
+climateMark(document.querySelector('#topbar .mark'), { initial: 'bloom' });
 const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
 const lerp = (a, b, t) => a + (b - a) * t;
 const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
